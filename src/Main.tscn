@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2y3rj1q3mnj0"]
+
+[ext_resource type="Script" path="res://src/Main.cs" id="1_cjfrr"]
+[ext_resource type="Script" path="res://src/menu/MenuLayout.cs" id="2_54r87"]
+[ext_resource type="Texture2D" uid="uid://bo1qgdbjwqtnw" path="res://asset/image/title.png" id="2_r622l"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cjfrr")
+
+[node name="MainLayout" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="MenuLayout" type="VBoxContainer" parent="MainLayout" node_paths=PackedStringArray("_QuitButton")]
+layout_mode = 2
+script = ExtResource("2_54r87")
+_QuitButton = NodePath("QuitButton")
+
+[node name="TitleLayout" type="CenterContainer" parent="MainLayout/MenuLayout"]
+layout_mode = 2
+
+[node name="Title" type="TextureRect" parent="MainLayout/MenuLayout/TitleLayout"]
+layout_mode = 2
+texture = ExtResource("2_r622l")
+stretch_mode = 4
+
+[node name="NewGameButton" type="Button" parent="MainLayout/MenuLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "New Game"
+
+[node name="LoadGameButton" type="Button" parent="MainLayout/MenuLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+disabled = true
+text = "Load Game"
+
+[node name="SettingButton" type="Button" parent="MainLayout/MenuLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="MainLayout/MenuLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Quit Game
+"

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dnsm13kdshcxp"]
 
-[ext_resource type="Script" path="res://script/ui/MenuLayout.cs" id="1_ulpk2"]
-[ext_resource type="Texture2D" uid="uid://bo1qgdbjwqtnw" path="res://asset/image/title.png" id="2_n32uv"]
+[ext_resource type="Script" path="res://script/ui/MainMenu.cs" id="1_5avki"]
+[ext_resource type="Texture2D" uid="uid://bo1qgdbjwqtnw" path="res://asset/image/title.png" id="2_esw5v"]
 
 [node name="MenuLayout" type="VBoxContainer" node_paths=PackedStringArray("_QuitButton", "_LoadGameButton", "_SettingButton")]
 anchors_preset = 15
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ulpk2")
+script = ExtResource("1_5avki")
 _QuitButton = NodePath("QuitButton")
 _LoadGameButton = NodePath("LoadGameButton")
 _SettingButton = NodePath("SettingButton")
@@ -19,7 +19,7 @@ layout_mode = 2
 
 [node name="Title" type="TextureRect" parent="TitleLayout"]
 layout_mode = 2
-texture = ExtResource("2_n32uv")
+texture = ExtResource("2_esw5v")
 stretch_mode = 4
 
 [node name="NewGameButton" type="Button" parent="."]

@@ -1,7 +1,7 @@
 using Godot;
 using Mutemaanpa;
 
-public partial class MenuLayout : VBoxContainer
+public partial class MainMenu : VBoxContainer
 {
     [Export]
     private Button _QuitButton;
@@ -16,6 +16,6 @@ public partial class MenuLayout : VBoxContainer
     {
         base._Ready();
         _QuitButton.Pressed += () => GetTree().Quit();
-        _SettingButton.Pressed += () => Router.Of(this).Switch("/setting");
+        _SettingButton.Pressed += () => Router.Of(this).Push("/setting");
     }
 }

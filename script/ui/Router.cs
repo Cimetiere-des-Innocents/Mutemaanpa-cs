@@ -103,10 +103,7 @@ public partial class Router : Control
             sceneStack.Push(child);
             RemoveChild(child);
         }
-        else
-        {
-            AddChildByName(name);
-        }
+        AddChildByName(name);
     }
 
     private void RemoveChildAndFree()

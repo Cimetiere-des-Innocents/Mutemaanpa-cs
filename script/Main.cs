@@ -44,7 +44,7 @@ public partial class Main : CenterContainer
         var router = Mutemaanpa.Router.CreateRouter(
             defaultPage: "/menu",
             routes: [
-                (name: "/menu", uri: "res://scene/ui/menu_layout.tscn"),
+                (name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
                 (name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
             ]
         );

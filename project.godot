@@ -13,9 +13,9 @@ config_version=5
 config/name="mutemaanpa-cs"
 config/description="Mutemaanpa game."
 config/version="0.0.1"
-run/main_scene="res://src/Main.tscn"
+run/main_scene="res://scene/Main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
-config/icon="res://Asset/Image/logo.png"
+config/icon="res://asset/image/logo.png"
 
 [dotnet]
 

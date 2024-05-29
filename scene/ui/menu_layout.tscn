@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnsm13kdshcxp"]
+
+[ext_resource type="Script" path="res://script/ui/MenuLayout.cs" id="1_ulpk2"]
+[ext_resource type="Texture2D" uid="uid://bo1qgdbjwqtnw" path="res://asset/image/title.png" id="2_n32uv"]
+
+[node name="MenuLayout" type="VBoxContainer" node_paths=PackedStringArray("_QuitButton", "_LoadGameButton")]
+script = ExtResource("1_ulpk2")
+_QuitButton = NodePath("QuitButton")
+_LoadGameButton = NodePath("LoadGameButton")
+
+[node name="TitleLayout" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="TextureRect" parent="TitleLayout"]
+layout_mode = 2
+texture = ExtResource("2_n32uv")
+stretch_mode = 4
+
+[node name="NewGameButton" type="Button" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "New Game"
+
+[node name="LoadGameButton" type="Button" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+disabled = true
+text = "Load Game"
+
+[node name="SettingButton" type="Button" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Quit Game
+"

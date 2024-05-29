@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mutemaanpa-game", "mutemaanpa-game.csproj", "{C07105E5-C0DE-4E30-8125-4C16FD3A1FA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mutemaanpa-cs", "mutemaanpa-cs.csproj", "{C07105E5-C0DE-4E30-8125-4C16FD3A1FA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

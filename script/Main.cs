@@ -35,10 +35,20 @@ using System;
 ///  13. click "Continue"
 ///
 /// </summary>
-public partial class Main : Control
+public partial class Main : CenterContainer
 {
-    [Export]
-    private Node GameScene;
 
+    public override void _Ready()
+    {
+        base._Ready();
+        var router = Mutemaanpa.Router.CreateRouter(
+            defaultPage: "/menu",
+            routes: [
+                (name: "/menu", uri: "res://scene/ui/menu_layout.tscn"),
+                (name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
+            ]
+        );
+        AddChild(router);
+    }
 
 }

@@ -42,7 +42,7 @@ public partial class Router : Control
 
     private Router() { }
 
-    public static Router CreateRouter(string defaultPage, params (string, string)[] routes)
+    public static Router CreateRouter(string defaultPage, params (string name, string uri)[] routes)
     {
         var router = new Router();
         router.Register(routes);
@@ -99,8 +99,9 @@ public partial class Router : Control
     {
         if (GetChildCount() > 0)
         {
-            sceneStack.Push(GetChild(0));
-            RemoveChildAndFree();
+            var child = GetChild(0);
+            sceneStack.Push(child);
+            RemoveChild(child);
         }
         else
         {
@@ -112,7 +113,7 @@ public partial class Router : Control
     {
         var child = GetChild(0);
         RemoveChild(child);
-        child.Free();
+        child.QueueFree();
     }
 
     private void AddChildByName(string name)
@@ -153,7 +154,7 @@ public partial class Router : Control
     {
         foreach (var child in GetChildren())
         {
-            child.Free();
+            child.QueueFree();
         }
         AddChild(new ErrorPage(
             ShowError(err) + string.Join('\n', msg)

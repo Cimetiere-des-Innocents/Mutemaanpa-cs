@@ -159,16 +159,9 @@ namespace Mutemaanpa
         /// </summary>
         /// <param name="msg"></param>
         [DoesNotReturn]
-        private void ReportError(RouterError err, params string[] msg)
+        private static void ReportError(RouterError err, params string[] msg)
         {
-            foreach (var child in GetChildren())
-            {
-                child.QueueFree();
-            }
-            AddChild(new ErrorPage(
-                ShowError(err) + string.Join('\n', msg)
-            ));
-            for (; ; );
+           throw new Exception(ShowError(err) + msg.Join(","));
         }
 
         private static string ShowError(RouterError err) => err switch

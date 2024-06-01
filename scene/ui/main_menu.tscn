@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://script/ui/MainMenu.cs" id="1_5avki"]
 [ext_resource type="Texture2D" uid="uid://bo1qgdbjwqtnw" path="res://asset/image/title.png" id="2_esw5v"]
 
-[node name="MenuLayout" type="VBoxContainer" node_paths=PackedStringArray("_QuitButton", "_LoadGameButton", "_SettingButton")]
+[node name="MenuLayout" type="VBoxContainer" node_paths=PackedStringArray("_QuitButton", "_LoadGameButton", "_SettingButton", "_NewGameButton")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -13,6 +13,7 @@ script = ExtResource("1_5avki")
 _QuitButton = NodePath("QuitButton")
 _LoadGameButton = NodePath("LoadGameButton")
 _SettingButton = NodePath("SettingButton")
+_NewGameButton = NodePath("NewGameButton")
 
 [node name="TitleLayout" type="CenterContainer" parent="."]
 layout_mode = 2

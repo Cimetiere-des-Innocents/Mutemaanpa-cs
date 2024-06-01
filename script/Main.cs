@@ -45,8 +45,9 @@ namespace Mutemaanpa
             var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
-                    (name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
+                (name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
                 (name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
+                (name: "/newGame", uri: "res://scene/creation/character_creation.tscn"),
                 ]
             );
             AddChild(router);

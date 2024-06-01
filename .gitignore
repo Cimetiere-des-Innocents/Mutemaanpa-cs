@@ -3,3 +3,7 @@
 
 # project asset files
 local/
+
+temp/
+
+.vscode/

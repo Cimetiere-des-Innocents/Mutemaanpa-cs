@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhj88btsy0p5k"]
+
+[ext_resource type="Script" path="res://script/ui/ErrorPage.cs" id="1_1ms7w"]
+
+[node name="ErrorPage" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("1_1ms7w")
+
+[node name="Error" type="Label" parent="."]
+layout_mode = 2
+text = "Error"
+horizontal_alignment = 1
+
+[node name="ErrorMessage" type="Label" parent="."]
+layout_mode = 2
+text = "
+"
+horizontal_alignment = 1

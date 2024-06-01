@@ -126,9 +126,9 @@ namespace Mutemaanpa
 
         private void AddChildByName(string name)
         {
-            if (nameToPath.TryGetValue(name, out Welles welles))
+            if (nameToPath.TryGetValue(name, out Welles? welles))
             {
-                AddChild(welles.Value.Instantiate());
+                AddChild(welles!.Value.Instantiate());
             }
             else
             {
@@ -144,9 +144,9 @@ namespace Mutemaanpa
         public void Pop()
         {
             RemoveChildAndFree();
-            if (sceneStack.TryPop(out Node result))
+            if (sceneStack.TryPop(out Node? result))
             {
-                AddChild(result);
+                AddChild(result!);
             }
             else
             {

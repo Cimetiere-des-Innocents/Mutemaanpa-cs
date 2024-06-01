@@ -37,12 +37,12 @@ namespace Mutemaanpa
     ///  13. click "Continue"
     ///
     /// </summary>
-    public partial class Main : CenterContainer
+    public partial class Main : PanelContainer
     {
         public override void _Ready()
         {
             base._Ready();
-            var router = Mutemaanpa.Router.CreateRouter(
+            var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
                     (name: "/menu", uri: "res://scene/ui/main_menu.tscn"),

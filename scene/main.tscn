@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://script/Main.cs" id="1_t5fu3"]
 
-[node name="Main" type="CenterContainer"]
+[node name="Main" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

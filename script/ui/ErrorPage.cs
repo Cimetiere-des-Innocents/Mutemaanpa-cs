@@ -5,12 +5,12 @@ namespace Mutemaanpa
     public partial class ErrorPage(string errorMessage) : VBoxContainer
     {
         [Export]
-        private Label errorMessageDisplay;
+        private Label? errorMessageDisplay;
 
         public override void _Ready()
         {
             base._Ready();
-            errorMessageDisplay.Text = errorMessage;
+            errorMessageDisplay!.Text = errorMessage;
         }
     }
 }

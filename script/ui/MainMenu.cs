@@ -1,21 +1,23 @@
-using Godot;
-using Mutemaanpa;
-
-public partial class MainMenu : VBoxContainer
+namespace Mutemaanpa
 {
-    [Export]
-    private Button _QuitButton;
+    using Godot;
 
-    [Export]
-    private Button _LoadGameButton;
-
-    [Export]
-    private Button _SettingButton;
-
-    public override void _Ready()
+    public partial class MainMenu : VBoxContainer
     {
-        base._Ready();
-        _QuitButton.Pressed += () => GetTree().Quit();
-        _SettingButton.Pressed += () => Router.Of(this).Push("/setting");
+        [Export]
+        private Button _QuitButton;
+
+        [Export]
+        private Button _LoadGameButton;
+
+        [Export]
+        private Button _SettingButton;
+
+        public override void _Ready()
+        {
+            base._Ready();
+            _QuitButton.Pressed += () => GetTree().Quit();
+            _SettingButton.Pressed += () => Router.Of(this).Push("/setting");
+        }
     }
 }

@@ -1,14 +1,16 @@
-using Godot;
-
-public partial class ErrorPage(string errorMessage) : VBoxContainer
+namespace Mutemaanpa
 {
-    [Export]
-    private Label errorMessageDisplay;
+    using Godot;
 
-    public override void _Ready()
+    public partial class ErrorPage(string errorMessage) : VBoxContainer
     {
-        base._Ready();
-        errorMessageDisplay.Text = errorMessage;
-    }
+        [Export]
+        private Label errorMessageDisplay;
 
+        public override void _Ready()
+        {
+            base._Ready();
+            errorMessageDisplay.Text = errorMessage;
+        }
+    }
 }

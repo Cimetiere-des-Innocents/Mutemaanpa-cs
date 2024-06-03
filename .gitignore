@@ -7,3 +7,5 @@ local/
 temp/
 
 .vscode/
+
+.fake

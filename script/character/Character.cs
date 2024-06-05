@@ -18,12 +18,37 @@ namespace Mutemaanpa
         public int Wisdom { get; set; }
     }
 
+    /// <summary>
+    /// basic information about the character
+    /// </summary>
     public class CharacterStat
     {
+        public required string Name {get; set;}
         public int HitPoint { get; set; }
         public int ManaPoint { get; set; }
-        public Vector3 Velocity { get; set; }
         public Vector3 Position { get; set; }
+
+        /// <summary>
+        /// This field can be null, because NPC characters don't have this field set.
+        /// </summary>
+        /// <value></value>
+        public string? Player {get; set;}
+    }
+
+    /// <summary>
+    /// Persistent data of the character.
+    /// </summary>
+    public class CharacterState
+    {
+        public required CharacterAbility Ability;
+        public required CharacterStat Stat;
+    }
+
+    public class CharacterRuntime
+    {
+        public int MaxHitPoint {get; set;}
+        public int MaxManaPoint {get; set;}
+
     }
 
     abstract class ICharacter

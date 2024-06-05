@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://4u5cj2asvoc2"]
+[gd_scene load_steps=2 format=3 uid="uid://4u5cj2asvoc2"]
+
+[ext_resource type="PackedScene" uid="uid://ctfhfm3prxc3q" path="res://scene/character/creation_navigator.tscn" id="1_1kyug"]
 
 [node name="CharacterCreation" type="Node3D"]
 
@@ -6,5 +8,11 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.932301)
 
 [node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0436833, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0436833, 0.221698, 0)
 text = "Who Are You?"
+
+[node name="CreationNavigator" parent="." instance=ExtResource("1_1kyug")]
+custom_minimum_size = Vector2(400, 0)
+anchors_preset = 9
+anchor_right = 0.0
+grow_horizontal = 1

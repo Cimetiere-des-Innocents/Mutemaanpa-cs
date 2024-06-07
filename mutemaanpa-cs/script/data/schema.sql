@@ -8,17 +8,21 @@ CREATE TYPE ORIGIN AS ENUM (
     'Nameless One'
 );
 
-CREATE TYPE VECTOR3 AS STRUCT(
+CREATE TABLE IF NOT EXISTS position (
+    id UUID PRIMARY KEY,
     x FLOAT,
     y FLOAT,
     z FLOAT,
+    FOREIGN KEY(id) REFERENCES character(id)
 );
 
 CREATE TABLE IF NOT EXISTS character (
-    id UUID NOT NULL,
+    id UUID PRIMARY KEY,
+    
+    name TEXT,
     hp REAL,
     mp SMALLINT,
-    position VECTOR3,
+    origin ORIGIN,
     
     strength SMALLINT,
     stamina SMALLINT,
@@ -27,8 +31,5 @@ CREATE TABLE IF NOT EXISTS character (
     intelligence SMALLINT,
     wisdom SMALLINT,
 
-    origin ORIGIN,
-    player UUID 
+    player UUID
 );
-
-

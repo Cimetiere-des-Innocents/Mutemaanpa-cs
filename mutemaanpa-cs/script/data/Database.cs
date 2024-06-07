@@ -1,46 +1,52 @@
 namespace Mutemaanpa;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using Dapper;
 using DuckDB.NET.Data;
 using Godot;
 
-public class OriginMapper : SqlMapper.TypeHandler<Origin>
-{
-    public override Origin Parse(object value) => value.ToString()?.ToUpper() switch
-    {
-        string s => Enum.Parse<Origin>(s),
-        _ => Origin.NAMELESS_ONE
-    };
-
-    public override void SetValue(IDbDataParameter parameter, Origin value)
-    {
-        parameter.Value = value.ToString();
-    }
-}
-
-
 /// <summary>
 /// Database load and stores persistent data for Mutemaanpa.
 /// </summary>
-public class Database(string dbPath)
+public class Database
 {
+    private string DbPath { get; set; }
+
+    public Database(string dbPath)
+    {
+        DbPath = dbPath;
+        using var db = new DuckDBConnection(dbPath);
+        db.Execute(DatabaseConst.SCHEMA);
+    }
+
     public void CommitCharacter(CharacterData character)
     {
-        using var db = new DuckDBConnection(dbPath);
+        using var db = new DuckDBConnection(DbPath);
         string sql = """
             INSERT INTO character(id, name, hp, mp, origin, strength, stamina,
             dexterity, constitution, intelligence, wisdom, player) VALUES 
-            (@Id, @Name, @Hp, @Mp, @Origin, @Str, @Sta, @Dex, @Con, @Int, @Wis, @Player);
+            ($Id, $Name, $Hp, $Mp, $Origin, $Str, $Sta, $Dex, $Con, $Int, $Wis, $Player);
             """;
-        object[] param = { };
+        object[] param = [ new {
+            Id = character.Uuid,
+            character.Stat.Name,
+            character.Stat.Hp,
+            character.Stat.Mp,
+            character.Stat.Origin,
+            Str = character.Ability.Strength,
+            Sta = character.Ability.Stamina,
+            Dex = character.Ability.Dexterity,
+            Con = character.Ability.Constitution,
+            Int = character.Ability.Intelligence,
+            Wis = character.Ability.Wisdom,
+            character.Player
+        }];
         db.Execute(sql, param);
     }
 
     public IEnumerable<CharacterData> QueryCharacter()
     {
-        using var db = new DuckDBConnection(dbPath);
+        using var db = new DuckDBConnection(DbPath);
         var sql = "SELECT * FROM character NATURAL JOIN position;";
         return db.Query<Guid,
                         CharacterStat,
@@ -60,5 +66,4 @@ public class Database(string dbPath)
             splitOn: "name,strength,player,x"
         );
     }
-
 }

@@ -5,31 +5,58 @@ using Mutemaanpa;
 [TestClass]
 public class CharacterTest
 {
-    CharacterData character = new(
-        Ability: new(1, 1, 1, 1, 1, 1),
-        Stat: new(
+    static CharacterAbility ability = new(1, 1, 2, 1, 1, 1);
+    static CharacterStat stat = new(
             "test",
             1.0f,
             1,
             Origin.SPY
-        ),
+    );
+
+    static CharacterData data = new(
+        Ability: ability,
+        Stat: stat,
         Uuid: Guid.NewGuid(),
         Position: Godot.Vector3.Up,
         Player: null
     );
 
-    [TestMethod]
-    public void TestDB()
+    [TestInitialize]
+    public void Init()
     {
         if (File.Exists("save.db"))
         {
             File.Delete("save.db");
         }
+    }
+
+    [TestMethod]
+    public void TestDB()
+    {
         var db = new Database("Data Source=save.db");
-        db.CommitCharacter(character);
+        db.CommitCharacter(data);
         var characters = db.QueryCharacter();
-        Assert.AreEqual(character, characters.First());
+        Assert.AreEqual(data, characters.First());
         // clean up if successful
         File.Delete("save.db");
+    }
+
+    [TestMethod]
+    public void TestManager()
+    {
+        var db = new Database("Data Source=save.db");
+        var manager = new CharacterManager(db);
+        var uuid = manager.RegisterCharacter(
+            stat,
+            ability,
+            null,
+            Guid.NewGuid()
+        );
+        var character = manager.GetCharacterState(uuid);
+        manager.Store();
+        var manager2 = new CharacterManager(db);
+        manager2.Load();
+        var characterRead = manager2.GetPlayer();
+        Assert.AreEqual(character, characterRead);
     }
 }

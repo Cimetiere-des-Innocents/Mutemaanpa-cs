@@ -71,7 +71,7 @@ public class Database
                         CharacterStat,
                         CharacterAbility,
                         Guid?,
-                        (float, float, float)?, // https://github.com/DapperLib/Dapper/issues/1900
+                        (float?, float?, float?), // https://github.com/DapperLib/Dapper/issues/1900
                         CharacterData>
         (
             sql,
@@ -81,8 +81,8 @@ public class Database
                 Uuid: id,
                 Player: player,
                 Position: position switch {
-                    var (x, y, z) => new Vector3(x, y, z),
-                    null => null
+                    (float x, float y, float z) => new Vector3(x, y, z),
+                    _ => null
                 }
             ),
             splitOn: "name, strength, player, x"

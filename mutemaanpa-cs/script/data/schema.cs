@@ -3,13 +3,23 @@ namespace Mutemaanpa;
 public readonly struct DatabaseConst
 {
     public static readonly string SCHEMA = """
+        CREATE TYPE ORIGIN AS ENUM (
+            'SOLDIER',
+            'CLERIC',
+            'ROGUE',
+            'HUNTER',
+            'BUREAUCRAT',
+            'SPY',
+            'NAMELESS ONE'
+        );
+
         CREATE TABLE IF NOT EXISTS character (
             id UUID PRIMARY KEY,
             
             name TEXT,
             hp REAL,
             mp SMALLINT,
-            origin INTEGER,
+            origin ORIGIN,
             
             strength SMALLINT,
             stamina SMALLINT,

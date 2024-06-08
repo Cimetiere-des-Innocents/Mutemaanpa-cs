@@ -35,7 +35,7 @@ public enum Origin
 public record struct CharacterStat
 (
     string Name,
-    int Hp,
+    float Hp,
     int Mp,
     Origin Origin
 );
@@ -48,7 +48,10 @@ public record struct CharacterData
     CharacterAbility Ability,
     CharacterStat Stat,
     Guid Uuid,
-    Vector3 Position,
+    
+    /// A character may not have any positions(daemon characters) in some
+    /// special circumstances.
+    Vector3? Position,
 
     /// <summary>
     /// This field can be null, because NPC characters don't have this field set.

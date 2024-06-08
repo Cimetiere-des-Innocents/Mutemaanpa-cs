@@ -5,6 +5,7 @@ using Dapper;
 using DuckDB.NET.Data;
 using Godot;
 
+
 /// <summary>
 /// Database load and stores persistent data for Mutemaanpa.
 /// </summary>
@@ -22,6 +23,8 @@ public class Database
     public void CommitCharacter(CharacterData character)
     {
         using var db = new DuckDBConnection(DbPath);
+        db.Open();
+        using var tx = db.BeginTransaction();
         string sql = """
             INSERT INTO character(id, name, hp, mp, origin, strength, stamina,
             dexterity, constitution, intelligence, wisdom, player) VALUES 
@@ -32,7 +35,7 @@ public class Database
             character.Stat.Name,
             character.Stat.Hp,
             character.Stat.Mp,
-            character.Stat.Origin,
+            Origin = character.Stat.Origin.ToString(),
             Str = character.Ability.Strength,
             Sta = character.Ability.Stamina,
             Dex = character.Ability.Dexterity,
@@ -42,17 +45,33 @@ public class Database
             character.Player
         }];
         db.Execute(sql, param);
+
+        if (character.Position != null)
+        {
+            sql = """
+            INSERT INTO position(id, x, y, z) VALUES ($Id, $X, $Y, $Z);
+            """;
+            param = [ new {
+                Id = character.Uuid,
+                character.Position?.X,
+                character.Position?.Y,
+                character.Position?.Z
+            }];
+            db.Execute(sql, param);
+        }
+        tx.Commit();
+        db.Close();
     }
 
     public IEnumerable<CharacterData> QueryCharacter()
     {
         using var db = new DuckDBConnection(DbPath);
-        var sql = "SELECT * FROM character NATURAL JOIN position;";
+        var sql = "SELECT * FROM character NATURAL LEFT OUTER JOIN position;";
         return db.Query<Guid,
                         CharacterStat,
                         CharacterAbility,
-                        Guid,
-                        Vector3,
+                        Guid?,
+                        (float, float, float)?, // https://github.com/DapperLib/Dapper/issues/1900
                         CharacterData>
         (
             sql,
@@ -61,9 +80,12 @@ public class Database
                 Stat: stat,
                 Uuid: id,
                 Player: player,
-                Position: position
+                Position: position switch {
+                    var (x, y, z) => new Vector3(x, y, z),
+                    null => null
+                }
             ),
-            splitOn: "name,strength,player,x"
+            splitOn: "name, strength, player, x"
         );
     }
 }

@@ -9,7 +9,7 @@ using Godot;
 /// </summary>
 public class CharacterManager(Database database)
 {
-    private readonly Dictionary<Guid, CharacterState> uuidToCharacter = [];
+    private readonly Dictionary<Guid, CharacterState> UuidToCharacter = [];
 
     /// <summary>
     /// Generate a new character with its data, assigns uuid.
@@ -22,13 +22,21 @@ public class CharacterManager(Database database)
     {
         var uuid = Guid.NewGuid();
         var data = new CharacterData(ability, stat, uuid, spawnPoint, player);
-        uuidToCharacter.Add(uuid, LoadCharacter(data));
+        // Some properties must be set after calculation.
+        var runtimeState = CalculateRuntimeProperty(data);
+        var newStat = stat with
+        {
+            Hp = runtimeState.MaxHitPoint,
+            Mp = runtimeState.MaxManaPoint
+        };
+        data.Stat = newStat;
+        UuidToCharacter.Add(uuid, new(data, runtimeState));
         return uuid;
     }
 
     public void Store()
     {
-        foreach (var state in uuidToCharacter.Values)
+        foreach (var state in UuidToCharacter.Values)
         {
             var data = state.CharacterData;
             database.CommitCharacter(data);
@@ -39,7 +47,7 @@ public class CharacterManager(Database database)
     {
         foreach (var character in database.QueryCharacter())
         {
-            uuidToCharacter.Add(character.Uuid, LoadCharacter(character));
+            UuidToCharacter.Add(character.Uuid, LoadCharacter(character));
         }
     }
 
@@ -60,13 +68,13 @@ public class CharacterManager(Database database)
     }
 
     public CharacterState? GetCharacterState(Guid guid)
-        => uuidToCharacter.TryGetValue(guid, out var v)
+        => UuidToCharacter.TryGetValue(guid, out var v)
             ? v
             : null;
 
 
     public CharacterState GetPlayer(/* TODO: distinguish players */)
-        => (from c in uuidToCharacter.Values
+        => (from c in UuidToCharacter.Values
             where c.CharacterData.Player is not null
             select c).First();
 }

@@ -38,27 +38,27 @@ using Godot;
 /// </summary>
 public partial class Main : PanelContainer
 {
-	public Provider provider = new();
-	public override void _Ready()
-	{
-		base._Ready();
-		Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    public Provider provider = new();
+    public override void _Ready()
+    {
+        base._Ready();
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
-		var db = new Database("Data Source=m8a_save.db");
-		var characterManager = new CharacterManager(db);
-		provider.Add<Database>(db);
-		provider.Add<CharacterManager>(characterManager);
+        var db = new Database($"Data Source=m8a_save_{System.Guid.NewGuid()}.db");
+        var characterManager = new CharacterManager(db);
+        provider.Add<Database>(db);
+        provider.Add<CharacterManager>(characterManager);
 
-		var router = Router.CreateRouter(
-			defaultPage: "/menu",
-			routes: [
-				(name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
-				(name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
-				(name: "/newGame", uri: "res://scene/character/character_creation.tscn"),
-				(name: "/intermission/opening", uri: "res://scene/intermission/opening_scene.tscn"),
-			]
-		);
-		AddChild(router);
-	}
+        var router = Router.CreateRouter(
+            defaultPage: "/menu",
+            routes: [
+                (name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
+                (name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
+                (name: "/newGame", uri: "res://scene/character/character_creation.tscn"),
+                (name: "/intermission/opening", uri: "res://scene/intermission/opening_scene.tscn"),
+            ]
+        );
+        AddChild(router);
+    }
 }
 

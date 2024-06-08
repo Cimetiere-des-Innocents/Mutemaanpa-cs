@@ -26,6 +26,7 @@ public partial class CreationNavigator : PanelContainer
 				Guid.NewGuid()
 			);
 			CharacterManager.Store();
+			Router.Of(this).Overwrite("/intermission/opening");
 		};
 	}
 

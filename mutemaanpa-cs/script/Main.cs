@@ -55,6 +55,7 @@ public partial class Main : PanelContainer
 				(name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
 				(name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
 				(name: "/newGame", uri: "res://scene/character/character_creation.tscn"),
+				(name: "/intermission/opening", uri: "res://scene/intermission/opening_scene.tscn"),
 			]
 		);
 		AddChild(router);

@@ -7,3 +7,10 @@ local/
 temp/
 
 .vscode/
+
+bin/
+obj/
+TestResults/
+
+.fake
+*.db

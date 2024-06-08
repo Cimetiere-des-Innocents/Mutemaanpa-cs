@@ -20,3 +20,4 @@ config/icon="res://asset/image/logo.png"
 [dotnet]
 
 project/assembly_name="mutemaanpa-cs"
+project/solution_directory=".."

@@ -1,11 +1,17 @@
-[gd_scene format=3 uid="uid://b1sb32tnlfypc"]
+[gd_scene load_steps=2 format=3 uid="uid://b1sb32tnlfypc"]
 
-[node name="NumberBar" type="PanelContainer"]
+[ext_resource type="Script" path="res://script/character/NumberBar.cs" id="1_jk78c"]
+
+[node name="NumberBar" type="PanelContainer" node_paths=PackedStringArray("Ability", "AddOne", "MinusOne")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_jk78c")
+Ability = NodePath("HBoxContainer/Label")
+AddOne = NodePath("HBoxContainer/AddButton")
+MinusOne = NodePath("HBoxContainer/MinusButton")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2

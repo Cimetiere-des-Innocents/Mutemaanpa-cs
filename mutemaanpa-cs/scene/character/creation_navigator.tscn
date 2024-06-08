@@ -1,14 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://ctfhfm3prxc3q"]
+[gd_scene load_steps=4 format=3 uid="uid://ctfhfm3prxc3q"]
 
+[ext_resource type="Script" path="res://script/character/CreationNavigator.cs" id="1_2vo8w"]
 [ext_resource type="PackedScene" uid="uid://lgt5fb5pu42q" path="res://scene/character/set_info.tscn" id="1_3fp1g"]
 [ext_resource type="PackedScene" uid="uid://cgy05cyssmsda" path="res://scene/character/set_ability.tscn" id="2_ynkjv"]
 
-[node name="CreationNavigator" type="PanelContainer"]
+[node name="CreationNavigator" type="PanelContainer" node_paths=PackedStringArray("SetInfo", "SetAbility")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_2vo8w")
+SetInfo = NodePath("TabContainer/SetInfo")
+SetAbility = NodePath("TabContainer/SetAbility")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 2

@@ -38,27 +38,55 @@ using Godot;
 /// </summary>
 public partial class Main : PanelContainer
 {
-    public Provider provider = new();
-    public override void _Ready()
-    {
-        base._Ready();
-        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+	public Provider provider = new();
+	public override void _Ready()
+	{
+		base._Ready();
+		ConfigureExternalLibraries();
+		ResolveDependency();
+		AddRouter();
+	}
 
-        var db = new Database($"Data Source=m8a_save_{System.Guid.NewGuid()}.db");
-        var characterManager = new CharacterManager(db);
-        provider.Add<Database>(db);
-        provider.Add<CharacterManager>(characterManager);
+	private static void ConfigureExternalLibraries()
+	{
+		Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+	}
 
-        var router = Router.CreateRouter(
-            defaultPage: "/menu",
-            routes: [
-                (name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
-                (name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
-                (name: "/newGame", uri: "res://scene/character/character_creation.tscn"),
-                (name: "/intermission/opening", uri: "res://scene/intermission/opening_scene.tscn"),
-            ]
-        );
-        AddChild(router);
-    }
+	private void ResolveDependency()
+	{
+		var metadata = new MetadataManager();
+		provider.Add<MetadataManager>(metadata);
+
+		var db = InitDatabase();
+		provider.Add<Database>(db);
+
+		var characterManager = new CharacterManager(db);
+		provider.Add<CharacterManager>(characterManager);
+	}
+
+	private Database InitDatabase()
+	{
+		var metadataManager = Provider.Of<MetadataManager>(this);
+		var db = new Database($"Data Source=m8a_save_{metadataManager.Metadata.PlayerId}.db");
+		if (metadataManager.FirstTimeLaunch)
+		{
+			db.InitDatabase();
+		}
+		return db;
+	}
+
+	private void AddRouter()
+	{
+		var router = Router.CreateRouter(
+				defaultPage: "/menu",
+				routes: [
+				(name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
+				(name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
+				(name: "/newGame", uri: "res://scene/character/character_creation.tscn"),
+				(name: "/intermission/opening", uri: "res://scene/intermission/opening_scene.tscn"),
+			]
+		);
+		AddChild(router);
+	}
 }
 

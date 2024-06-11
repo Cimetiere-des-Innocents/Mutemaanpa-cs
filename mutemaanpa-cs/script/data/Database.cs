@@ -9,14 +9,12 @@ using Godot;
 /// <summary>
 /// Database load and stores persistent data for Mutemaanpa.
 /// </summary>
-public class Database
+public class Database(string DbPath)
 {
-    private string DbPath { get; set; }
-
-    public Database(string dbPath)
+    public void InitDatabase()
     {
-        DbPath = dbPath;
-        using var db = new DuckDBConnection(dbPath);
+        // Only run DDL if the database is not exist.
+        using var db = new DuckDBConnection(DbPath);
         db.Execute(DatabaseConst.SCHEMA);
     }
 
@@ -80,7 +78,8 @@ public class Database
                 Stat: stat,
                 Uuid: id,
                 Player: player,
-                Position: position switch {
+                Position: position switch
+                {
                     (float x, float y, float z) => new Vector3(x, y, z),
                     _ => null
                 }

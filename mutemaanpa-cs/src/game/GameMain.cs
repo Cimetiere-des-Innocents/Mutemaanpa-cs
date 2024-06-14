@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Mutemaanpa;
@@ -15,10 +16,28 @@ public partial class GameMain : PanelContainer, IProvider
         return provider;
     }
 
-    public static GameMain CreateGameMain(CharacterManager characterManager)
+    public static GameMain CreateGameMain(SaveDatabase saveDatabase,
+                                          MetadataManager metadata,
+                                          CharacterStat characterStat,
+                                          CharacterAbility characterAbility)
     {
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
+
+        var saveUuid = saveDatabase.NewSave();
+        metadata.CurrentSave = saveUuid;
+        var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
+        characterDb.InitDatabase();
+        var characterManager = new CharacterManager(characterDb);
+
+        characterManager.RegisterCharacter(
+            characterStat,
+            characterAbility,
+            null,
+            Guid.NewGuid()
+        );
+        characterManager.Store();
+
         gameMain.ResolveDependency(characterManager);
         return gameMain;
     }

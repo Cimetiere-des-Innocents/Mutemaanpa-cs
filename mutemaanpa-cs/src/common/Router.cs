@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using Welles = System.Lazy<Godot.PackedScene>;
+using Welles = System.Func<Godot.Node>;
 
 /// <summary>
 /// Router controls the navigation of scenes. The router node is responsible of
@@ -42,6 +42,16 @@ public partial class Router : Control
 
     private Router() { }
 
+    public static Router CreateRouter(string defaultPage, params (string name, Welles endpoint)[] routes)
+    {
+        var router = new Router();
+        router.Register(routes);
+        router.Push(defaultPage);
+        return router;
+    }
+
+    public static Welles From(string path) => () => ResourceLoader.Load<PackedScene>(path).Instantiate();
+
     public static Router CreateRouter(string defaultPage, params (string name, string uri)[] routes)
     {
         var router = new Router();
@@ -62,11 +72,20 @@ public partial class Router : Control
         _ => Of(node.GetParent())
     };
 
+    public void Register(params (string, Welles)[] routes)
+    {
+        foreach (var (name, load) in routes)
+        {
+            nameToPath.Add(name, load);
+        }
+    }
+
     public void Register(params (string, string)[] routes)
     {
         foreach (var (name, path) in routes)
         {
-            nameToPath.Add(name, new Welles(() => ResourceLoader.Load<PackedScene>(path)));
+            nameToPath.Add(name, new Welles(() => ResourceLoader.Load<PackedScene>(path)
+                .Instantiate()));
         }
     }
 
@@ -145,7 +164,7 @@ public partial class Router : Control
     {
         if (nameToPath.TryGetValue(name, out Welles? welles))
         {
-            return welles!.Value.Instantiate();
+            return welles();
         }
         else
         {

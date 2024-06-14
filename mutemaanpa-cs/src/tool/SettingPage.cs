@@ -16,6 +16,14 @@ public partial class SettingPage : MarginContainer
     [Export]
     private CheckBox? _TestCheckBox;
 
+    public static SettingPage CreateSettingPage(MetadataManager metadataManager)
+    {
+        var settingPage = ResourceLoader.Load<PackedScene>("res://scene/tool/setting_page.tscn")
+            .Instantiate<SettingPage>();
+        settingPage.metadataManager = metadataManager;
+        return settingPage;
+    }
+
     public override void _Ready()
     {
         base._Ready();

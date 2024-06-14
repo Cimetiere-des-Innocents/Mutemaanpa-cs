@@ -39,6 +39,7 @@ using Godot;
 public partial class Main : PanelContainer, IProvider
 {
     private readonly Provider provider = new();
+
     public override void _Ready()
     {
         base._Ready();
@@ -70,10 +71,9 @@ public partial class Main : PanelContainer, IProvider
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
-                (name: "/menu", uri: "res://scene/tool/main_menu.tscn"),
-                (name: "/setting", uri: "res://scene/tool/setting_page.tscn"),
-                (name: "/newGame", uri: "res://scene/game/character/character_creation.tscn"),
-                (name: "/game", uri: "res://scene/game/game_main.tscn"),
+                (name: "/menu", endpoint: Router.From("res://scene/tool/main_menu.tscn")),
+                (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(Provider.Of<MetadataManager>(this))),
+                (name: "/newGame", endpoint: Router.From("res://scene/game/character/character_creation.tscn")),
             ]
         );
         AddChild(router);

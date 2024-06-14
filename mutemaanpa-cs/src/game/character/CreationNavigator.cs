@@ -37,8 +37,10 @@ public partial class CreationNavigator : PanelContainer
                 Guid.NewGuid()
             );
             characterManager.Store();
-            
-            Router.Of(this).Overwrite("/intermission/opening");
+
+            var gameMain = GameMain.CreateGameMain(characterManager);
+
+            Router.Of(this).Overwrite(gameMain);
         };
     }
 

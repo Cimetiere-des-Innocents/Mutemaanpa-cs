@@ -77,13 +77,18 @@ public partial class Router : Control
     /// <param name="name"></param>
     public Node Switch(string name)
     {
+        return Switch(LookupChildByName(name));
+    }
+
+    public Node Switch(Node node)
+    {
         if (GetChildCount() != 1)
         {
             ReportError(RouterError.EMPTY_SWITCH);
         }
         var oldChild = GetChild(0);
         RemoveChild(oldChild);
-        AddChildByName(name);
+        AddChild(node);
         return oldChild;
     }
 
@@ -92,11 +97,16 @@ public partial class Router : Control
     /// </summary>
     public void Overwrite(string name)
     {
+        Overwrite(LookupChildByName(name));
+    }
+
+    public void Overwrite(Node node)
+    {
         if (GetChildCount() == 1)
         {
             RemoveChildAndFree();
         }
-        AddChildByName(name);
+        AddChild(node);
     }
 
     /// <summary>
@@ -105,15 +115,23 @@ public partial class Router : Control
     /// Note that don't do anything after call this function; it will be undefined.
     /// </summary>
     /// <param name="name"></param>
-    public void Push(string name)
+    public void Push(string name, bool removeOld = true)
+    {
+        Push(LookupChildByName(name), removeOld);
+    }
+
+    public void Push(Node node, bool removeOld = true)
     {
         if (GetChildCount() > 0)
         {
             var child = GetChild(0);
             sceneStack.Push(child);
-            RemoveChild(child);
+            if (removeOld)
+            {
+                RemoveChild(child);
+            }
         }
-        AddChildByName(name);
+        AddChild(node);
     }
 
     private void RemoveChildAndFree()
@@ -123,16 +141,17 @@ public partial class Router : Control
         child.QueueFree();
     }
 
-    private void AddChildByName(string name)
+    private Node LookupChildByName(string name)
     {
         if (nameToPath.TryGetValue(name, out Welles? welles))
         {
-            AddChild(welles!.Value.Instantiate());
+            return welles!.Value.Instantiate();
         }
         else
         {
             ReportError(RouterError.ROUTE_NOT_EXIST, name);
         }
+        throw new Exception("unreachable");
     }
 
     /// <summary>

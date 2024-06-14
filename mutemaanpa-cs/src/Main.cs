@@ -72,6 +72,7 @@ public partial class Main : PanelContainer, IProvider
                 routes: [
                 (name: "/menu", uri: "res://scene/tool/main_menu.tscn"),
                 (name: "/setting", uri: "res://scene/tool/setting_page.tscn"),
+                (name: "/newGame", uri: "res://scene/game/character/character_creation.tscn"),
                 (name: "/game", uri: "res://scene/game/game_main.tscn"),
             ]
         );

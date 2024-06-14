@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game/character/SetInfo.cs" id="1_vmses"]
 
-[node name="SetInfo" type="MarginContainer" node_paths=PackedStringArray("CharacterName", "Origin")]
+[node name="SetInfo" type="MarginContainer" node_paths=PackedStringArray("CharacterName", "Origin", "BackButton")]
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 291.0
@@ -16,6 +16,7 @@ theme_override_constants/margin_bottom = 20
 script = ExtResource("1_vmses")
 CharacterName = NodePath("VBoxContainer/MarginContainer/VBoxContainer/NameLine")
 Origin = NodePath("VBoxContainer/MarginContainer/VBoxContainer/OriginOptions")
+BackButton = NodePath("VBoxContainer/HBoxContainer/BackButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
@@ -66,3 +67,8 @@ popup/item_6/id = 6
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+
+[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"

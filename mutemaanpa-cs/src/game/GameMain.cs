@@ -15,32 +15,30 @@ public partial class GameMain : PanelContainer, IProvider
         return provider;
     }
 
+    public static GameMain CreateGameMain(CharacterManager characterManager)
+    {
+        var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
+            .Instantiate<GameMain>();
+        gameMain.ResolveDependency(characterManager);
+        return gameMain;
+    }
+
+    private void ResolveDependency(CharacterManager characterManager)
+    {
+        provider.Add<CharacterManager>(characterManager);
+    }
+
     public override void _Ready()
     {
         base._Ready();
-        ResolveDependency();
         AddRouter();
-    }
-
-    private void ResolveDependency()
-    {
-        var currentSave = Provider.Of<MetadataManager>(this).CurrentSave;
-        if (currentSave is not null)
-        {
-            var characterDb = new CharacterDatabase($"Data Source=m8a_save_{currentSave}.db");
-            provider.Add<CharacterDatabase>(characterDb);
-
-            var characterManager = new CharacterManager(characterDb);
-            provider.Add<CharacterManager>(characterManager);
-        }
     }
 
     private void AddRouter()
     {
         var router = Router.CreateRouter(
-            defaultPage: "/newGame",
+            defaultPage: "/intermission/opening",
             routes: [
-                (name: "/newGame", uri: "res://scene/game/character/character_creation.tscn"),
                 (name: "/intermission/opening", uri: "res://scene/game/intermission/opening_scene.tscn")
             ]
         );

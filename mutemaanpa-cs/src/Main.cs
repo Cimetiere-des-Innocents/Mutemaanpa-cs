@@ -36,9 +36,9 @@ using Godot;
 ///  13. click "Continue"
 ///
 /// </summary>
-public partial class Main : PanelContainer
+public partial class Main : PanelContainer, IProvider
 {
-	public Provider provider = new();
+	private readonly Provider provider = new();
 	public override void _Ready()
 	{
 		base._Ready();
@@ -57,22 +57,12 @@ public partial class Main : PanelContainer
 		var metadata = new MetadataManager();
 		provider.Add<MetadataManager>(metadata);
 
-		var db = InitDatabase();
-		provider.Add<CharacterDatabase>(db);
-
-		var characterManager = new CharacterManager(db);
-		provider.Add<CharacterManager>(characterManager);
-	}
-
-	private CharacterDatabase InitDatabase()
-	{
-		var metadataManager = Provider.Of<MetadataManager>(this);
-		var db = new CharacterDatabase($"Data Source=m8a_save_{metadataManager.Metadata.PlayerId}.db");
-		if (metadataManager.FirstTimeLaunch)
+		var saveDb = new SaveDatabase($"Data Source=mutemaanpa.db");
+		if (metadata.FirstTimeLaunch)
 		{
-			db.InitDatabase();
+			saveDb.InitDatabase();
 		}
-		return db;
+		provider.Add<SaveDatabase>(saveDb);
 	}
 
 	private void AddRouter()
@@ -80,13 +70,17 @@ public partial class Main : PanelContainer
 		var router = Router.CreateRouter(
 				defaultPage: "/menu",
 				routes: [
-				(name: "/menu", uri: "res://scene/ui/main_menu.tscn"),
-				(name: "/setting", uri: "res://scene/ui/setting_page.tscn"),
-				(name: "/newGame", uri: "res://scene/character/character_creation.tscn"),
-				(name: "/intermission/opening", uri: "res://scene/intermission/opening_scene.tscn"),
+				(name: "/menu", uri: "res://scene/tool/main_menu.tscn"),
+				(name: "/setting", uri: "res://scene/tool/setting_page.tscn"),
+				(name: "/game", uri: "res://scene/game/game_main.tscn"),
 			]
 		);
 		AddChild(router);
+	}
+
+	public Provider GetProvider()
+	{
+		return provider;
 	}
 }
 

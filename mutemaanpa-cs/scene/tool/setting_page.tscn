@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c247ojatli678"]
 
-[ext_resource type="Script" path="res://script/ui/SettingPage.cs" id="1_7wayw"]
+[ext_resource type="Script" path="res://src/tool/SettingPage.cs" id="1_7wayw"]
 
 [node name="SettingPage" type="MarginContainer" node_paths=PackedStringArray("_CancelButton", "_OkayButton", "_TestCheckBox")]
 anchors_preset = 15

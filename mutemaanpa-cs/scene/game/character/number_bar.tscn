@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b1sb32tnlfypc"]
 
-[ext_resource type="Script" path="res://script/character/NumberBar.cs" id="1_jk78c"]
+[ext_resource type="Script" path="res://src/game/character/NumberBar.cs" id="1_jk78c"]
 
 [node name="NumberBar" type="PanelContainer" node_paths=PackedStringArray("Ability", "AddOne", "MinusOne")]
 anchors_preset = 15

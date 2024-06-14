@@ -16,7 +16,7 @@ public class SaveDatabase(string DbPath)
     private static readonly string SCHEMA = """
         CREATE TABLE IF NOT EXISTS save_slot (
             id UUID PRIMARY KEY,
-            created_at TIMESTAMP DEFAULT current_timestamp
+            created_at TIMESTAMP DEFAULT current_timestamp,
             last_played TIMESTAMP DEFAULT current_timestamp
         );
     """;

@@ -1,4 +1,5 @@
 namespace Mutemaanpa;
+
 using Godot;
 
 public partial class MainMenu : VBoxContainer
@@ -20,7 +21,18 @@ public partial class MainMenu : VBoxContainer
 		base._Ready();
 		_QuitButton!.Pressed += () => GetTree().Quit();
 		_SettingButton!.Pressed += () => Router.Of(this).Push("/setting");
-		_NewGameButton!.Pressed += () => Router.Of(this).Push("/newGame");
+		_NewGameButton!.Pressed += () =>
+		{
+			var saveDatabase = Provider.Of<SaveDatabase>(this);
+			var saveUuid = saveDatabase.NewSave();
+
+			var metadata = Provider.Of<MetadataManager>(this);
+			metadata.CurrentSave = saveUuid;
+
+			var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
+			characterDb.InitDatabase();
+			Router.Of(this).Push("/game");
+		};
 	}
 }
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dnsm13kdshcxp"]
 
-[ext_resource type="Script" path="res://script/ui/MainMenu.cs" id="1_5avki"]
+[ext_resource type="Script" path="res://src/tool/MainMenu.cs" id="1_5avki"]
 [ext_resource type="Texture2D" uid="uid://bo1qgdbjwqtnw" path="res://asset/image/title.png" id="2_esw5v"]
 
 [node name="MenuLayout" type="VBoxContainer" node_paths=PackedStringArray("_QuitButton", "_LoadGameButton", "_SettingButton", "_NewGameButton")]

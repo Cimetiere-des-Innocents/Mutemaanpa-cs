@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cgy05cyssmsda"]
 
-[ext_resource type="Script" path="res://script/character/SetAbility.cs" id="1_3b7kf"]
-[ext_resource type="PackedScene" uid="uid://b1sb32tnlfypc" path="res://scene/character/number_bar.tscn" id="1_jirnj"]
+[ext_resource type="Script" path="res://src/game/character/SetAbility.cs" id="1_3b7kf"]
+[ext_resource type="PackedScene" uid="uid://b1sb32tnlfypc" path="res://scene/game/character/number_bar.tscn" id="1_jirnj"]
 
 [node name="SetAbility" type="MarginContainer" node_paths=PackedStringArray("Strength", "Stamina", "Dexterity", "Constitution", "Intelligence", "Wisdom", "FinishButton")]
 anchors_preset = 9

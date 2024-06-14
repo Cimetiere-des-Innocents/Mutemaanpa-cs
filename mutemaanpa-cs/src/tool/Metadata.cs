@@ -1,4 +1,5 @@
 namespace Mutemaanpa;
+
 using System;
 using System.Text.Json;
 using Godot;
@@ -6,8 +7,7 @@ using Godot;
 
 public record struct MetadataState
 (
-    bool Test,
-    Guid PlayerId
+    bool Test
 );
 
 /// <summary>
@@ -20,6 +20,7 @@ public class MetadataManager
 {
     private static readonly string MetadataPath = "user://setting";
     public bool FirstTimeLaunch { get; private set; } = false;
+    public Guid? CurrentSave {get; set;} = null;
 
     public MetadataState Metadata;
 
@@ -36,8 +37,7 @@ public class MetadataManager
     {
         FirstTimeLaunch = true;
         return new MetadataState(
-            Test: false,
-            PlayerId: Guid.NewGuid()
+            Test: false
         );
     }
 

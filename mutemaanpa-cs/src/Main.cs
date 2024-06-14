@@ -38,49 +38,49 @@ using Godot;
 /// </summary>
 public partial class Main : PanelContainer, IProvider
 {
-	private readonly Provider provider = new();
-	public override void _Ready()
-	{
-		base._Ready();
-		ConfigureExternalLibraries();
-		ResolveDependency();
-		AddRouter();
-	}
+    private readonly Provider provider = new();
+    public override void _Ready()
+    {
+        base._Ready();
+        ConfigureExternalLibraries();
+        ResolveDependency();
+        AddRouter();
+    }
 
-	private static void ConfigureExternalLibraries()
-	{
-		Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-	}
+    private static void ConfigureExternalLibraries()
+    {
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    }
 
-	private void ResolveDependency()
-	{
-		var metadata = new MetadataManager();
-		provider.Add<MetadataManager>(metadata);
+    private void ResolveDependency()
+    {
+        var metadata = new MetadataManager();
+        provider.Add<MetadataManager>(metadata);
 
-		var saveDb = new SaveDatabase($"Data Source=mutemaanpa.db");
-		if (metadata.FirstTimeLaunch)
-		{
-			saveDb.InitDatabase();
-		}
-		provider.Add<SaveDatabase>(saveDb);
-	}
+        var saveDb = new SaveDatabase($"Data Source=mutemaanpa.db");
+        if (metadata.FirstTimeLaunch)
+        {
+            saveDb.InitDatabase();
+        }
+        provider.Add<SaveDatabase>(saveDb);
+    }
 
-	private void AddRouter()
-	{
-		var router = Router.CreateRouter(
-				defaultPage: "/menu",
-				routes: [
-				(name: "/menu", uri: "res://scene/tool/main_menu.tscn"),
-				(name: "/setting", uri: "res://scene/tool/setting_page.tscn"),
-				(name: "/game", uri: "res://scene/game/game_main.tscn"),
-			]
-		);
-		AddChild(router);
-	}
+    private void AddRouter()
+    {
+        var router = Router.CreateRouter(
+                defaultPage: "/menu",
+                routes: [
+                (name: "/menu", uri: "res://scene/tool/main_menu.tscn"),
+                (name: "/setting", uri: "res://scene/tool/setting_page.tscn"),
+                (name: "/game", uri: "res://scene/game/game_main.tscn"),
+            ]
+        );
+        AddChild(router);
+    }
 
-	public Provider GetProvider()
-	{
-		return provider;
-	}
+    public Provider GetProvider()
+    {
+        return provider;
+    }
 }
 

@@ -5,29 +5,41 @@ using Godot;
 
 public partial class CreationNavigator : PanelContainer
 {
-	private CharacterManager? CharacterManager;
 
-	[Export]
-	private SetInfo? SetInfo;
+    [Export]
+    private SetInfo? SetInfo;
 
-	[Export]
-	private SetAbility? SetAbility;
+    [Export]
+    private SetAbility? SetAbility;
 
-	public override void _Ready()
-	{
-		base._Ready();
-		CharacterManager = Provider.Of<CharacterManager>(this);
-		SetAbility!.FinishButton!.Pressed += () =>
-		{
-			CharacterManager.RegisterCharacter(
-				SetInfo!.GetCharacterStat(),
-				SetAbility!.GetAbility(),
-				null,
-				Guid.NewGuid()
-			);
-			CharacterManager.Store();
-			Router.Of(this).Overwrite("/intermission/opening");
-		};
-	}
+    public override void _Ready()
+    {
+        base._Ready();
+        SetAbility!.FinishButton!.Pressed += () =>
+        {
+            var saveDatabase = Provider.Of<SaveDatabase>(this);
+            var saveUuid = saveDatabase.NewSave();
+
+            var metadata = Provider.Of<MetadataManager>(this);
+            metadata.CurrentSave = saveUuid;
+
+            var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
+            characterDb.InitDatabase();
+            Provider.Add(this, characterDb);
+
+            var characterManager = new CharacterManager(characterDb);
+            Provider.Add(this, characterManager);
+
+            characterManager.RegisterCharacter(
+                SetInfo!.GetCharacterStat(),
+                SetAbility!.GetAbility(),
+                null,
+                Guid.NewGuid()
+            );
+            characterManager.Store();
+            
+            Router.Of(this).Overwrite("/intermission/opening");
+        };
+    }
 
 }

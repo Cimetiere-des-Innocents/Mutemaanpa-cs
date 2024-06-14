@@ -22,6 +22,18 @@ public class Provider
     {
         _deps.Add(typeof(T), dep);
     }
+
+    public static void Add<T>(Node node, T dep) where T : class 
+    {
+        if (node is IProvider p)
+        {
+            p.GetProvider().Add<T>(dep);
+        }
+        else
+        {
+            Add(node.GetParent(), dep);
+        }
+    }
 }
 
 public interface IProvider

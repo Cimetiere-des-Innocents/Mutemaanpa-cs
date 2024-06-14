@@ -33,7 +33,7 @@ public class CharacterTest
     [TestMethod]
     public void TestDB()
     {
-        var db = new Database("Data Source=save.db");
+        var db = new CharacterDatabase("Data Source=save.db");
         db.CommitCharacter(data);
         var characters = db.QueryCharacter();
         Assert.AreEqual(data, characters.First());
@@ -44,7 +44,7 @@ public class CharacterTest
     [TestMethod]
     public void TestManager()
     {
-        var db = new Database("Data Source=save.db");
+        var db = new CharacterDatabase("Data Source=save.db");
         var manager = new CharacterManager(db);
         var uuid = manager.RegisterCharacter(
             stat,

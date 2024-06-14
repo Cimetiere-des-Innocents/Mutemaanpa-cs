@@ -7,7 +7,7 @@ using Godot;
 /// <summary>
 /// Holds all in-game characters data, and persists them.
 /// </summary>
-public class CharacterManager(Database database)
+public class CharacterManager(CharacterDatabase database)
 {
     private readonly Dictionary<Guid, CharacterState> UuidToCharacter = [];
 

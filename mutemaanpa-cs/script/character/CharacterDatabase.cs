@@ -9,13 +9,51 @@ using Godot;
 /// <summary>
 /// Database load and stores persistent data for Mutemaanpa.
 /// </summary>
-public class Database(string DbPath)
+public class CharacterDatabase(string DbPath)
 {
+    public static readonly string SCHEMA = """
+        CREATE TYPE ORIGIN AS ENUM (
+            'SOLDIER',
+            'CLERIC',
+            'ROGUE',
+            'HUNTER',
+            'BUREAUCRAT',
+            'SPY',
+            'NAMELESS ONE'
+        );
+
+        CREATE TABLE IF NOT EXISTS character (
+            id UUID PRIMARY KEY,
+            
+            name TEXT,
+            hp REAL,
+            mp SMALLINT,
+            origin ORIGIN,
+            
+            strength SMALLINT,
+            stamina SMALLINT,
+            dexterity SMALLINT,
+            constitution SMALLINT,
+            intelligence SMALLINT,
+            wisdom SMALLINT,
+
+            player UUID
+        );
+
+        CREATE TABLE IF NOT EXISTS position (
+            id UUID PRIMARY KEY,
+            x FLOAT,
+            y FLOAT,
+            z FLOAT,
+            FOREIGN KEY(id) REFERENCES character(id)
+        );
+        """;
+
     public void InitDatabase()
     {
         // Only run DDL if the database is not exist.
         using var db = new DuckDBConnection(DbPath);
-        db.Execute(DatabaseConst.SCHEMA);
+        db.Execute(SCHEMA);
     }
 
     public void CommitCharacter(CharacterData character)

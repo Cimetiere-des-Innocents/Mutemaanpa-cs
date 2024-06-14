@@ -58,16 +58,16 @@ public partial class Main : PanelContainer
 		provider.Add<MetadataManager>(metadata);
 
 		var db = InitDatabase();
-		provider.Add<Database>(db);
+		provider.Add<CharacterDatabase>(db);
 
 		var characterManager = new CharacterManager(db);
 		provider.Add<CharacterManager>(characterManager);
 	}
 
-	private Database InitDatabase()
+	private CharacterDatabase InitDatabase()
 	{
 		var metadataManager = Provider.Of<MetadataManager>(this);
-		var db = new Database($"Data Source=m8a_save_{metadataManager.Metadata.PlayerId}.db");
+		var db = new CharacterDatabase($"Data Source=m8a_save_{metadataManager.Metadata.PlayerId}.db");
 		if (metadataManager.FirstTimeLaunch)
 		{
 			db.InitDatabase();

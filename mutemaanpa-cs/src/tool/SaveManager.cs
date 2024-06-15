@@ -7,7 +7,7 @@ using DuckDB.NET.Data;
 namespace Mutemaanpa;
 
 public record struct SaveData(
-    Guid Uuid,
+    Guid Id,
     DateTime CreatedAt,
     DateTime LastPlayed
 );

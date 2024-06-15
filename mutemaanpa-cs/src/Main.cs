@@ -72,7 +72,8 @@ public partial class Main : PanelContainer
                 routes: [
                 (name: "/menu", endpoint: () => MainMenu.CreateMainMenu(saveDatabase!.HasSave())),
                 (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
-                (name: "/newGame", endpoint: Router.From("res://scene/tool/create_character/character_creation.tscn")),
+                (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(saveDatabase!, metadata!)),
+                (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))
             ]
         );
         AddChild(router);

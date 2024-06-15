@@ -32,6 +32,7 @@ public partial class MainMenu : VBoxContainer
         _QuitButton!.Pressed += () => GetTree().Quit();
         _SettingButton!.Pressed += () => Router.Of(this).Push("/setting");
         _NewGameButton!.Pressed += () => Router.Of(this).Push("/newGame");
+        _LoadGameButton!.Pressed += () => Router.Of(this).Push("/load");
         _LoadGameButton!.Disabled = !_HasSave;
     }
 }

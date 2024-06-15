@@ -12,7 +12,7 @@ public partial class CharacterCreation : Node3D
     public static CharacterCreation CreateCharacterCreation(SaveDatabase saveDatabase,
                                                             MetadataManager metadata)
     {
-        var node = ResourceLoader.Load<PackedScene>("res://scene/game/character/character_creation.tscn")
+        var node = ResourceLoader.Load<PackedScene>("res://scene/tool/create_character/character_creation.tscn")
             .Instantiate<CharacterCreation>();
         node.creationNavigator!.SetFinishCallback((stat, ability) =>
         {

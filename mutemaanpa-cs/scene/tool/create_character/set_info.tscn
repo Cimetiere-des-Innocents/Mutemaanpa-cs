@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://lgt5fb5pu42q"]
 
-[ext_resource type="Script" path="res://src/game/character/SetInfo.cs" id="1_vmses"]
+[ext_resource type="Script" path="res://src/tool/create_character/SetInfo.cs" id="1_vmses"]
 
 [node name="SetInfo" type="MarginContainer" node_paths=PackedStringArray("CharacterName", "Origin", "BackButton")]
 anchors_preset = 9

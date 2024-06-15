@@ -48,7 +48,7 @@ public record struct CharacterData
     CharacterAbility Ability,
     CharacterStat Stat,
     Guid Uuid,
-    
+
     /// A character may not have any positions(daemon characters) in some
     /// special circumstances.
     Vector3? Position,

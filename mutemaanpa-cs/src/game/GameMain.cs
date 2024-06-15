@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 namespace Mutemaanpa;
@@ -8,43 +7,17 @@ namespace Mutemaanpa;
 /// 
 /// NOTE: the save file must be provided in advance
 /// </summary>
-public partial class GameMain : PanelContainer, IProvider
+public partial class GameMain : PanelContainer
 {
-    private readonly Provider provider = new();
-    public Provider GetProvider()
-    {
-        return provider;
-    }
+    CharacterManager? characterManager;
 
-    public static GameMain CreateGameMain(SaveDatabase saveDatabase,
-                                          MetadataManager metadata,
-                                          CharacterStat characterStat,
-                                          CharacterAbility characterAbility)
+    public static GameMain CreateGameMain(CharacterManager characterManager)
     {
+
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
-
-        var saveUuid = saveDatabase.NewSave();
-        metadata.CurrentSave = saveUuid;
-        var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
-        characterDb.InitDatabase();
-        var characterManager = new CharacterManager(characterDb);
-
-        characterManager.RegisterCharacter(
-            characterStat,
-            characterAbility,
-            null,
-            Guid.NewGuid()
-        );
-        characterManager.Store();
-
-        gameMain.ResolveDependency(characterManager);
+        gameMain.characterManager = characterManager;
         return gameMain;
-    }
-
-    private void ResolveDependency(CharacterManager characterManager)
-    {
-        provider.Add<CharacterManager>(characterManager);
     }
 
     public override void _Ready()

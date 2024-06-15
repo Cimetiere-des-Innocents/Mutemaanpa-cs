@@ -17,14 +17,15 @@ public partial class SetInfo : MarginContainer
         CharacterName!.Text,
         0.0f,
         0,
-        (Origin) Origin!.Selected
+        (Origin)Origin!.Selected
     );
 
     public override void _Ready()
     {
         base._Ready();
-        BackButton!.Pressed += () => {
-            Router.Of(this).Pop();            
+        BackButton!.Pressed += () =>
+        {
+            Router.Of(this).Pop();
         };
     }
 }

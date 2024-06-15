@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dapper;
 using DuckDB.NET.Data;
 
 namespace Mutemaanpa;
 
-public record struct SaveData (
+public record struct SaveData(
     Guid Uuid,
     DateTime CreatedAt,
     DateTime LastPlayed
@@ -39,7 +40,8 @@ public class SaveDatabase(string DbPath)
             """
             INSERT INTO save_slot (id) VALUES ($id)
             """,
-            new {
+            new
+            {
                 id = saveUuid
             }
         );
@@ -55,4 +57,6 @@ public class SaveDatabase(string DbPath)
             """
         );
     }
+
+    public bool HasSave() => QuerySaves().Any();
 }

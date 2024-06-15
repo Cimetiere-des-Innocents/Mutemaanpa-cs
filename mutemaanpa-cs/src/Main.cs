@@ -36,15 +36,16 @@ using Godot;
 ///  13. click "Continue"
 ///
 /// </summary>
-public partial class Main : PanelContainer, IProvider
+public partial class Main : PanelContainer
 {
-    private readonly Provider provider = new();
+    MetadataManager? metadata;
+    SaveDatabase? saveDatabase;
 
     public override void _Ready()
     {
         base._Ready();
         ConfigureExternalLibraries();
-        ResolveDependency();
+        Bootstrap();
         AddRouter();
     }
 
@@ -53,17 +54,15 @@ public partial class Main : PanelContainer, IProvider
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
     }
 
-    private void ResolveDependency()
+    private void Bootstrap()
     {
-        var metadata = new MetadataManager();
-        provider.Add<MetadataManager>(metadata);
+        metadata = new MetadataManager();
 
-        var saveDb = new SaveDatabase($"Data Source=mutemaanpa.db");
+        saveDatabase = new SaveDatabase($"Data Source=mutemaanpa.db");
         if (metadata.FirstTimeLaunch)
         {
-            saveDb.InitDatabase();
+            saveDatabase.InitDatabase();
         }
-        provider.Add<SaveDatabase>(saveDb);
     }
 
     private void AddRouter()
@@ -71,17 +70,13 @@ public partial class Main : PanelContainer, IProvider
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
-                (name: "/menu", endpoint: Router.From("res://scene/tool/main_menu.tscn")),
-                (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(Provider.Of<MetadataManager>(this))),
-                (name: "/newGame", endpoint: Router.From("res://scene/game/character/character_creation.tscn")),
+                (name: "/menu", endpoint: () => MainMenu.CreateMainMenu(saveDatabase!.HasSave())),
+                (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
+                (name: "/newGame", endpoint: Router.From("res://scene/tool/create_character/character_creation.tscn")),
             ]
         );
         AddChild(router);
     }
 
-    public Provider GetProvider()
-    {
-        return provider;
-    }
 }
 

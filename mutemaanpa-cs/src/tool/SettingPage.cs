@@ -27,21 +27,20 @@ public partial class SettingPage : MarginContainer
     public override void _Ready()
     {
         base._Ready();
-        metadataManager = Provider.Of<MetadataManager>(this);
         _CancelButton!.ButtonUp += () =>
         {
             Router.Of(this).Pop();
         };
         _OkayButton!.ButtonUp += () =>
         {
-            metadataManager.WriteToDisk();
+            metadataManager!.WriteToDisk();
             Router.Of(this).Pop();
         };
         _TestCheckBox!.ButtonUp += () =>
         {
-            metadataManager.Metadata.Test = _TestCheckBox.ButtonPressed;
+            metadataManager!.Metadata.Test = _TestCheckBox.ButtonPressed;
         };
-        _TestCheckBox?.SetPressedNoSignal(metadataManager.Metadata.Test);
+        _TestCheckBox?.SetPressedNoSignal(metadataManager!.Metadata.Test);
     }
 }
 

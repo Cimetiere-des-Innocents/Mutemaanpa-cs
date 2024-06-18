@@ -9,14 +9,14 @@ namespace Mutemaanpa;
 /// </summary>
 public partial class GameMain : PanelContainer
 {
-    CharacterManager? characterManager;
+    CharacterMemory? characterMemory;
 
-    public static GameMain CreateGameMain(CharacterManager characterManager)
+    public static GameMain CreateGameMain(CharacterMemory characterMemory)
     {
 
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
-        gameMain.characterManager = characterManager;
+        gameMain.characterMemory = characterMemory;
         return gameMain;
     }
 

@@ -23,8 +23,8 @@ public partial class SaveSlot : PanelContainer
         node.LoadGame!.Pressed += () =>
         {
             var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveData.Id}.db");
-            var characterManager = new CharacterManager(characterDb);
-            var gameMain = GameMain.CreateGameMain(characterManager);
+            var characterMemory = new CharacterMemory(characterDb);
+            var gameMain = GameMain.CreateGameMain(characterMemory);
             Router.Of(node).Overwrite(gameMain);
 
         };

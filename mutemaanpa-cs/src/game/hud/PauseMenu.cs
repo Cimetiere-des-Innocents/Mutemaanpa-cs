@@ -20,16 +20,29 @@ public partial class PauseMenu : CenterContainer
         return node;
     }
 
-    // Called when the node enters the scene tree for the first time.
+    public override void _Input(InputEvent @event)
+    {
+        if (@event.IsActionReleased("ui_cancel"))
+        {
+            Visible = !Visible;
+            GetTree().Paused = !GetTree().Paused;
+            // NOTE that if we don't accept the event, it will propagates to parent
+            // controls which can result in double canceling... that may not be desired.
+            AcceptEvent();
+        }
+    }
+
     public override void _Ready()
     {
         BackGame!.Pressed += () =>
         {
-            Router.Of(this).Pop();
+            Hide();
+            GetTree().Paused = false;
         };
         ToTitle!.Pressed += () =>
         {
-            GetTree().Quit();
+            GetTree().Paused = false;
+            Router.Of(this).Pop();
         };
         QuitGame!.Pressed += () =>
         {
@@ -37,8 +50,4 @@ public partial class PauseMenu : CenterContainer
         };
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
-    }
 }

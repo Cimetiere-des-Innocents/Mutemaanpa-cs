@@ -11,9 +11,10 @@ public partial class GameMain : PanelContainer
 {
     CharacterMemory? characterMemory;
 
+    PauseMenu? pauseMenu;
+
     public static GameMain CreateGameMain(CharacterMemory characterMemory)
     {
-
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
         gameMain.characterMemory = characterMemory;
@@ -24,6 +25,7 @@ public partial class GameMain : PanelContainer
     {
         base._Ready();
         AddRouter();
+        AddPauseMenu();
     }
 
     private void AddRouter()
@@ -37,4 +39,10 @@ public partial class GameMain : PanelContainer
         AddChild(router);
     }
 
+    private void AddPauseMenu()
+    {
+        pauseMenu = PauseMenu.CreatePauseMenu();
+        AddChild(pauseMenu);
+        pauseMenu.Hide();
+    }
 }

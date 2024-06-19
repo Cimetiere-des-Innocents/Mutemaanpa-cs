@@ -25,6 +25,7 @@ script = ExtResource("1_8wapa")
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 0.892523, 0.451002, 0, -0.451002, 0.892523, 0, 2.80627, 6.06455)
+current = true
 
 [node name="NPC" type="Node3D" parent="."]
 

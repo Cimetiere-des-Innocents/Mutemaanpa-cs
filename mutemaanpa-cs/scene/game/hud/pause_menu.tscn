@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://src/game/hud/PauseMenu.cs" id="1_cx8kv"]
 
 [node name="PauseMenu" type="CenterContainer" node_paths=PackedStringArray("BackGame", "ToTitle", "QuitGame")]
+process_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -18,12 +19,15 @@ layout_mode = 2
 
 [node name="BackButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "Back To Game"
 
 [node name="MenuButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "Back To Menu"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "Quit Game"

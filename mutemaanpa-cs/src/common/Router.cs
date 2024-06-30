@@ -40,8 +40,6 @@ public partial class Router : Control
         Contract.Invariant(GetChildCount() == 1);
     }
 
-    private Router() { }
-
     public static Router CreateRouter(string defaultPage, params (string name, Welles endpoint)[] routes)
     {
         var router = new Router();

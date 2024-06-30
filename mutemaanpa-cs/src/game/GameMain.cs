@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 namespace Mutemaanpa;
@@ -9,14 +10,16 @@ namespace Mutemaanpa;
 /// </summary>
 public partial class GameMain : PanelContainer
 {
-    CharacterManager? characterManager;
+    CharacterMemory? characterMemory;
+    PauseMenu? pauseMenu;
+    WorldHud? worldHud;
+    Router? router;
 
-    public static GameMain CreateGameMain(CharacterManager characterManager)
+    public static GameMain CreateGameMain(CharacterMemory characterMemory)
     {
-
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
-        gameMain.characterManager = characterManager;
+        gameMain.characterMemory = characterMemory;
         return gameMain;
     }
 
@@ -24,17 +27,44 @@ public partial class GameMain : PanelContainer
     {
         base._Ready();
         AddRouter();
+        AddWorldHud(bindPlayerInfo);
+        AddPauseMenu();
+        LoadLevel();
     }
 
     private void AddRouter()
     {
-        var router = Router.CreateRouter(
-            defaultPage: "/intermission/opening",
-            routes: [
-                (name: "/intermission/opening", uri: "res://scene/game/intermission/opening_scene.tscn")
-            ]
-        );
+        router = new Router();
         AddChild(router);
+        router.Register(("/intermission/opening", () => OpeningScene.CreateOpeningScene(() =>
+        {
+            router.Overwrite(World.CreateWorld());
+            worldHud!.Show();
+        })));
     }
 
+    private void AddPauseMenu()
+    {
+        pauseMenu = PauseMenu.CreatePauseMenu();
+        AddChild(pauseMenu);
+        pauseMenu.Hide();
+    }
+
+    private void AddWorldHud(Action playerCallback)
+    {
+        worldHud = WorldHud.CreateWorldHud(playerCallback);
+        worldHud.MouseFilter = MouseFilterEnum.Pass;
+        AddChild(worldHud);
+    }
+
+    private void LoadLevel()
+    {
+        router!.Push("/intermission/opening");
+        worldHud!.Hide();
+    }
+
+    private static void bindPlayerInfo()
+    {
+
+    }
 }

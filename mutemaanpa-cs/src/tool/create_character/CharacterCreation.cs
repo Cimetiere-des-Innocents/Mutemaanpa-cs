@@ -20,16 +20,16 @@ public partial class CharacterCreation : Node3D
             metadata.CurrentSave = saveUuid;
             var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
             characterDb.InitDatabase();
-            var characterManager = new CharacterManager(characterDb);
+            var characterMemory = new CharacterMemory(characterDb);
 
-            characterManager.RegisterCharacter(
+            characterMemory.RegisterCharacter(
                 stat,
                 ability,
                 null,
                 Guid.NewGuid()
             );
-            characterManager.Store();
-            var gameMain = GameMain.CreateGameMain(characterManager);
+            characterMemory.Store();
+            var gameMain = GameMain.CreateGameMain(characterMemory);
             Router.Of(node).Overwrite(gameMain);
         });
         return node;

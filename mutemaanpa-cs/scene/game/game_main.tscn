@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://66ggisnmhfoh"]
+[gd_scene load_steps=3 format=3 uid="uid://66ggisnmhfoh"]
 
 [ext_resource type="Script" path="res://src/game/GameMain.cs" id="1_gni1y"]
-[ext_resource type="PackedScene" uid="uid://drc7l7vck2ion" path="res://scene/game/hud/world_hud.tscn" id="2_e7u8a"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8k2ap"]
 
@@ -13,7 +12,3 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_8k2ap")
 script = ExtResource("1_gni1y")
-
-[node name="WorldHud" parent="." instance=ExtResource("2_e7u8a")]
-layout_mode = 2
-mouse_filter = 1

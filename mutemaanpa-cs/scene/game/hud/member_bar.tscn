@@ -1,9 +1,23 @@
-[gd_scene format=3 uid="uid://bduhtxfoblfsb"]
+[gd_scene load_steps=3 format=3 uid="uid://bduhtxfoblfsb"]
 
-[node name="MemberBar" type="Control"]
+[ext_resource type="Texture2D" uid="uid://g72ggnr8louv" path="res://asset/image/PlayerAvatar.png" id="1_vm1q2"]
+[ext_resource type="Script" path="res://src/game/hud/MemberBar.cs" id="1_xnkmg"]
+
+[node name="MemberBar" type="Control" node_paths=PackedStringArray("playerButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_xnkmg")
+playerButton = NodePath("TextureButton")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 1
+offset_top = 200.0
+offset_right = 450.0
+offset_bottom = 800.0
+scale = Vector2(0.3, 0.3)
+texture_normal = ExtResource("1_vm1q2")
+stretch_mode = 4

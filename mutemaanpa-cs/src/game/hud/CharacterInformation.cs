@@ -5,7 +5,7 @@ using Godot;
 /// <summary>
 /// CharacterInformation shows the character stat in a in-game popup window.
 /// </summary>
-public partial class CharacterInformation : PanelContainer
+public partial class CharacterInformation : CenterContainer
 {
     [Export]
     Label? CharacterName;

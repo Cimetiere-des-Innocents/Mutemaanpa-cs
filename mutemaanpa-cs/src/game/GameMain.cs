@@ -31,7 +31,7 @@ public partial class GameMain : PanelContainer
     {
         base._Ready();
         AddRouter();
-        AddWorldHud(BindPlayerInfo);
+        AddWorldHud(BindPlayerInfo, BindPlayerHpMp());
         AddPauseMenu();
         LoadLevel();
     }
@@ -55,9 +55,9 @@ public partial class GameMain : PanelContainer
         pauseMenu.Hide();
     }
 
-    private void AddWorldHud(Action playerCallback)
+    private void AddWorldHud(Action playerCallback, MemberLiveData memberLiveData)
     {
-        worldHud = WorldHud.CreateWorldHud(playerCallback);
+        worldHud = WorldHud.CreateWorldHud(playerCallback, memberLiveData);
         worldHud.MouseFilter = MouseFilterEnum.Pass;
         AddChild(worldHud);
     }
@@ -72,5 +72,15 @@ public partial class GameMain : PanelContainer
     {
         var info = CharacterInformation.From(characterMemory!.GetPlayer());
         worldHud!.AddChild(info);
+    }
+
+    private MemberLiveData BindPlayerHpMp()
+    {
+        return new MemberLiveData(
+            GetMaxHp: () => characterMemory!.GetPlayer().CharacterRuntime.MaxHitPoint,
+            GetCurHp: () => (int)characterMemory!.GetPlayer().CharacterData.Stat.Hp,
+            GetMaxMp: () => characterMemory!.GetPlayer().CharacterRuntime.MaxManaPoint,
+            GetCurMp: () => characterMemory!.GetPlayer().CharacterData.Stat.Mp
+        );
     }
 }

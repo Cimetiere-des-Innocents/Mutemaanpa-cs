@@ -3,68 +3,68 @@
 [ext_resource type="PackedScene" uid="uid://bd54kne6cmfv0" path="res://scene/game/hud/label_value.tscn" id="1_ibgyh"]
 [ext_resource type="Script" path="res://src/game/hud/CharacterInformation.cs" id="1_v5mtl"]
 
-[node name="CharacterInformation" type="PanelContainer" node_paths=PackedStringArray("CharacterName", "HitPointDisplay", "ManaPointDisplay", "OriginDisplay", "StrengthDisplay", "StaminaDisplay", "DexterityDisplay", "ConstitutionDisplay", "IntelligenceDisplay", "WisdomDisplay", "QuitButton")]
+[node name="CharacterInformation" type="CenterContainer" node_paths=PackedStringArray("CharacterName", "HitPointDisplay", "ManaPointDisplay", "OriginDisplay", "StrengthDisplay", "StaminaDisplay", "DexterityDisplay", "ConstitutionDisplay", "IntelligenceDisplay", "WisdomDisplay", "QuitButton")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_v5mtl")
-CharacterName = NodePath("CenterContainer/MarginContainer/VBoxContainer/Name")
-HitPointDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/HitPoint")
-ManaPointDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/ManaPoint")
-OriginDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Origin")
-StrengthDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Strength")
-StaminaDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Stamina")
-DexterityDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Dexterity")
-ConstitutionDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Constitution")
-IntelligenceDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Intelligence")
-WisdomDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Wisdom")
-QuitButton = NodePath("CenterContainer/MarginContainer/VBoxContainer/CloseButton")
+CharacterName = NodePath("PanelContainer/MarginContainer/VBoxContainer/Name")
+HitPointDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/HitPoint")
+ManaPointDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/ManaPoint")
+OriginDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/Origin")
+StrengthDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/Strength")
+StaminaDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/Stamina")
+DexterityDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/Dexterity")
+ConstitutionDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/Constitution")
+IntelligenceDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/Intelligence")
+WisdomDisplay = NodePath("PanelContainer/MarginContainer/VBoxContainer/Wisdom")
+QuitButton = NodePath("PanelContainer/MarginContainer/VBoxContainer/CloseButton")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Name" type="Label" parent="CenterContainer/MarginContainer/VBoxContainer"]
+[node name="Name" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="HitPoint" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="HitPoint" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="ManaPoint" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="ManaPoint" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="Origin" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="Origin" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="Strength" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="Strength" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="Stamina" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="Stamina" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="Dexterity" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="Dexterity" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="Constitution" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="Constitution" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="Intelligence" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="Intelligence" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="Wisdom" parent="CenterContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
+[node name="Wisdom" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource("1_ibgyh")]
 layout_mode = 2
 
-[node name="CloseButton" type="Button" parent="CenterContainer/MarginContainer/VBoxContainer"]
+[node name="CloseButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Close"

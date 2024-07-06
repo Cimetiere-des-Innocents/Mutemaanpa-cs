@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://drc7l7vck2ion"]
+
+[ext_resource type="Script" path="res://src/game/hud/WorldHud.cs" id="1_06tqh"]
+[ext_resource type="PackedScene" uid="uid://de5o23l85ur3f" path="res://scene/game/hud/bottom/bottom_deck.tscn" id="2_5cqph"]
+
+[node name="WorldHud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_06tqh")
+
+[node name="BottomDeck" parent="." instance=ExtResource("2_5cqph")]
+layout_mode = 1

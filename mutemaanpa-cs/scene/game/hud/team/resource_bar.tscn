@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://2ys0qncoeytu"]
+
+[ext_resource type="Script" path="res://src/game/hud/team/ResourceBar.cs" id="1_h60jk"]
+[ext_resource type="StyleBox" uid="uid://q4ca1unb3shu" path="res://scene/game/hud/team/style/background_fill.tres" id="2_fsnn1"]
+[ext_resource type="StyleBox" uid="uid://bgnv3xgap0p35" path="res://scene/game/hud/team/style/hp_bar_fill.tres" id="3_dvlnv"]
+
+[node name="ResourceBar" type="MarginContainer" node_paths=PackedStringArray("ProgressBar")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 1
+script = ExtResource("1_h60jk")
+ProgressBar = NodePath("ProgressBar")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/background = ExtResource("2_fsnn1")
+theme_override_styles/fill = ExtResource("3_dvlnv")
+value = 80.0

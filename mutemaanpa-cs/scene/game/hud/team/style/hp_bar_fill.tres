@@ -1,0 +1,7 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://bgnv3xgap0p35"]
+
+[sub_resource type="MeshTexture" id="MeshTexture_qwbvd"]
+
+[resource]
+texture = SubResource("MeshTexture_qwbvd")
+modulate_color = Color(0.533326, 0, 0, 1)

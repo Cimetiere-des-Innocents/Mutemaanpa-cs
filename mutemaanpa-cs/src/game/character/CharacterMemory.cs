@@ -5,9 +5,9 @@ using System.Linq;
 using Godot;
 
 /// <summary>
-/// Holds all in-game characters data, and persists them.
+/// Holds all in-game characters data in memory, and persists them.
 /// </summary>
-public class CharacterManager(CharacterDatabase database)
+public class CharacterMemory(CharacterDatabase database)
 {
     private readonly Dictionary<Guid, CharacterState> UuidToCharacter = [];
 
@@ -63,7 +63,7 @@ public class CharacterManager(CharacterDatabase database)
     {
         return new CharacterRuntime(
             MaxHitPoint: data.Ability.Constitution,
-            MaxManaPoint: data.Ability.Stamina
+            MaxManaPoint: 0
         );
     }
 

@@ -20,7 +20,15 @@ public partial class LoadGame : ScrollContainer
             Router.Of(node).Pop();
         };
         saveDatabase.QuerySaves().AsList()
-            .ForEach((save) => node.saveList!.AddChild(SaveSlot.CreateSaveSlot(save)));
+            .ForEach((save) => node.saveList!.AddChild(SaveSlot.CreateSaveSlot(save, () =>
+        {
+            var characterDb = new CharacterDatabase($"Data Source=m8a_save_{save.Id}.db");
+            var characterMemory = new CharacterMemory(characterDb);
+            characterMemory.Load();
+            var gameMain = GameMain.CreateGameMain(characterMemory);
+            Router.Of(node).Overwrite(gameMain);
+
+        })));
         return node;
     }
 }

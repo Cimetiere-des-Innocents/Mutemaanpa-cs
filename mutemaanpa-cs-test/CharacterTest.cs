@@ -34,6 +34,7 @@ public class CharacterTest
     public void TestDB()
     {
         var db = new CharacterDatabase("Data Source=save.db");
+        db.InitDatabase();
         db.CommitCharacter(data);
         var characters = db.QueryCharacter();
         Assert.AreEqual(data, characters.First());
@@ -45,7 +46,8 @@ public class CharacterTest
     public void TestManager()
     {
         var db = new CharacterDatabase("Data Source=save.db");
-        var manager = new CharacterManager(db);
+        db.InitDatabase();
+        var manager = new CharacterMemory(db);
         var uuid = manager.RegisterCharacter(
             stat,
             ability,
@@ -54,7 +56,7 @@ public class CharacterTest
         );
         var character = manager.GetCharacterState(uuid);
         manager.Store();
-        var manager2 = new CharacterManager(db);
+        var manager2 = new CharacterMemory(db);
         manager2.Load();
         var characterRead = manager2.GetPlayer();
         Assert.AreEqual(character, characterRead);

@@ -17,7 +17,8 @@ public partial class OpeningScene : PanelContainer
 
     public override void _Input(InputEvent @event)
     {
-        if (@event.IsActionReleased("ui_accept"))
+        if (@event.IsActionReleased("ui_accept") 
+            || (@event is InputEventMouseButton m && m.IsReleased()))
         {
             onFinished?.Invoke();
         }

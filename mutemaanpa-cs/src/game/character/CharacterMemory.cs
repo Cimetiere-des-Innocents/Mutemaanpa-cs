@@ -63,7 +63,7 @@ public class CharacterMemory(CharacterDatabase database)
     {
         return new CharacterRuntime(
             MaxHitPoint: data.Ability.Constitution,
-            MaxManaPoint: data.Ability.Stamina
+            MaxManaPoint: 0
         );
     }
 

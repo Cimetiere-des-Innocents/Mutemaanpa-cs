@@ -16,6 +16,14 @@ public partial class ResourceBar : MarginContainer
     {
         ProgressBar!.MaxValue = GetMaximumValue!();
         ProgressBar!.Value = GetCurrentValue!();
+        if (ProgressBar!.MaxValue == 0)
+        {
+            Hide();
+        }
+        else
+        {
+            Show();
+        }
     }
 
     public void SetBarStyle(StyleBoxTexture fillStyle)

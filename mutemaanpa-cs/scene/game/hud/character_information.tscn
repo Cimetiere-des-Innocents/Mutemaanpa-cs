@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bd54kne6cmfv0" path="res://scene/game/hud/label_value.tscn" id="1_ibgyh"]
 [ext_resource type="Script" path="res://src/game/hud/CharacterInformation.cs" id="1_v5mtl"]
 
-[node name="CharacterInformation" type="PanelContainer" node_paths=PackedStringArray("CharacterName", "HitPointDisplay", "ManaPointDisplay", "OriginDisplay", "StrengthDisplay", "StaminaDisplay", "DexterityDisplay", "ConstitutionDisplay", "IntelligenceDisplay", "WisdomDisplay")]
+[node name="CharacterInformation" type="PanelContainer" node_paths=PackedStringArray("CharacterName", "HitPointDisplay", "ManaPointDisplay", "OriginDisplay", "StrengthDisplay", "StaminaDisplay", "DexterityDisplay", "ConstitutionDisplay", "IntelligenceDisplay", "WisdomDisplay", "QuitButton")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -20,6 +20,7 @@ DexterityDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Dexte
 ConstitutionDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Constitution")
 IntelligenceDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Intelligence")
 WisdomDisplay = NodePath("CenterContainer/MarginContainer/VBoxContainer/Wisdom")
+QuitButton = NodePath("CenterContainer/MarginContainer/VBoxContainer/CloseButton")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 2

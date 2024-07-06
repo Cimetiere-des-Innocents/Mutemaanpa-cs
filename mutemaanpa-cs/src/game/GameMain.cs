@@ -12,6 +12,10 @@ public partial class GameMain : PanelContainer
 {
     CharacterMemory? characterMemory;
     PauseMenu? pauseMenu;
+    /// <summary>
+    /// worldHud put here, because it must have a Control parent, otherwise mouse events will not
+    /// propagate and the whole ui breaks.
+    /// </summary>
     WorldHud? worldHud;
     Router? router;
 
@@ -27,7 +31,7 @@ public partial class GameMain : PanelContainer
     {
         base._Ready();
         AddRouter();
-        AddWorldHud(bindPlayerInfo);
+        AddWorldHud(BindPlayerInfo);
         AddPauseMenu();
         LoadLevel();
     }
@@ -36,11 +40,12 @@ public partial class GameMain : PanelContainer
     {
         router = new Router();
         AddChild(router);
-        router.Register(("/intermission/opening", () => OpeningScene.CreateOpeningScene(() =>
+        Node GetOpeningScene() => OpeningScene.CreateOpeningScene(() =>
         {
             router.Overwrite(World.CreateWorld());
             worldHud!.Show();
-        })));
+        });
+        router.Register(("/intermission/opening", GetOpeningScene));
     }
 
     private void AddPauseMenu()
@@ -63,8 +68,9 @@ public partial class GameMain : PanelContainer
         worldHud!.Hide();
     }
 
-    private static void bindPlayerInfo()
+    private void BindPlayerInfo()
     {
-
+        var info = CharacterInformation.From(characterMemory!.GetPlayer());
+        worldHud!.AddChild(info);
     }
 }

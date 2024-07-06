@@ -21,4 +21,10 @@ public partial class LabelValue : HBoxContainer
         node.ValueLabel!.Text = value;
         return node;
     }
+
+    public void SetLabelValue(string key, string value)
+    {
+        KeyLabel!.Text = key;
+        ValueLabel!.Text = value;
+    }
 }

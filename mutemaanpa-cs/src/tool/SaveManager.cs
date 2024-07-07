@@ -23,8 +23,7 @@ public class SaveDatabase(string DbPath)
     """;
 
     /// <summary>
-    /// Run SQL Data Define language. Create table. Only execute when user first
-    /// run this game.
+    /// Run SQL Data Define language.
     /// </summary>    
     public void InitDatabase()
     {

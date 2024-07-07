@@ -1,7 +1,5 @@
 namespace mutemaanpa_cs_test;
 
-using Mutemaanpa;
-
 [TestClass]
 public class CharacterTest
 {
@@ -51,14 +49,31 @@ public class CharacterTest
         var uuid = manager.RegisterCharacter(
             stat,
             ability,
-            null,
+            Vector3.Zero,
             Guid.NewGuid()
         );
         var character = manager.GetCharacterState(uuid);
         manager.Store();
         var manager2 = new CharacterMemory(db);
         manager2.Load();
-        var characterRead = manager2.GetPlayer();
+        var characterRead = manager2.GetPlayerState();
         Assert.AreEqual(character, characterRead);
+    }
+
+    [TestMethod]
+    public void TestMove()
+    {
+        var db = new CharacterDatabase("Data Source=save.db");
+        db.InitDatabase();
+        var manager = new CharacterMemory(db);
+        _ = manager.RegisterCharacter(
+            stat,
+            ability,
+            Vector3.Zero,
+            Guid.NewGuid()
+        );
+        var character = manager.GetPlayer();
+        character.Move(Vector3.Up, 1.0f);
+        Console.WriteLine(character);
     }
 }

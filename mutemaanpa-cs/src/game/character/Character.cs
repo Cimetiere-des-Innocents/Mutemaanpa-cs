@@ -67,40 +67,97 @@ public record struct CharacterData
 public record struct CharacterRuntime
 (
     int MaxHitPoint,
-    int MaxManaPoint
+    int MaxManaPoint,
+    float Speed
 );
 
 public record struct CharacterState
 (
-    CharacterData CharacterData,
-    CharacterRuntime CharacterRuntime
+    CharacterData Data,
+    CharacterRuntime Runtime
 );
 
-abstract class ICharacter
+public abstract class ICharacter(CharacterState state)
 {
-    public required string name;
-    public required CharacterStat stat;
-    public required CharacterAbility ability;
-    public abstract Vector3 Move(int dx, int dy);
+    public CharacterState state = state;
+    public abstract (ICharacter, Vector3) Move(Vector3 input, float delta);
     public virtual void OnEnterState() { }
     public virtual void OnLeaveState() { }
+    internal abstract (ICharacter, float) Hit(float damage);
 }
 
-class ALiveCharacter : ICharacter
+class ALiveCharacter(CharacterState state) : ICharacter(state)
 {
-    public override Vector3 Move(int dx, int dy)
+    public override (ICharacter, Vector3) Move(Vector3 input, float delta)
     {
-        return Vector3.Up;
+        var deltaPosition = input.Normalized() * state.Runtime.Speed * delta;
+        var newPosition = state.Data.Position!.Value + deltaPosition;
+        return (new ALiveCharacter(state with
+        {
+            Data = state.Data with { Position = newPosition }
+        }), newPosition);
+    }
+
+    internal override (ICharacter, float) Hit(float damage)
+    {
+        Func<CharacterState, ICharacter> transit = (CharacterState state) => new ALiveCharacter(state);
+        if (damage > state.Data.Stat.Hp)
+        {
+            damage = state.Data.Stat.Hp;
+            transit = (CharacterState state) => new DeadCharacter(state);
+        }
+        var newHp = state.Data.Stat.Hp - damage;
+        var newState = state with
+        {
+            Data = state.Data with
+            {
+                Stat = state.Data.Stat with { Hp = newHp }
+            }
+        };
+        return (transit(newState), newHp);
     }
 }
 
-class DeadCharacter : ICharacter
+class DeadCharacter(CharacterState state) : ICharacter(state)
 {
-    public override Vector3 Move(int dx, int dy)
+    public override (ICharacter, Vector3) Move(Vector3 input, float delta)
     {
-        // No op
-        return Vector3.Up;
+        return (this, Vector3.Zero);
+    }
+
+    internal override (ICharacter, float) Hit(float damage)
+    {
+        return (this, 0);
     }
 }
 
+public partial class Character(ICharacter state)
+{
+    static readonly Action NoAction = () => { };
 
+    public Character(CharacterState characterState) : this(
+        characterState.Data.Stat.Hp switch
+        {
+            0 => new DeadCharacter(characterState),
+            > 0 => new ALiveCharacter(characterState),
+            _ => throw new Exception("we don't have negative health players")
+        })
+    { }
+
+    public CharacterData Dump() => state.state.Data;
+
+    public CharacterState State() => state.state;
+
+    public Action Hit(float damage)
+    {
+        (state, damage) = state.Hit(damage);
+        EventBus.Publish(new HitEvent(state.state.Data.Stat.Name, damage));
+        return NoAction;
+    }
+
+    public Vector3 Move(Vector3 input, float delta)
+    {
+        (state, var position) = state.Move(input, delta);
+        return position;
+    }
+}

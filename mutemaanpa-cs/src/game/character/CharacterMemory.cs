@@ -9,7 +9,7 @@ using Godot;
 /// </summary>
 public class CharacterMemory(CharacterDatabase database)
 {
-    private readonly Dictionary<Guid, CharacterState> UuidToCharacter = [];
+    private readonly Dictionary<Guid, Character> UuidToCharacter = [];
 
     /// <summary>
     /// Generate a new character with its data, assigns uuid.
@@ -17,7 +17,7 @@ public class CharacterMemory(CharacterDatabase database)
     /// <param name="characterState"></param>
     public Guid RegisterCharacter(CharacterStat stat,
                                   CharacterAbility ability,
-                                  Vector3? spawnPoint,
+                                  Vector3 spawnPoint,
                                   Guid? player)
     {
         var uuid = Guid.NewGuid();
@@ -30,15 +30,15 @@ public class CharacterMemory(CharacterDatabase database)
             Mp = runtimeState.MaxManaPoint
         };
         data.Stat = newStat;
-        UuidToCharacter.Add(uuid, new(data, runtimeState));
+        UuidToCharacter.Add(uuid, new(new CharacterState(data, runtimeState)));
         return uuid;
     }
 
     public void Store()
     {
-        foreach (var state in UuidToCharacter.Values)
+        foreach (var character in UuidToCharacter.Values)
         {
-            var data = state.CharacterData;
+            var data = character.Dump();
             database.CommitCharacter(data);
         }
     }
@@ -51,31 +51,34 @@ public class CharacterMemory(CharacterDatabase database)
         }
     }
 
-    private static CharacterState LoadCharacter(CharacterData data)
-    {
-        return new(
+    private static Character LoadCharacter(CharacterData data) => new(LoadCharacterState(data));
+
+    private static CharacterState LoadCharacterState(CharacterData data) =>
+        new(
             data,
             CalculateRuntimeProperty(data)
         );
-    }
+
 
     private static CharacterRuntime CalculateRuntimeProperty(CharacterData data)
     {
         return new CharacterRuntime(
             MaxHitPoint: data.Ability.Constitution,
-            MaxManaPoint: 0
+            MaxManaPoint: 0,
+            Speed: 5.0f
         );
     }
 
     public CharacterState? GetCharacterState(Guid guid)
         => UuidToCharacter.TryGetValue(guid, out var v)
-            ? v
+            ? v.State()
             : null;
 
-
-    public CharacterState GetPlayer(/* TODO: distinguish players */)
+    public CharacterState GetPlayerState(/* TODO: distinguish players */)
         => (from c in UuidToCharacter.Values
-            where c.CharacterData.Player is not null
-            select c).First();
+            where c.State().Data.Player is not null
+            select c.State()).First();
+
+    public Character GetPlayer() => new(GetPlayerState());
 }
 

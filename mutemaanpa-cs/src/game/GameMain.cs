@@ -10,7 +10,7 @@ namespace Mutemaanpa;
 /// </summary>
 public partial class GameMain : PanelContainer
 {
-    CharacterMemory? characterMemory;
+    public CharacterMemory? characterMemory { get; set; }
     PauseMenu? pauseMenu;
     /// <summary>
     /// worldHud put here, because it must have a Control parent, otherwise mouse events will not
@@ -70,17 +70,17 @@ public partial class GameMain : PanelContainer
 
     private void BindPlayerInfo()
     {
-        var info = CharacterInformation.From(characterMemory!.GetPlayer());
+        var info = CharacterInformation.From(characterMemory!.GetPlayerState());
         worldHud!.AddChild(info);
     }
 
     private MemberLiveData BindPlayerHpMp()
     {
         return new MemberLiveData(
-            GetMaxHp: () => characterMemory!.GetPlayer().CharacterRuntime.MaxHitPoint,
-            GetCurHp: () => (int)characterMemory!.GetPlayer().CharacterData.Stat.Hp,
-            GetMaxMp: () => characterMemory!.GetPlayer().CharacterRuntime.MaxManaPoint,
-            GetCurMp: () => characterMemory!.GetPlayer().CharacterData.Stat.Mp
+            GetMaxHp: () => characterMemory!.GetPlayerState().Runtime.MaxHitPoint,
+            GetCurHp: () => (int)characterMemory!.GetPlayerState().Data.Stat.Hp,
+            GetMaxMp: () => characterMemory!.GetPlayerState().Runtime.MaxManaPoint,
+            GetCurMp: () => characterMemory!.GetPlayerState().Data.Stat.Mp
         );
     }
 }

@@ -59,10 +59,7 @@ public partial class Main : PanelContainer
         metadata = new MetadataManager();
 
         saveDatabase = new SaveDatabase($"Data Source=mutemaanpa.db");
-        if (metadata.FirstTimeLaunch)
-        {
-            saveDatabase.InitDatabase();
-        }
+        saveDatabase.InitDatabase();
     }
 
     private void AddRouter()

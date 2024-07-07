@@ -1,5 +1,6 @@
 namespace Mutemaanpa;
 
+using System;
 using Godot;
 
 public partial class PauseMenu : CenterContainer
@@ -12,11 +13,15 @@ public partial class PauseMenu : CenterContainer
 
     [Export]
     Button? QuitGame;
+    Action? ToTitleCallback;
+    Action? QuitCallback;
 
-    public static PauseMenu CreatePauseMenu()
+    public static PauseMenu CreatePauseMenu(Action toMenuCallback, Action quitCallback)
     {
         var node = ResourceLoader.Load<PackedScene>("res://scene/game/hud/pause_menu.tscn")
             .Instantiate<PauseMenu>();
+        node.ToTitleCallback = toMenuCallback;
+        node.QuitCallback = quitCallback;
         return node;
     }
 
@@ -42,10 +47,12 @@ public partial class PauseMenu : CenterContainer
         ToTitle!.Pressed += () =>
         {
             GetTree().Paused = false;
+            ToTitleCallback!.Invoke();
             Router.Of(this).Pop();
         };
         QuitGame!.Pressed += () =>
         {
+            QuitCallback!.Invoke();
             GetTree().Quit();
         };
     }

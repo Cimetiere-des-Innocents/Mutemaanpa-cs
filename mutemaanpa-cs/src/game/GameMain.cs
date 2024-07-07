@@ -50,9 +50,14 @@ public partial class GameMain : PanelContainer
 
     private void AddPauseMenu()
     {
-        pauseMenu = PauseMenu.CreatePauseMenu();
+        pauseMenu = PauseMenu.CreatePauseMenu(SaveGame, SaveGame);
         AddChild(pauseMenu);
         pauseMenu.Hide();
+    }
+
+    private void SaveGame()
+    {
+        characterMemory!.Store();
     }
 
     private void AddWorldHud(Action playerCallback, MemberLiveData memberLiveData)

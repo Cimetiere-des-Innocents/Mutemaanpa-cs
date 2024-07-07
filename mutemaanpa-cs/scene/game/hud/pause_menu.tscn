@@ -25,9 +25,9 @@ text = "Back To Game"
 [node name="MenuButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "Back To Menu"
+text = "Save & To Menu"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
-text = "Quit Game"
+text = "Save & Quit"

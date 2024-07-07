@@ -74,11 +74,10 @@ public class CharacterMemory(CharacterDatabase database)
             ? v.State()
             : null;
 
-    public CharacterState GetPlayerState(/* TODO: distinguish players */)
-        => (from c in UuidToCharacter.Values
-            where c.State().Data.Player is not null
-            select c.State()).First();
+    public CharacterState GetPlayerState() => GetPlayer().State();
 
-    public Character GetPlayer() => new(GetPlayerState());
+    public Character GetPlayer() => (from c in UuidToCharacter.Values
+                                     where c.State().Data.Player is not null
+                                     select c).First();
 }
 

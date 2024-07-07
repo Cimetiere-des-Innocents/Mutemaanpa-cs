@@ -62,7 +62,7 @@ public class CharacterDatabase(string DbPath)
         db.Open();
         using var tx = db.BeginTransaction();
         string sql = """
-            INSERT INTO character(id, name, hp, mp, origin, strength, stamina,
+            INSERT OR REPLACE INTO character(id, name, hp, mp, origin, strength, stamina,
             dexterity, constitution, intelligence, wisdom, player) VALUES 
             ($Id, $Name, $Hp, $Mp, $Origin, $Str, $Sta, $Dex, $Con, $Int, $Wis, $Player);
             """;
@@ -85,7 +85,7 @@ public class CharacterDatabase(string DbPath)
         if (character.Position != null)
         {
             sql = """
-            INSERT INTO position(id, x, y, z) VALUES ($Id, $X, $Y, $Z);
+            INSERT OR REPLACE INTO position(id, x, y, z) VALUES ($Id, $X, $Y, $Z);
             """;
             param = [ new {
                 Id = character.Uuid,

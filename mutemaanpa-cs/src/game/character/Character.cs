@@ -101,7 +101,7 @@ class ALiveCharacter(CharacterState state) : ICharacter(state)
     internal override (ICharacter, float) Hit(float damage)
     {
         Func<CharacterState, ICharacter> transit = (CharacterState state) => new ALiveCharacter(state);
-        if (damage > state.Data.Stat.Hp)
+        if (damage >= state.Data.Stat.Hp)
         {
             damage = state.Data.Stat.Hp;
             transit = (CharacterState state) => new DeadCharacter(state);
@@ -159,5 +159,10 @@ public partial class Character(ICharacter state)
     {
         (state, var position) = state.Move(input, delta);
         return position;
+    }
+
+    public bool Dead
+    {
+        get => state is DeadCharacter;
     }
 }

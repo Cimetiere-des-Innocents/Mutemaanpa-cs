@@ -67,7 +67,7 @@ public partial class Main : PanelContainer
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
-                (name: "/menu", endpoint: () => MainMenu.CreateMainMenu(saveDatabase!.HasSave())),
+                (name: "/menu", endpoint: () => MainMenu.CreateMainMenu()),
                 (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
                 (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(saveDatabase!, metadata!)),
                 (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))

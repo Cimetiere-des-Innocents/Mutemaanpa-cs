@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/tool/load/SaveSlot.cs" id="1_byaf1"]
 
-[node name="SaveSlot" type="PanelContainer" node_paths=PackedStringArray("SaveName", "SaveTime", "LoadGame")]
+[node name="SaveSlot" type="PanelContainer" node_paths=PackedStringArray("SaveName", "SaveTime", "LoadGame", "DeleteSave")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,6 +12,7 @@ script = ExtResource("1_byaf1")
 SaveName = NodePath("MarginContainer/HBoxContainer/VBoxContainer/SaveName")
 SaveTime = NodePath("MarginContainer/HBoxContainer/VBoxContainer/SaveTime")
 LoadGame = NodePath("MarginContainer/HBoxContainer/LoadButton")
+DeleteSave = NodePath("MarginContainer/HBoxContainer/DeleteButton")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -41,3 +42,9 @@ text = "Time here"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Load"
+
+[node name="DeleteButton" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Delete
+"

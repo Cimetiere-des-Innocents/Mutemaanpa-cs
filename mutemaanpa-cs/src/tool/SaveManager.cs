@@ -58,4 +58,18 @@ public class SaveDatabase(string DbPath)
     }
 
     public bool HasSave() => QuerySaves().Any();
+
+    internal void Remove(Guid id)
+    {
+        using var db = new DuckDBConnection(DbPath);
+        db.Execute(
+            """
+            DELETE FROM save_slot WHERE id = $id
+            """,
+            new
+            {
+                id
+            }
+        );
+    }
 }

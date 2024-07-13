@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game/hud/GameLog.cs" id="1_7wltg"]
 
-[node name="GameLog" type="Control"]
+[node name="GameLog" type="Control" node_paths=PackedStringArray("LogBox")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_7wltg")
+LogBox = NodePath("PanelContainer/VBoxContainer/RichTextLabel")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1

@@ -142,9 +142,9 @@ public partial class Router : Control
         if (GetChildCount() > 0)
         {
             var child = GetChild(0);
-            sceneStack.Push(child);
             if (removeOld)
             {
+                sceneStack.Push(child);
                 RemoveChild(child);
             }
         }

@@ -73,6 +73,34 @@ public partial class Main : PanelContainer
                 (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))
             ]
         );
+        Node GetGameOverScene()
+        {
+            GetTree().Paused = true;
+            return GameOver.CreateGameOver(
+                ToTitleAction: () =>
+                {
+                    GetTree().Paused = false;
+                    foreach (var child in router.GetChildren())
+                    {
+                        router.RemoveChild(child);
+                        child.QueueFree();
+                    }
+                    router.Push("/menu");
+                },
+                LoadGameAction: () =>
+                {
+                    GetTree().Paused = false;
+                    foreach (var child in router.GetChildren())
+                    {
+                        router.RemoveChild(child);
+                        child.QueueFree();
+                    }
+                    router.Push("/menu");
+                    router.Push("/load");
+                }
+            );
+        }
+        router.Register(("/gameOver", GetGameOverScene));
         AddChild(router);
     }
 

@@ -28,7 +28,8 @@ public partial class LoadGame : ScrollContainer
             .ForEach((save) =>
             {
                 var saveFile = $"m8a_save_{save.Id}.db";
-                var child = SaveSlot.CreateSaveSlot(save, () =>
+                var child = SaveSlot.CreateSaveSlot(save,
+                loadGameBehavior: () =>
                 {
                     var characterDb = new CharacterDatabase($"Data Source={saveFile}");
                     var characterMemory = new CharacterMemory(characterDb);
@@ -36,7 +37,8 @@ public partial class LoadGame : ScrollContainer
                     var gameMain = GameMain.CreateGameMain(characterMemory);
                     Router.Of(node).Overwrite(gameMain);
 
-                }, () =>
+                },
+                deleteSaveBehavior: () =>
                 {
                     saveDatabase.Remove(save.Id);
                     node.saveList!.RemoveChild(node.saveIdToListIdx.TryGetValue(save.Id, out var value)

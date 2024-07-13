@@ -9,13 +9,31 @@ public partial class GameLog : Control
 
     public override void _Ready()
     {
-        EventBus.Subscribe((HitEvent hit) =>
+        EventBus.Subscribe<HitEvent>(HitHandler);
+        EventBus.Subscribe<DeadEvent>(DeadHandler);
+    }
+
+    private void HitHandler(HitEvent hit)
+    {
+        LogBox?.AppendText($"{hit.Victim} was hit by damage {hit.Damage}.\n");
+    }
+
+    private void DeadHandler(DeadEvent dead)
+    {
+        LogBox?.AppendText($"{dead.Character.Data.Stat.Name} is dead!\n");
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationPredelete)
         {
-            LogBox!.AppendText($"{hit.Victim} was hit by damage {hit.Damage}.");
-        });
-        EventBus.Subscribe((DeadEvent dead) =>
-        {
-            LogBox!.AppendText($"{dead.Victim} is dead!");
-        });
+            GameOverHandler();
+        }
+    }
+
+    private void GameOverHandler()
+    {
+        EventBus.Unsubscribe<HitEvent>(HitHandler);
+        EventBus.Unsubscribe<DeadEvent>(DeadHandler);
     }
 }

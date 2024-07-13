@@ -54,7 +54,7 @@ skeleton = NodePath("../../DeadZone/NPCMesh")
 transform = Transform3D(1, 0, 0, 0, 0.892523, 0.451002, 0, -0.451002, 0.892523, 0, 2.80627, 6.06455)
 current = true
 
-[node name="DeadZone" type="Area3D" parent="."]
+[node name="DeadZone" type="RigidBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeadZone"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0193576, -0.0130316, 0)

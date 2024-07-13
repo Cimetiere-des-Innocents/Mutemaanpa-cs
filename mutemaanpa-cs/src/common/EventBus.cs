@@ -10,9 +10,9 @@ public class HitEvent(string victim, float damage) : EventArgs
     public float Damage { get; } = damage;
 }
 
-public class DeadEvent(string victim) : EventArgs
+public class DeadEvent(CharacterState character) : EventArgs
 {
-    public string Victim { get; } = victim;
+    public CharacterState Character { get; } = character;
 }
 
 /// <summary>
@@ -31,6 +31,18 @@ public static class EventBus
     private static readonly Dictionary<Type, List<Delegate>> eventHandlers = [];
     private static readonly object Lock = new();
 
+    /// <summary>
+    /// Subscribes an game-wide event
+    /// 
+    /// NOTE: If you subscribe some events, remember to unsubscribe it according to your object's
+    /// lifetime, otherwise segmentation fault may happens.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="handler"></param> <summary>
+    /// 
+    /// </summary>
+    /// <param name="handler"></param>
+    /// <typeparam name="T"></typeparam>
     public static void Subscribe<T>(Action<T> handler) where T : EventArgs
     {
         Type type = typeof(T);

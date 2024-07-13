@@ -5,11 +5,12 @@ using Godot;
 public partial class Player : CharacterBody3D
 {
     private Character? player;
+    private double lastDamaged = 0.0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        player = GetNode<GameMain>("../../..").characterMemory!.GetPlayer();
+        player = GetNode<GameMain>("../../..").CharacterMemory!.GetPlayer();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -32,6 +33,20 @@ public partial class Player : CharacterBody3D
             input += Vector3.Right;
         }
 
-        Position = player!.Move(input, (float)delta);
+        foreach (var kinematicCollision3D in this.GetSlideCollisions())
+        {
+            if (kinematicCollision3D.GetCollider() is RigidBody3D rigidBody && rigidBody.Name == "DeadZone")
+            {
+                lastDamaged += delta;
+                if (lastDamaged > 0.5)
+                {
+                    player!.Hit(1.0f);
+                    lastDamaged -= 0.5;
+                }
+            }
+        }
+
+        Velocity = player!.GetVelocity(input);
+        MoveAndSlide();
     }
 }

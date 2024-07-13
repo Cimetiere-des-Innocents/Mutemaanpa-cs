@@ -23,3 +23,4 @@ size_flags_vertical = 1
 theme_override_styles/background = ExtResource("2_fsnn1")
 theme_override_styles/fill = ExtResource("3_dvlnv")
 value = 80.0
+rounded = true

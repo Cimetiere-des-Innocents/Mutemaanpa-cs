@@ -5,10 +5,10 @@ using Godot;
 
 public record struct MemberLiveData
 (
-    Func<int> GetMaxHp,
-    Func<int> GetCurHp,
-    Func<int> GetMaxMp,
-    Func<int> GetCurMp
+    Func<double> GetMaxHp,
+    Func<double> GetCurHp,
+    Func<double> GetMaxMp,
+    Func<double> GetCurMp
 );
 
 /// <summary>

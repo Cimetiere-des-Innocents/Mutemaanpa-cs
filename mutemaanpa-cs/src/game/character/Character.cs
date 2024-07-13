@@ -80,23 +80,13 @@ public record struct CharacterState
 public abstract class ICharacter(CharacterState state)
 {
     public CharacterState state = state;
-    public abstract (ICharacter, Vector3) Move(Vector3 input, float delta);
-    public virtual void OnEnterState() { }
-    public virtual void OnLeaveState() { }
+    public abstract Vector3 GetVelocity(Vector3 input);
     internal abstract (ICharacter, float) Hit(float damage);
 }
 
 class ALiveCharacter(CharacterState state) : ICharacter(state)
 {
-    public override (ICharacter, Vector3) Move(Vector3 input, float delta)
-    {
-        var deltaPosition = input.Normalized() * state.Runtime.Speed * delta;
-        var newPosition = state.Data.Position!.Value + deltaPosition;
-        return (new ALiveCharacter(state with
-        {
-            Data = state.Data with { Position = newPosition }
-        }), newPosition);
-    }
+    public override Vector3 GetVelocity(Vector3 input) => input.Normalized() * state.Runtime.Speed;
 
     internal override (ICharacter, float) Hit(float damage)
     {
@@ -104,7 +94,11 @@ class ALiveCharacter(CharacterState state) : ICharacter(state)
         if (damage >= state.Data.Stat.Hp)
         {
             damage = state.Data.Stat.Hp;
-            transit = (CharacterState state) => new DeadCharacter(state);
+            transit = (CharacterState state) =>
+            {
+                EventBus.Publish(new DeadEvent(state));
+                return new DeadCharacter(state);
+            };
         }
         var newHp = state.Data.Stat.Hp - damage;
         var newState = state with
@@ -120,10 +114,7 @@ class ALiveCharacter(CharacterState state) : ICharacter(state)
 
 class DeadCharacter(CharacterState state) : ICharacter(state)
 {
-    public override (ICharacter, Vector3) Move(Vector3 input, float delta)
-    {
-        return (this, Vector3.Zero);
-    }
+    public override Vector3 GetVelocity(Vector3 input) => Vector3.Zero;
 
     internal override (ICharacter, float) Hit(float damage)
     {
@@ -131,6 +122,12 @@ class DeadCharacter(CharacterState state) : ICharacter(state)
     }
 }
 
+/// <summary>
+/// Controller class for characters
+/// </summary>
+/// <param name="state"></param> <summary>
+/// The state of a character.
+/// </summary>
 public partial class Character(ICharacter state)
 {
     static readonly Action NoAction = () => { };
@@ -148,6 +145,11 @@ public partial class Character(ICharacter state)
 
     public CharacterState State() => state.state;
 
+    /// <summary>
+    /// Called when the player is hit by another entity.
+    /// </summary>
+    /// <param name="damage">The net damage</param>
+    /// <returns>Reaction to the damage</returns>
     public Action Hit(float damage)
     {
         (state, damage) = state.Hit(damage);
@@ -155,11 +157,7 @@ public partial class Character(ICharacter state)
         return NoAction;
     }
 
-    public Vector3 Move(Vector3 input, float delta)
-    {
-        (state, var position) = state.Move(input, delta);
-        return position;
-    }
+    public Vector3 GetVelocity(Vector3 input) => state.GetVelocity(input);
 
     public bool Dead
     {

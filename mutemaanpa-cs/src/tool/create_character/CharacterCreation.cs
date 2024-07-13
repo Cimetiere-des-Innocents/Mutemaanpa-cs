@@ -25,7 +25,7 @@ public partial class CharacterCreation : Node3D
             characterMemory.RegisterCharacter(
                 stat,
                 ability,
-                Vector3.Zero,
+                Vector3.Left,
                 Guid.NewGuid()
             );
             characterMemory.Store();

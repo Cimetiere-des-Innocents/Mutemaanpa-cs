@@ -73,9 +73,8 @@ public class CharacterTest
             Guid.NewGuid()
         );
         var character = manager.GetPlayer();
-        character.Move(Vector3.Up, 1.0f);
-        var movedVector = Vector3.Up * 5.0f * 1.0f;
-        Assert.AreEqual(character.Dump().Position!.Value, movedVector);
+        var v = character.GetVelocity(Vector3.Up);
+        Assert.AreEqual(v, Vector3.Up);
     }
 
     [TestMethod]

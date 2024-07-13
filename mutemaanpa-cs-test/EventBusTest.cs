@@ -45,4 +45,17 @@ public class EventBusTest
         EventBus.Publish(eventB);
         Assert.AreEqual(s, eventA.ToString());
     }
+
+    [TestMethod]
+    public void TestUnsub()
+    {
+        var handler = (AEvent a) =>
+        {
+            s = a.ToString();
+        };
+        EventBus.Subscribe(handler);
+        EventBus.Unsubscribe(handler);
+        EventBus.Publish(eventA);
+        Assert.AreEqual(s, "");
+    }
 }

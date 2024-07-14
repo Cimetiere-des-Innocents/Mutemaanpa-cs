@@ -11,6 +11,7 @@ public partial class Player : CharacterBody3D
     public override void _Ready()
     {
         player = GetNode<GameMain>("../../..").CharacterMemory!.GetPlayer();
+        Position = player.Dump().Position!.Value;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -48,5 +49,6 @@ public partial class Player : CharacterBody3D
 
         Velocity = player!.GetVelocity(input);
         MoveAndSlide();
+        player.Move(Position);
     }
 }

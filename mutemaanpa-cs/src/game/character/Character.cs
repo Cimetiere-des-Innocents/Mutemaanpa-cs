@@ -82,6 +82,7 @@ public abstract class ICharacter(CharacterState state)
     public CharacterState state = state;
     public abstract Vector3 GetVelocity(Vector3 input);
     internal abstract (ICharacter, float) Hit(float damage);
+    internal abstract (ICharacter, Vector3) Move(Vector3 newPosition);
 }
 
 class ALiveCharacter(CharacterState state) : ICharacter(state)
@@ -110,6 +111,18 @@ class ALiveCharacter(CharacterState state) : ICharacter(state)
         };
         return (transit(newState), newHp);
     }
+
+    internal override (ICharacter, Vector3) Move(Vector3 newPosition)
+    {
+        var newState = state with
+        {
+            Data = state.Data with
+            {
+                Position = newPosition
+            }
+        };
+        return (new ALiveCharacter(newState), newPosition);
+    }
 }
 
 class DeadCharacter(CharacterState state) : ICharacter(state)
@@ -119,6 +132,11 @@ class DeadCharacter(CharacterState state) : ICharacter(state)
     internal override (ICharacter, float) Hit(float damage)
     {
         return (this, 0);
+    }
+
+    internal override (ICharacter, Vector3) Move(Vector3 newPosition)
+    {
+        return (this, state.Data.Position!.Value);
     }
 }
 
@@ -158,6 +176,12 @@ public partial class Character(ICharacter state)
     }
 
     public Vector3 GetVelocity(Vector3 input) => state.GetVelocity(input);
+
+    public Vector3 Move(Vector3 newPosition)
+    {
+        (state, newPosition) = state.Move(newPosition);
+        return newPosition;
+    }
 
     public bool Dead
     {

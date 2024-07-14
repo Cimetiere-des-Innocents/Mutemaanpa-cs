@@ -5,7 +5,7 @@ namespace Mutemaanpa;
 
 public class Journal
 {
-    static Journal Of(Node node) => node switch
+    public static Journal Of(Node node) => node switch
     {
         GameMain m => m.Journal!,
         Node n => Of(n.GetParent()),

@@ -54,6 +54,10 @@ current = true
 
 [node name="Interaction" parent="Player" instance=ExtResource("3_dknve")]
 
+[node name="Head" type="Label3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.895778, 0)
+text = "Did you expect a needle"
+
 [node name="DeadZone" type="RigidBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeadZone"]
@@ -79,3 +83,7 @@ shape = SubResource("BoxShape3D_w3vv6")
 mesh = SubResource("BoxMesh_il1h7")
 
 [node name="Interaction" parent="DeadZone2" instance=ExtResource("3_dknve")]
+
+[node name="Head" type="Label3D" parent="DeadZone2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.895778, 0)
+text = "Did you expect a needle"

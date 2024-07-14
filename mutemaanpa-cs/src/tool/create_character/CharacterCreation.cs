@@ -19,7 +19,6 @@ public partial class CharacterCreation : Node3D
             var saveUuid = saveDatabase.NewSave();
             metadata.CurrentSave = saveUuid;
             var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
-            characterDb.InitDatabase();
             var characterMemory = new CharacterMemory(characterDb);
 
             characterMemory.RegisterCharacter(

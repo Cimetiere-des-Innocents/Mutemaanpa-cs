@@ -9,8 +9,10 @@ using Godot;
 /// <summary>
 /// Database load and stores persistent data for Mutemaanpa.
 /// </summary>
-public class CharacterDatabase(string DbPath)
+public class CharacterDatabase
 {
+    public string DbPath { get; private set; }
+
     public static readonly string SCHEMA = """
         CREATE TYPE ORIGIN AS ENUM (
             'SOLDIER',
@@ -49,9 +51,9 @@ public class CharacterDatabase(string DbPath)
         );
         """;
 
-    public void InitDatabase()
+    public CharacterDatabase(string DbPath)
     {
-        // Only run DDL if the database is not exist.
+        this.DbPath = DbPath;
         using var db = new DuckDBConnection(DbPath);
         db.Execute(SCHEMA);
     }

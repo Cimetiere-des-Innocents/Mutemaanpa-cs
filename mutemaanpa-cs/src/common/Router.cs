@@ -45,6 +45,7 @@ public partial class Router : Control
         var router = new Router();
         router.Register(routes);
         router.Push(defaultPage);
+        router.MouseFilter = MouseFilterEnum.Ignore;
         return router;
     }
 

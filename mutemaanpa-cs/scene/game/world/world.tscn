@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://src/game/world/World.cs" id="1_ro40x"]
 [ext_resource type="Script" path="res://src/game/world/Player.cs" id="2_4w2e2"]
+[ext_resource type="PackedScene" uid="uid://bbjph8hyqamat" path="res://scene/game/dialogue/interaction.tscn" id="3_dknve"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vvi8o"]
 size = Vector3(30, 1, 30)
@@ -21,9 +22,6 @@ size = Vector3(30, 1, 30)
 size = Vector3(0.942383, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_il1h7"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pslgv"]
-albedo_color = Color(0.133333, 1, 1, 1)
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_ro40x")
@@ -54,6 +52,8 @@ skeleton = NodePath("../../DeadZone/NPCMesh")
 transform = Transform3D(1, 0, 0, 0, 0.892523, 0.451002, 0, -0.451002, 0.892523, 0, 2.80627, 6.06455)
 current = true
 
+[node name="Interaction" parent="Player" instance=ExtResource("3_dknve")]
+
 [node name="DeadZone" type="RigidBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DeadZone"]
@@ -63,8 +63,19 @@ shape = SubResource("BoxShape3D_w3vv6")
 [node name="NPCMesh" type="MeshInstance3D" parent="DeadZone"]
 mesh = SubResource("BoxMesh_il1h7")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_pslgv")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.602874, 0.797837, 0, -0.797837, 0.602874, 0, 1.38519, 0)
 light_energy = 10.0
+
+[node name="DeadZone2" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.87482)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeadZone2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0193576, -0.0130316, 0)
+shape = SubResource("BoxShape3D_w3vv6")
+
+[node name="NPCMesh" type="MeshInstance3D" parent="DeadZone2"]
+mesh = SubResource("BoxMesh_il1h7")
+
+[node name="Interaction" parent="DeadZone2" instance=ExtResource("3_dknve")]

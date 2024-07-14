@@ -67,7 +67,7 @@ public partial class Main : PanelContainer
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
-                (name: "/menu", endpoint: () => MainMenu.CreateMainMenu()),
+                (name: "/menu", endpoint: MainMenu.CreateMainMenu),
                 (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
                 (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(saveDatabase!, metadata!)),
                 (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))
@@ -76,26 +76,21 @@ public partial class Main : PanelContainer
         Node GetGameOverScene()
         {
             GetTree().Paused = true;
-            return GameOver.CreateGameOver(
-                ToTitleAction: () =>
+            void CleanGameMain()
+            {
+                GetTree().Paused = false;
+                foreach (var child in router.GetChildren())
                 {
-                    GetTree().Paused = false;
-                    foreach (var child in router.GetChildren())
-                    {
-                        router.RemoveChild(child);
-                        child.QueueFree();
-                    }
-                    router.Push("/menu");
-                },
+                    router.RemoveChild(child);
+                    child.QueueFree();
+                }
+                router.Push("/menu");
+            }
+            return GameOver.CreateGameOver(
+                ToTitleAction: CleanGameMain,
                 LoadGameAction: () =>
                 {
-                    GetTree().Paused = false;
-                    foreach (var child in router.GetChildren())
-                    {
-                        router.RemoveChild(child);
-                        child.QueueFree();
-                    }
-                    router.Push("/menu");
+                    CleanGameMain();
                     router.Push("/load");
                 }
             );

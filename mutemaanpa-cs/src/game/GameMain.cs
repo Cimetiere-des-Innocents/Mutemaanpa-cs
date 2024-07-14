@@ -9,6 +9,7 @@ namespace Mutemaanpa;
 public partial class GameMain : PanelContainer
 {
     public CharacterMemory? CharacterMemory { get; set; }
+    public Journal? Journal { get; set; }
     PauseMenu? pauseMenu;
     /// <summary>
     /// worldHud put here, because it must have a Control parent, otherwise mouse events will not

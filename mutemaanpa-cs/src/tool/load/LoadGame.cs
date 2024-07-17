@@ -34,7 +34,8 @@ public partial class LoadGame : ScrollContainer
                     var characterDb = new CharacterDatabase($"Data Source={saveFile}");
                     var characterMemory = new CharacterMemory(characterDb);
                     characterMemory.Load();
-                    var gameMain = GameMain.CreateGameMain(characterMemory);
+                    var journal = new Journal(saveFile);
+                    var gameMain = GameMain.CreateGameMain(characterMemory, journal, save.Id);
                     Router.Of(node).Overwrite(gameMain);
 
                 },

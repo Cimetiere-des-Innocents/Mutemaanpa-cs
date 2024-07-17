@@ -3,6 +3,12 @@ using Godot;
 
 namespace Mutemaanpa;
 
+enum Level
+{
+    OPENING,
+    GLOBULIN
+}
+
 /// <summary>
 /// GameMain holds the game session state of Mutemaanpa.
 /// </summary>
@@ -10,6 +16,7 @@ public partial class GameMain : PanelContainer
 {
     public CharacterMemory? CharacterMemory { get; set; }
     public Journal? Journal { get; set; }
+    public Guid? Save { get; set; }
     PauseMenu? pauseMenu;
     /// <summary>
     /// worldHud put here, because it must have a Control parent, otherwise mouse events will not
@@ -18,11 +25,15 @@ public partial class GameMain : PanelContainer
     WorldHud? worldHud;
     Router? router;
 
-    public static GameMain CreateGameMain(CharacterMemory characterMemory)
+    public static GameMain CreateGameMain(CharacterMemory characterMemory,
+                                          Journal journal,
+                                          Guid save)
     {
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
         gameMain.CharacterMemory = characterMemory;
+        gameMain.Journal = journal;
+        gameMain.Save = save;
         return gameMain;
     }
 
@@ -43,10 +54,12 @@ public partial class GameMain : PanelContainer
         AddChild(router);
         Node GetOpeningScene() => OpeningScene.CreateOpeningScene(() =>
         {
+            SetLevel(Level.GLOBULIN);
             router.Overwrite(World.CreateWorld());
             worldHud!.Show();
         });
         router.Register(("/intermission/opening", GetOpeningScene));
+        router.Register(("/globulin", World.CreateWorld));
     }
 
     private void AddPauseMenu()
@@ -58,6 +71,7 @@ public partial class GameMain : PanelContainer
 
     private void SaveGame()
     {
+        Journal!.Store();
         CharacterMemory!.Store();
     }
 
@@ -70,8 +84,17 @@ public partial class GameMain : PanelContainer
 
     private void LoadLevel()
     {
-        router!.Push("/intermission/opening");
-        worldHud!.Hide();
+        switch (GetLevel())
+        {
+            case Level.OPENING:
+                router!.Push("/intermission/opening");
+                worldHud!.Hide();
+                break;
+            case Level.GLOBULIN:
+                router!.Overwrite("/globulin");
+                worldHud!.Show();
+                break;
+        }
     }
 
     private void BindPlayerInfo()
@@ -110,6 +133,36 @@ public partial class GameMain : PanelContainer
         if (what == NotificationPredelete)
         {
             EventBus.Unsubscribe<DeadEvent>(GameOverHandler);
+        }
+    }
+
+    private void SetGlobalFlag(string key, string value)
+    {
+        Journal!.Set(Save!.Value, key, value);
+    }
+
+    private string? GetGlobalFlag(string key) => Journal!.Get(Save!.Value, key);
+
+    private Level GetLevel() => GetGlobalFlag("level") switch
+    {
+        "globulin" => Level.GLOBULIN,
+        _ => Level.OPENING
+    };
+
+    private void SetLevel(Level level)
+    {
+        void SetLevelFlag(string value)
+        {
+            SetGlobalFlag("level", value);
+        }
+        switch (level)
+        {
+            case Level.OPENING:
+                SetLevelFlag("opening");
+                break;
+            case Level.GLOBULIN:
+                SetLevelFlag("globulin");
+                break;
         }
     }
 }

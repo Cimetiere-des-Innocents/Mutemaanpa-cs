@@ -60,16 +60,15 @@ public class Journal
     {
         using var db = new DuckDBConnection(DbPath);
         db.Open();
-        using var appender = db.CreateAppender("journal");
+        string template = """
+        INSERT OR REPLACE INTO journal VALUES ($uuid, $key, $value);
+        """;
         foreach (var (uuid, keyToValue) in groupToKeyToValue.AsEnumerable())
         {
             foreach (var (key, value) in keyToValue.AsEnumerable())
             {
-                appender.CreateRow()
-                        .AppendValue(uuid)
-                        .AppendValue(key)
-                        .AppendValue(value)
-                        .EndRow();
+                object[] param = [new { uuid, key, value }];
+                db.Execute(template, param);
             }
         }
     }

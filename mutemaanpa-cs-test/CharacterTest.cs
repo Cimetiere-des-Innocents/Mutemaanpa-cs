@@ -32,6 +32,7 @@ public class CharacterTest
     public void TestDB()
     {
         var db = new CharacterDatabase("Data Source=save.db");
+        db.Init();
         db.CommitCharacter(data);
         var characters = db.QueryCharacter();
         Assert.AreEqual(data, characters.First());
@@ -43,6 +44,7 @@ public class CharacterTest
     public void TestManager()
     {
         var db = new CharacterDatabase("Data Source=save.db");
+        db.Init();
         var manager = new CharacterMemory(db);
         var uuid = manager.RegisterCharacter(
             stat,
@@ -62,6 +64,7 @@ public class CharacterTest
     public void TestMove()
     {
         var db = new CharacterDatabase("Data Source=save.db");
+        db.Init();
         var manager = new CharacterMemory(db);
         _ = manager.RegisterCharacter(
             stat,
@@ -78,6 +81,7 @@ public class CharacterTest
     public void TestHit()
     {
         var db = new CharacterDatabase("Data Source=save.db");
+        db.Init();
         var manager = new CharacterMemory(db);
         _ = manager.RegisterCharacter(
             stat,

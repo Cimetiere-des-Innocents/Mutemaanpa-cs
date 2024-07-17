@@ -19,7 +19,9 @@ public partial class CharacterCreation : Node3D
             var saveUuid = saveDatabase.NewSave();
             metadata.CurrentSave = saveUuid;
             var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
+            characterDb.Init();
             var characterMemory = new CharacterMemory(characterDb);
+            var journal = new Journal($"m8a_save_{saveUuid}.db");
 
             characterMemory.RegisterCharacter(
                 stat,
@@ -28,7 +30,7 @@ public partial class CharacterCreation : Node3D
                 Guid.NewGuid()
             );
             characterMemory.Store();
-            var gameMain = GameMain.CreateGameMain(characterMemory);
+            var gameMain = GameMain.CreateGameMain(characterMemory, journal, saveUuid);
             Router.Of(node).Overwrite(gameMain);
         });
         return node;

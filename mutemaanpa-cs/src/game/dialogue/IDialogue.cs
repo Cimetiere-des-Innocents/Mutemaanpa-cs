@@ -1,21 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Dapper;
 
 namespace Mutemaanpa;
 
-public record struct Transition
-(
-    string? Text,
-    IDialogue? Next,
-    Action? Effect
-)
-{
-    /// <summary>
-    /// DummyTransition does not show option. Instead, it prompts a NEXT button or wait several seconds,
-    /// depend on implementation.
-    /// </summary>
-    public readonly bool IsDummyTransition => Text is null && Next is not null;
-};
+public interface IInteractiveText;
 
 /// <summary>
 /// Dialogues can compose a DAG, which has both text and transition to next state.
@@ -29,7 +18,7 @@ public record struct Transition
 /// [2] Goodbye. -> exit dialogue
 /// 
 /// </summary>
-public interface IDialogue
+public interface IDialogue : IInteractiveText
 {
     public string GetText();
 
@@ -41,3 +30,66 @@ public interface IDialogue
         return transitions.Count == 1 && transitions[0].IsDummyTransition;
     }
 };
+
+public record struct Transition
+(
+    string? Text,
+    IDialogue? Next,
+    Action? Effect
+)
+{
+    /// <summary>
+    /// DummyTransition does not show option. Instead, it prompts a NEXT button or wait several seconds,
+    /// depend on implementation.
+    /// </summary>
+    public readonly bool IsDummyTransition => Text is null && Next is not null;
+    
+};
+
+public class Dialogue(string text, params Transition[] transitions) : IDialogue
+{
+    public List<Transition> GetNext() => transitions.AsList();
+
+    public string GetText() => text;
+}
+
+public interface IBanter : IInteractiveText
+{
+    public string GetText();
+}
+
+/// <summary>
+/// The banter just repeats and repeats.
+/// </summary>
+/// <param name="banter"></param>
+public class SingleBanter(string banter) : IBanter
+{
+    public string GetText() => banter;
+}
+
+/// <summary>
+/// The banter contains many variations.
+/// </summary>
+/// <param name="choosingStrategy"></param>
+/// <param name="banters"></param>
+public class ManyBanter(Func<int> choosingStrategy, params string[] banters) : IBanter
+{
+    public string GetText()
+    {
+        var next = choosingStrategy() % banters.Length;
+        return banters[next];
+    }
+}
+
+/// <summary>
+/// Interaction says banters in a round-taking way.
+/// </summary>
+/// <param name="banters"></param>
+public class SerialBanter(params string[] banters) : ManyBanter(MakeSerialCounter(), banters)
+{
+    static Func<int> MakeSerialCounter()
+    {
+        int i = 0;
+        return () => i++;
+    }
+}

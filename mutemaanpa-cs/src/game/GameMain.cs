@@ -24,6 +24,7 @@ public partial class GameMain : PanelContainer
     /// </summary>
     WorldHud? worldHud;
     Router? router;
+    DialogueBox? dialogueBox;
 
     public static GameMain CreateGameMain(CharacterMemory characterMemory,
                                           Journal journal,
@@ -36,6 +37,13 @@ public partial class GameMain : PanelContainer
         gameMain.Save = save;
         return gameMain;
     }
+
+    public static GameMain Of(Node node) => node switch
+    {
+        GameMain gameMain => gameMain,
+        Node another when another.GetParent() is not null => Of(another.GetParent()),
+        _ => throw new Exception("I can't find a proper game main!")
+    };
 
     public override void _Ready()
     {
@@ -52,7 +60,7 @@ public partial class GameMain : PanelContainer
     {
         router = new Router();
         AddChild(router);
-        Node GetOpeningScene() => OpeningScene.CreateOpeningScene(() =>
+        Node GetOpeningScene() => OpeningScene.CreateOpeningScene(onFinished: () =>
         {
             SetLevel(Level.GLOBULIN);
             router.Overwrite(World.CreateWorld());
@@ -78,7 +86,6 @@ public partial class GameMain : PanelContainer
     private void AddWorldHud(Action playerCallback, MemberLiveData memberLiveData)
     {
         worldHud = WorldHud.CreateWorldHud(playerCallback, memberLiveData);
-        worldHud.MouseFilter = MouseFilterEnum.Pass;
         AddChild(worldHud);
     }
 
@@ -128,12 +135,30 @@ public partial class GameMain : PanelContainer
         Router.Of(this).Push("/gameOver", removeOld: false);
     }
 
+    /// <summary>
+    /// When game is over, cleanup all subscriptions.
+    /// </summary>
+    /// <param name="what"></param>
     public override void _Notification(int what)
     {
         if (what == NotificationPredelete)
         {
             EventBus.Unsubscribe<DeadEvent>(GameOverHandler);
         }
+    }
+
+
+    public void AddDialogueBox(IDialogue dialogue)
+    {
+        dialogueBox = DialogueBox.CreateDialogueBox(dialogue);
+        AddChild(dialogueBox);
+    }
+
+    public void RemoveDialogueBox()
+    {
+        dialogueBox!.QueueFree();
+        RemoveChild(dialogueBox);
+        dialogueBox = null;
     }
 
     private void SetGlobalFlag(string key, string value)

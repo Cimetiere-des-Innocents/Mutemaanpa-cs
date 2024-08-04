@@ -46,7 +46,6 @@ public partial class Main : PanelContainer
         base._Ready();
         ConfigureExternalLibraries();
         Bootstrap();
-        AddRouter();
     }
 
     private static void ConfigureExternalLibraries()
@@ -60,6 +59,7 @@ public partial class Main : PanelContainer
 
         saveDatabase = new SaveDatabase($"Data Source=mutemaanpa.db");
         saveDatabase.InitDatabase();
+        AddRouter();
     }
 
     private void AddRouter()
@@ -73,6 +73,7 @@ public partial class Main : PanelContainer
                 (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))
             ]
         );
+        
         Node GetGameOverScene()
         {
             GetTree().Paused = true;
@@ -98,6 +99,4 @@ public partial class Main : PanelContainer
         router.Register(("/gameOver", GetGameOverScene));
         AddChild(router);
     }
-
 }
-

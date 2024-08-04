@@ -30,7 +30,7 @@ public partial class PauseMenu : CenterContainer
         if (@event.IsActionReleased("ui_cancel"))
         {
             Visible = !Visible;
-            GetTree().Paused = !GetTree().Paused;
+            GetTree().Paused = Visible;
             // NOTE that if we don't accept the event, it will propagates to parent
             // controls which can result in double canceling... that may not be desired.
             AcceptEvent();

@@ -13,7 +13,9 @@ public partial class Interaction : Node3D
 {
     ShaderMaterial? outline;
     Label3D? banterBox;
-    Journal? journal;
+    bool inBanter;
+    protected GameMain? gameMain;
+    protected IInteractiveText? interactiveText;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -22,7 +24,7 @@ public partial class Interaction : Node3D
         RegisterOutlineHandler();
         RegisterBanterBox();
         SetClickHandler();
-        journal = Journal.Of(this);
+        gameMain = GameMain.Of(this);
     }
 
     private void RegisterOutlineHandler()
@@ -91,10 +93,42 @@ public partial class Interaction : Node3D
         && inputEventMouseButton.IsReleased()
         && inputEventMouseButton.ButtonIndex == MouseButton.Left)
         {
-            banterBox!.Show();
-            var timer = GetTree().CreateTimer(3.0);
-            timer.Timeout += banterBox!.Hide;
-        }
+            if (inBanter)
+            {
+                return;
+            }
+            switch (interactiveText)
+            {
+                case IBanter banter:
+                    ShowBanter(banter);
+                    break;
+                case IDialogue dialogue:
+                    ShowDialogue(dialogue);
+                    break;
+                default:
+                    break;
+            }
+        };
+    }
+
+    private void ShowBanter(IBanter banter)
+    {
+        banterBox!.Show();
+        inBanter = true;
+        banterBox!.Text = banter.GetText();
+        var timer = GetTree().CreateTimer(3.0);
+        timer.Timeout += banterBox!.Hide;
+        timer.Timeout += () => inBanter = false;
+    }
+
+    private void ShowDialogue(IDialogue dialogue)
+    {
+        gameMain!.AddDialogueBox(dialogue);
+    }
+
+    protected void EndDialogue()
+    {
+        gameMain!.RemoveDialogueBox();
     }
 }
 

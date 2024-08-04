@@ -84,10 +84,10 @@ public partial class Interaction : Node3D
     private void SetClickHandler()
     {
         var body = GetParent<PhysicsBody3D>();
-        body.Connect("input_event", Callable.From<Node, InputEvent, Vector3, Vector3, long>(ConnectClickEvents));
+        body.InputEvent += ClickEvents;
     }
 
-    protected virtual void ConnectClickEvents(Node camera, InputEvent @event, Vector3 position, Vector3 normal, long shape_idx)
+    protected virtual void ClickEvents(Node camera, InputEvent @event, Vector3 position, Vector3 normal, long shape_idx)
     {
         if (@event is InputEventMouseButton inputEventMouseButton
         && inputEventMouseButton.IsReleased()

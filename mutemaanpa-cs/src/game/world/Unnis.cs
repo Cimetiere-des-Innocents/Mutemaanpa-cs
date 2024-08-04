@@ -16,10 +16,17 @@ public partial class Unnis : Interaction
             Effect: EndDialogue
         ),
         new Transition(
-            Text: "Hello unnis.",
-            Next: FoodTheory(),
+            Text: "Hi Unnis.",
+            Next: Dialogue.MakeSeqDialogue(ToEat(),
+                "alas", "hello"),
             Effect: null
         )
+    );
+
+    private Transition ToEat() => new(
+        Text: "I want to eat something",
+        Next: FoodTheory(),
+        Effect: null
     );
 
     private Dialogue FoodTheory() => new(

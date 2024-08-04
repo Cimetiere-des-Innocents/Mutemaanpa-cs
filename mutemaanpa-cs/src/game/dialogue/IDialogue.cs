@@ -43,7 +43,7 @@ public record struct Transition
     /// depend on implementation.
     /// </summary>
     public readonly bool IsDummyTransition => Text is null && Next is not null;
-    
+
 };
 
 public class Dialogue(string text, params Transition[] transitions) : IDialogue
@@ -51,6 +51,13 @@ public class Dialogue(string text, params Transition[] transitions) : IDialogue
     public List<Transition> GetNext() => transitions.AsList();
 
     public string GetText() => text;
+
+    public static Dialogue MakeSeqDialogue(Transition lastTo, params string[] texts) => texts switch
+    {
+        [] => throw new Exception("At least one text to make a series of conversation."),
+        [var lastText] => new(lastText, lastTo),
+        [var nextText, .. var remainingTexts] => new(nextText, new Transition(null, MakeSeqDialogue(lastTo, remainingTexts), null))
+    };
 }
 
 public interface IBanter : IInteractiveText

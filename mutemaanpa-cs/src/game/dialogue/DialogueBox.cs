@@ -43,8 +43,9 @@ public partial class DialogueBox : Control
         var optionList = 1;
         foreach (var transition in controller!.GetNext())
         {
-            view!.AppendText($"[url]{optionList++}: {transition!.Text}[/url]");
+            view!.AppendText($"[url]{optionList++}: {transition!.Text ?? "Continue"}[/url]");
             view!.Newline();
         }
+        view!.Newline();
     }
 }

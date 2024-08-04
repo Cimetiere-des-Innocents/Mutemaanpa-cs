@@ -11,6 +11,8 @@ using Godot;
 /// </summary>
 public class CharacterDatabase(string DbPath)
 {
+    public string DbPath { get; private set; } = DbPath;
+
     public static readonly string SCHEMA = """
         CREATE TYPE ORIGIN AS ENUM (
             'SOLDIER',
@@ -49,9 +51,8 @@ public class CharacterDatabase(string DbPath)
         );
         """;
 
-    public void InitDatabase()
+    public void Init()
     {
-        // Only run DDL if the database is not exist.
         using var db = new DuckDBConnection(DbPath);
         db.Execute(SCHEMA);
     }
@@ -62,7 +63,7 @@ public class CharacterDatabase(string DbPath)
         db.Open();
         using var tx = db.BeginTransaction();
         string sql = """
-            INSERT INTO character(id, name, hp, mp, origin, strength, stamina,
+            INSERT OR REPLACE INTO character(id, name, hp, mp, origin, strength, stamina,
             dexterity, constitution, intelligence, wisdom, player) VALUES 
             ($Id, $Name, $Hp, $Mp, $Origin, $Str, $Sta, $Dex, $Con, $Int, $Wis, $Player);
             """;
@@ -85,7 +86,7 @@ public class CharacterDatabase(string DbPath)
         if (character.Position != null)
         {
             sql = """
-            INSERT INTO position(id, x, y, z) VALUES ($Id, $X, $Y, $Z);
+            INSERT OR REPLACE INTO position(id, x, y, z) VALUES ($Id, $X, $Y, $Z);
             """;
             param = [ new {
                 Id = character.Uuid,

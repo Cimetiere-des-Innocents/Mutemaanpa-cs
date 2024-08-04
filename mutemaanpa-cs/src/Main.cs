@@ -46,7 +46,6 @@ public partial class Main : PanelContainer
         base._Ready();
         ConfigureExternalLibraries();
         Bootstrap();
-        AddRouter();
     }
 
     private static void ConfigureExternalLibraries()
@@ -59,10 +58,8 @@ public partial class Main : PanelContainer
         metadata = new MetadataManager();
 
         saveDatabase = new SaveDatabase($"Data Source=mutemaanpa.db");
-        if (metadata.FirstTimeLaunch)
-        {
-            saveDatabase.InitDatabase();
-        }
+        saveDatabase.InitDatabase();
+        AddRouter();
     }
 
     private void AddRouter()
@@ -70,14 +67,36 @@ public partial class Main : PanelContainer
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
-                (name: "/menu", endpoint: () => MainMenu.CreateMainMenu(saveDatabase!.HasSave())),
+                (name: "/menu", endpoint: MainMenu.CreateMainMenu),
                 (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
                 (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(saveDatabase!, metadata!)),
                 (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))
             ]
         );
+        
+        Node GetGameOverScene()
+        {
+            GetTree().Paused = true;
+            void CleanGameMain()
+            {
+                GetTree().Paused = false;
+                foreach (var child in router.GetChildren())
+                {
+                    router.RemoveChild(child);
+                    child.QueueFree();
+                }
+                router.Push("/menu");
+            }
+            return GameOver.CreateGameOver(
+                ToTitleAction: CleanGameMain,
+                LoadGameAction: () =>
+                {
+                    CleanGameMain();
+                    router.Push("/load");
+                }
+            );
+        }
+        router.Register(("/gameOver", GetGameOverScene));
         AddChild(router);
     }
-
 }
-

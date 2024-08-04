@@ -23,8 +23,7 @@ public class SaveDatabase(string DbPath)
     """;
 
     /// <summary>
-    /// Run SQL Data Define language. Create table. Only execute when user first
-    /// run this game.
+    /// Run SQL Data Define language.
     /// </summary>    
     public void InitDatabase()
     {
@@ -59,4 +58,18 @@ public class SaveDatabase(string DbPath)
     }
 
     public bool HasSave() => QuerySaves().Any();
+
+    internal void Remove(Guid id)
+    {
+        using var db = new DuckDBConnection(DbPath);
+        db.Execute(
+            """
+            DELETE FROM save_slot WHERE id = $id
+            """,
+            new
+            {
+                id
+            }
+        );
+    }
 }

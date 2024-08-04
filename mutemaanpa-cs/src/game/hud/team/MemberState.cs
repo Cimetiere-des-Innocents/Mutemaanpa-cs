@@ -14,13 +14,10 @@ public partial class MemberState : AspectRatioContainer
     [Export]
     ResourceBar? mpBar;
 
-    MemberLiveData? liveData;
-
     public void Init(MemberLiveData memberLiveData, Action pressedCallback)
     {
-        liveData = memberLiveData;
         (hpBar!.GetMaximumValue, hpBar!.GetCurrentValue, mpBar!.GetMaximumValue, mpBar!.GetCurrentValue)
-            = liveData!.Value;
+            = memberLiveData;
        playerButton!.Pressed += pressedCallback; 
     }
 

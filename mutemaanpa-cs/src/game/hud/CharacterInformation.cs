@@ -44,19 +44,19 @@ public partial class CharacterInformation : CenterContainer
     {
         var info = ResourceLoader.Load<PackedScene>("res://scene/game/hud/character_information.tscn")
             .Instantiate<CharacterInformation>();
-        info.CharacterName!.Text = state.CharacterData.Stat.Name;
-        info.HitPointDisplay!.SetLabelValue("HP", $"{state.CharacterData.Stat.Hp} / {state.CharacterRuntime.MaxHitPoint}");
-        info.ManaPointDisplay!.SetLabelValue("MP", $"{state.CharacterData.Stat.Mp} / {state.CharacterRuntime.MaxManaPoint}");
-        info.OriginDisplay!.SetLabelValue("Origin", state.CharacterData.Stat.Origin.ToString());
-        info.StrengthDisplay!.SetLabelValue("Strength", state.CharacterData.Ability.Strength.ToString());
-        info.StaminaDisplay!.SetLabelValue("Stamina", state.CharacterData.Ability.Stamina.ToString());
-        info.DexterityDisplay!.SetLabelValue("Dexterity", state.CharacterData.Ability.Stamina.ToString());
-        info.ConstitutionDisplay!.SetLabelValue("Constitution", state.CharacterData.Ability.Stamina.ToString());
-        info.IntelligenceDisplay!.SetLabelValue("Intelligence", state.CharacterData.Ability.Stamina.ToString());
-        info.WisdomDisplay!.SetLabelValue("Wisdom", state.CharacterData.Ability.Stamina.ToString());
+        info.CharacterName!.Text = state.Data.Stat.Name;
+        info.HitPointDisplay!.SetLabelValue("HP", $"{state.Data.Stat.Hp} / {state.Runtime.MaxHitPoint}");
+        info.ManaPointDisplay!.SetLabelValue("MP", $"{state.Data.Stat.Mp} / {state.Runtime.MaxManaPoint}");
+        info.OriginDisplay!.SetLabelValue("Origin", state.Data.Stat.Origin.ToString());
+        info.StrengthDisplay!.SetLabelValue("Strength", state.Data.Ability.Strength.ToString());
+        info.StaminaDisplay!.SetLabelValue("Stamina", state.Data.Ability.Stamina.ToString());
+        info.DexterityDisplay!.SetLabelValue("Dexterity", state.Data.Ability.Stamina.ToString());
+        info.ConstitutionDisplay!.SetLabelValue("Constitution", state.Data.Ability.Stamina.ToString());
+        info.IntelligenceDisplay!.SetLabelValue("Intelligence", state.Data.Ability.Stamina.ToString());
+        info.WisdomDisplay!.SetLabelValue("Wisdom", state.Data.Ability.Stamina.ToString());
         return info;
     }
-
+ 
     public override void _Ready()
     {
         QuitButton!.Pressed += QueueFree;

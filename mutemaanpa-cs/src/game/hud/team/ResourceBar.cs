@@ -8,9 +8,9 @@ public partial class ResourceBar : MarginContainer
     [Export]
     ProgressBar? ProgressBar;
 
-    public Func<int>? GetCurrentValue;
+    public Func<double>? GetCurrentValue;
 
-    public Func<int>? GetMaximumValue;
+    public Func<double>? GetMaximumValue;
 
     public override void _Process(double delta)
     {

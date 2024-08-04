@@ -1,39 +1,100 @@
-[gd_scene load_steps=6 format=3 uid="uid://bns3248d85gon"]
+[gd_scene load_steps=13 format=3 uid="uid://bns3248d85gon"]
 
-[ext_resource type="Script" path="res://src/game/world/TempMoveController.cs" id="1_8wapa"]
 [ext_resource type="Script" path="res://src/game/world/World.cs" id="1_ro40x"]
+[ext_resource type="Script" path="res://src/game/world/Player.cs" id="2_4w2e2"]
+[ext_resource type="PackedScene" uid="uid://bbjph8hyqamat" path="res://scene/game/dialogue/interaction.tscn" id="3_dknve"]
+[ext_resource type="Script" path="res://src/game/world/Unnis.cs" id="4_2byd7"]
+[ext_resource type="Script" path="res://src/game/world/Lena.cs" id="4_qkn73"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vvi8o"]
+size = Vector3(30, 1, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_raqkr"]
+albedo_color = Color(0, 0.137255, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3y0qn"]
+material = SubResource("StandardMaterial3D_raqkr")
+size = Vector3(30, 1, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3e4jx"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_6ryun"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_il1h7"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_w3vv6"]
+size = Vector3(0.942383, 1, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pslgv"]
-albedo_color = Color(0.133333, 1, 1, 1)
+[sub_resource type="BoxMesh" id="BoxMesh_il1h7"]
 
 [node name="World" type="Node3D"]
 script = ExtResource("1_ro40x")
 
-[node name="Player" type="Node3D" parent="."]
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_vvi8o")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("BoxMesh_3y0qn")
+
+[node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84954, 0, 0)
+script = ExtResource("2_4w2e2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("BoxShape3D_3e4jx")
 
 [node name="PlayerMesh" type="MeshInstance3D" parent="Player"]
 mesh = SubResource("BoxMesh_6ryun")
-skeleton = NodePath("../../NPC/NPCMesh")
+skeleton = NodePath("../../DeadZone/NPCMesh")
 
-[node name="TempMoveController" type="Node3D" parent="Player"]
-script = ExtResource("1_8wapa")
+[node name="PlayerController" type="Node3D" parent="Player"]
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 0.892523, 0.451002, 0, -0.451002, 0.892523, 0, 2.80627, 6.06455)
 current = true
 
-[node name="NPC" type="Node3D" parent="."]
+[node name="Interaction" parent="Player" instance=ExtResource("3_dknve")]
 
-[node name="NPCMesh" type="MeshInstance3D" parent="NPC"]
+[node name="Head" type="Label3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.895778, 0)
+text = "Did you expect a needle"
+
+[node name="DeadZone" type="RigidBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DeadZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0193576, -0.0130316, 0)
+shape = SubResource("BoxShape3D_w3vv6")
+
+[node name="NPCMesh" type="MeshInstance3D" parent="DeadZone"]
 mesh = SubResource("BoxMesh_il1h7")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_pslgv")
+
+[node name="Interaction" parent="DeadZone" instance=ExtResource("3_dknve")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84954, 0, 0)
+script = ExtResource("4_qkn73")
+
+[node name="Head" type="Label3D" parent="DeadZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0308208, 0.710168, 0)
+text = "Did you expect a needle"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.602874, 0.797837, 0, -0.797837, 0.602874, 0, 1.38519, 0)
 light_energy = 10.0
+
+[node name="Unnis" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.87482)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Unnis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0193576, -0.0130316, 0)
+shape = SubResource("BoxShape3D_w3vv6")
+
+[node name="NPCMesh" type="MeshInstance3D" parent="Unnis"]
+mesh = SubResource("BoxMesh_il1h7")
+
+[node name="Interaction" parent="Unnis" instance=ExtResource("3_dknve")]
+script = ExtResource("4_2byd7")
+
+[node name="Head" type="Label3D" parent="Unnis"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.895778, 0)
+text = "Did you expect a needle"

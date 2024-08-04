@@ -17,6 +17,7 @@ public partial class WorldHud : Control
             .Instantiate<WorldHud>();
         node.memberBar = MemberBar.CreateMemberBar(clickPlayerCallback, memberLiveData);
         node.AddChild(node.memberBar);
+        node.MouseFilter = MouseFilterEnum.Pass;
         return node;
     }
 }

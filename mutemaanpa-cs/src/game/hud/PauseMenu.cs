@@ -1,5 +1,6 @@
 namespace Mutemaanpa;
 
+using System;
 using Godot;
 
 public partial class PauseMenu : CenterContainer
@@ -12,11 +13,15 @@ public partial class PauseMenu : CenterContainer
 
     [Export]
     Button? QuitGame;
+    Action? ToTitleCallback;
+    Action? QuitCallback;
 
-    public static PauseMenu CreatePauseMenu()
+    public static PauseMenu CreatePauseMenu(Action toMenuCallback, Action quitCallback)
     {
         var node = ResourceLoader.Load<PackedScene>("res://scene/game/hud/pause_menu.tscn")
             .Instantiate<PauseMenu>();
+        node.ToTitleCallback = toMenuCallback;
+        node.QuitCallback = quitCallback;
         return node;
     }
 
@@ -25,7 +30,7 @@ public partial class PauseMenu : CenterContainer
         if (@event.IsActionReleased("ui_cancel"))
         {
             Visible = !Visible;
-            GetTree().Paused = !GetTree().Paused;
+            GetTree().Paused = Visible;
             // NOTE that if we don't accept the event, it will propagates to parent
             // controls which can result in double canceling... that may not be desired.
             AcceptEvent();
@@ -42,10 +47,12 @@ public partial class PauseMenu : CenterContainer
         ToTitle!.Pressed += () =>
         {
             GetTree().Paused = false;
+            ToTitleCallback!.Invoke();
             Router.Of(this).Pop();
         };
         QuitGame!.Pressed += () =>
         {
+            QuitCallback!.Invoke();
             GetTree().Quit();
         };
     }

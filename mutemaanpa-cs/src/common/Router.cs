@@ -45,6 +45,7 @@ public partial class Router : Control
         var router = new Router();
         router.Register(routes);
         router.Push(defaultPage);
+        router.MouseFilter = MouseFilterEnum.Ignore;
         return router;
     }
 
@@ -142,9 +143,9 @@ public partial class Router : Control
         if (GetChildCount() > 0)
         {
             var child = GetChild(0);
-            sceneStack.Push(child);
             if (removeOld)
             {
+                sceneStack.Push(child);
                 RemoveChild(child);
             }
         }

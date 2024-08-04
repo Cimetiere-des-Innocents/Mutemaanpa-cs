@@ -3,21 +3,31 @@ namespace mutemaanpa_cs_test;
 [TestClass]
 public class CharacterTest
 {
-    static CharacterAbility ability = new(1, 1, 2, 1, 1, 1);
-    static CharacterStat stat = new(
-            "test",
-            1.0f,
-            1,
-            Origin.SPY
-    );
+    static CharacterAbility ability = new()
+    {
+        Strength = 1,
+        Dexterity = 1,
+        Constitution = 2,
+        Intelligence = 1,
+        Wisdom = 1,
+        Stamina = 1
+    };
+    static CharacterStat stat = new()
+    {
+        Name = "test",
+        Hp = 1.0f,
+        Mp = 1,
+        Origin = Origin.SPY
+    };
 
-    static CharacterData data = new(
-        Ability: ability,
-        Stat: stat,
-        Uuid: Guid.NewGuid(),
-        Position: Godot.Vector3.Up,
-        Player: null
-    );
+    static CharacterData data = new()
+    {
+        Ability = ability,
+        Stat = stat,
+        Uuid = Guid.NewGuid(),
+        Position = Godot.Vector3.Up,
+        Player = null
+    };
 
     [TestInitialize]
     public void Init()

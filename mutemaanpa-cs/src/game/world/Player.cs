@@ -36,7 +36,7 @@ public partial class Player : CharacterBody3D
 
         foreach (var kinematicCollision3D in this.GetSlideCollisions())
         {
-            if (kinematicCollision3D.GetCollider() is RigidBody3D rigidBody && rigidBody.Name == "DeadZone")
+            if (kinematicCollision3D.GetCollider() is RigidBody3D rigidBody && rigidBody.Name == "Unnis")
             {
                 lastDamaged += delta;
                 if (lastDamaged > 0.5)

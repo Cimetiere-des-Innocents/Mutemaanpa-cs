@@ -25,13 +25,14 @@ public partial class SetAbility : MarginContainer
     [Export]
     public Button? FinishButton;
 
-    public CharacterAbility GetAbility() => new(
-        Strength!.Value,
-        Stamina!.Value,
-        Dexterity!.Value,
-        Constitution!.Value,
-        Intelligence!.Value,
-        Wisdom!.Value
-    );
+    public CharacterAbility GetAbility() => new()
+    {
+        Strength = Strength!.Value,
+        Stamina = Stamina!.Value,
+        Dexterity = Dexterity!.Value,
+        Constitution = Constitution!.Value,
+        Intelligence = Intelligence!.Value,
+        Wisdom = Wisdom!.Value
+    };
 
 }

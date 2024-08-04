@@ -77,7 +77,7 @@ public partial class Main : PanelContainer
         Node GetGameOverScene()
         {
             GetTree().Paused = true;
-            void CleanGameMain()
+            void CleanGameSession()
             {
                 GetTree().Paused = false;
                 foreach (var child in router.GetChildren())
@@ -88,10 +88,10 @@ public partial class Main : PanelContainer
                 router.Push("/menu");
             }
             return GameOver.CreateGameOver(
-                ToTitleAction: CleanGameMain,
+                ToTitleAction: CleanGameSession,
                 LoadGameAction: () =>
                 {
-                    CleanGameMain();
+                    CleanGameSession();
                     router.Push("/load");
                 }
             );

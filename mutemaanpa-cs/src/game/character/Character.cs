@@ -2,21 +2,21 @@ namespace Mutemaanpa;
 using System;
 using Godot;
 
-public record struct CharacterAbility
-(
+public class CharacterAbility
+{
     /// Influence attack, weight, hit points
-    int Strength,
+    public required int Strength;
     /// Influence mana, buff duration
-    int Stamina,
+    public required int Stamina;
     /// Influence speed, damage reduction
-    int Dexterity,
+    public required int Dexterity;
     /// Influence hit points, weight
-    int Constitution,
+    public required int Constitution;
     /// Influence spells, environment interaction, crafting
-    int Intelligence,
+    public required int Intelligence;
     /// Influence environment interaction, dialogue, merchant
-    int Wisdom
-);
+    public required int Wisdom;
+}
 
 public enum Origin
 {
@@ -32,56 +32,63 @@ public enum Origin
 /// <summary>
 /// basic information about the character
 /// </summary>
-public record struct CharacterStat
-(
-    string Name,
-    float Hp,
-    int Mp,
-    Origin Origin
-);
+public class CharacterStat
+{
+    public required string Name;
+    public required float Hp;
+    public required int Mp;
+    public required Origin Origin;
+}
 
 /// <summary>
 /// Persistent data of the character.
 /// </summary>
-public record struct CharacterData
-(
-    CharacterAbility Ability,
-    CharacterStat Stat,
-    Guid Uuid,
+public class CharacterData
+{
+    public required CharacterAbility Ability;
+    public required CharacterStat Stat;
+    public required Guid Uuid;
 
     /// A character may not have any positions(daemon characters) in some
     /// special circumstances.
-    Vector3? Position,
+    public required Vector3? Position;
 
     /// <summary>
     /// This field can be null, because NPC characters don't have this field set.
-    /// </summary>
-    /// <value></value>
-    Guid? Player
-);
+    /// </summary>  /// <value></value>
+    public required Guid? Player;
+}
 
 /// <summary>
 /// Derived and calculated properties of Character. It is maintained when
 /// game is running. We don't put them on disk in saving process.
 /// </summary>
-public record struct CharacterRuntime
-(
-    int MaxHitPoint,
-    int MaxManaPoint,
-    float Speed
-);
+public class CharacterRuntime
+{
+    public required int MaxHitPoint;
+    public required int MaxManaPoint;
+    public required float Speed;
+}
 
-public record struct CharacterState
-(
-    CharacterData Data,
-    CharacterRuntime Runtime
-);
+public class CharacterState
+{
+    public required CharacterData Data;
+    public required CharacterRuntime Runtime;
+}
 
 public abstract class ICharacter(CharacterState state)
 {
     public CharacterState state = state;
     public abstract Vector3 GetVelocity(Vector3 input);
+    /// <summary>
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <returns>(newState, damage)</returns>
     internal abstract (ICharacter, float) Hit(float damage);
+    /// <summary>
+    /// </summary>
+    /// <param name="newPosition"></param>
+    /// <returns>(newState, newPosition)</returns>
     internal abstract (ICharacter, Vector3) Move(Vector3 newPosition);
 }
 
@@ -101,27 +108,14 @@ class ALiveCharacter(CharacterState state) : ICharacter(state)
                 return new DeadCharacter(state);
             };
         }
-        var newHp = state.Data.Stat.Hp - damage;
-        var newState = state with
-        {
-            Data = state.Data with
-            {
-                Stat = state.Data.Stat with { Hp = newHp }
-            }
-        };
-        return (transit(newState), newHp);
+        state.Data.Stat.Hp -= damage;
+        return (transit(state), damage);
     }
 
     internal override (ICharacter, Vector3) Move(Vector3 newPosition)
     {
-        var newState = state with
-        {
-            Data = state.Data with
-            {
-                Position = newPosition
-            }
-        };
-        return (new ALiveCharacter(newState), newPosition);
+        state.Data.Position = newPosition;
+        return (new ALiveCharacter(state), newPosition);
     }
 }
 

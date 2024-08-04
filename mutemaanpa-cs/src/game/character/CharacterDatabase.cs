@@ -112,17 +112,18 @@ public class CharacterDatabase(string DbPath)
                         CharacterData>
         (
             sql,
-            (id, stat, ability, player, position) => new CharacterData(
-                Ability: ability,
-                Stat: stat,
-                Uuid: id,
-                Player: player,
-                Position: position switch
+            (id, stat, ability, player, position) => new CharacterData()
+            {
+                Ability = ability,
+                Stat = stat,
+                Uuid = id,
+                Player = player,
+                Position = position switch
                 {
                     (float x, float y, float z) => new Vector3(x, y, z),
                     _ => null
                 }
-            ),
+            },
             splitOn: "name, strength, player, x"
         );
     }

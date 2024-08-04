@@ -21,16 +21,23 @@ public class CharacterMemory(CharacterDatabase database)
                                   Guid? player)
     {
         var uuid = Guid.NewGuid();
-        var data = new CharacterData(ability, stat, uuid, spawnPoint, player);
+        var data = new CharacterData()
+        {
+            Ability = ability,
+            Stat = stat,
+            Uuid = uuid,
+            Position = spawnPoint,
+            Player = player
+        };
         // Some properties must be set after calculation.
         var runtimeState = CalculateRuntimeProperty(data);
-        var newStat = stat with
+        stat.Hp = runtimeState.MaxHitPoint;
+        stat.Mp = runtimeState.MaxManaPoint;
+        UuidToCharacter.Add(uuid, new(new CharacterState()
         {
-            Hp = runtimeState.MaxHitPoint,
-            Mp = runtimeState.MaxManaPoint
-        };
-        data.Stat = newStat;
-        UuidToCharacter.Add(uuid, new(new CharacterState(data, runtimeState)));
+            Data = data,
+            Runtime = runtimeState
+        }));
         return uuid;
     }
 
@@ -54,19 +61,21 @@ public class CharacterMemory(CharacterDatabase database)
     private static Character LoadCharacter(CharacterData data) => new(LoadCharacterState(data));
 
     private static CharacterState LoadCharacterState(CharacterData data) =>
-        new(
-            data,
-            CalculateRuntimeProperty(data)
-        );
+        new()
+        {
+            Data = data,
+            Runtime = CalculateRuntimeProperty(data)
+        };
 
 
     private static CharacterRuntime CalculateRuntimeProperty(CharacterData data)
     {
-        return new CharacterRuntime(
-            MaxHitPoint: data.Ability.Constitution,
-            MaxManaPoint: 0,
-            Speed: 5.0f
-        );
+        return new CharacterRuntime()
+        {
+            MaxHitPoint = data.Ability.Constitution,
+            MaxManaPoint = 0,
+            Speed = 5.0f
+        };
     }
 
     public CharacterState? GetCharacterState(Guid guid)

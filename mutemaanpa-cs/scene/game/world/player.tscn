@@ -5,7 +5,7 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3e4jx"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_6ryun"]
+[sub_resource type="BoxMesh" id="BoxMesh_3b7t0"]
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84954, 0, 0)
@@ -15,8 +15,7 @@ script = ExtResource("1_ioonr")
 shape = SubResource("BoxShape3D_3e4jx")
 
 [node name="PlayerMesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_6ryun")
-skeleton = NodePath("../../Lena/NPCMesh")
+mesh = SubResource("BoxMesh_3b7t0")
 
 [node name="PlayerController" type="Node3D" parent="."]
 

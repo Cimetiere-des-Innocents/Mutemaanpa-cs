@@ -174,6 +174,7 @@ public partial class Character(ICharacter state)
     public Vector3 Move(Vector3 newPosition)
     {
         (state, newPosition) = state.Move(newPosition);
+        Console.Write(M8a.Session.a);
         return newPosition;
     }
 
@@ -181,4 +182,8 @@ public partial class Character(ICharacter state)
     {
         get => state is DeadCharacter;
     }
+}
+
+public class CharacterModel
+{
 }

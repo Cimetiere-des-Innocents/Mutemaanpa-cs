@@ -1,8 +1,10 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mutemaanpa-cs", "mutemaanpa-cs\mutemaanpa-cs.csproj", "{C07105E5-C0DE-4E30-8125-4C16FD3A1FA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mutemaanpa", "M8a\M8a.csproj", "{C07105E5-C0DE-4E30-8125-4C16FD3A1FA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mutemaanpa-cs-test", "mutemaanpa-cs-test\mutemaanpa-cs-test.csproj", "{99FFE4AD-7448-4759-9557-F8F65871ACD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test project", "Test\Test.csproj", "{99FFE4AD-7448-4759-9557-F8F65871ACD7}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Kernel", "Kernel\Kernel.fsproj", "{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,5 +25,11 @@ Global
 		{99FFE4AD-7448-4759-9557-F8F65871ACD7}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
 		{99FFE4AD-7448-4759-9557-F8F65871ACD7}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
 		{99FFE4AD-7448-4759-9557-F8F65871ACD7}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

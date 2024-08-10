@@ -8,7 +8,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <GodotProjectDir>..\mutemaanpa-cs\</GodotProjectDir>
+    <GodotProjectDir>..\M8a\</GodotProjectDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mutemaanpa-cs\mutemaanpa-cs.csproj" />
+    <ProjectReference Include="..\M8a\M8a.csproj" />
   </ItemGroup>
 
 </Project>

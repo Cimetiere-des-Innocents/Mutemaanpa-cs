@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace mutemaanpa_cs_test;
 
 [TestClass]
@@ -67,7 +69,7 @@ public class CharacterTest
         var manager2 = new CharacterMemory(db);
         manager2.Load();
         var characterRead = manager2.GetPlayerState();
-        Assert.AreEqual(character, characterRead);
+        Assert.AreEqual(JsonSerializer.Serialize(character), JsonSerializer.Serialize(characterRead));
     }
 
     [TestMethod]

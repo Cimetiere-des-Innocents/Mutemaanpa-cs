@@ -24,7 +24,7 @@ window/size/viewport_height=1080
 
 [dotnet]
 
-project/assembly_name="mutemaanpa-cs"
+project/assembly_name="M8a"
 project/solution_directory=".."
 
 [input]

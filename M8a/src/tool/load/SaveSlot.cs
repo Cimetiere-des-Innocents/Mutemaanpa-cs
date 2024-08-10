@@ -2,6 +2,7 @@ namespace Mutemaanpa;
 
 using System;
 using Godot;
+using Kernel;
 
 public partial class SaveSlot : PanelContainer
 {

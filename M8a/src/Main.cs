@@ -1,6 +1,7 @@
 namespace Mutemaanpa;
 
 using Godot;
+using Kernel;
 
 /// <summary>
 /// Main class controls the whole game wide configuration / states.
@@ -39,7 +40,7 @@ using Godot;
 public partial class Main : PanelContainer
 {
     MetadataManager? metadata;
-    SaveDatabase? saveDatabase;
+    Catalog? catalog;
 
     public override void _Ready()
     {
@@ -57,8 +58,8 @@ public partial class Main : PanelContainer
     {
         metadata = new MetadataManager();
 
-        saveDatabase = new SaveDatabase($"Data Source=mutemaanpa.db");
-        saveDatabase.InitDatabase();
+        catalog = new Catalog($"Data Source=mutemaanpa.db");
+        catalog.init();
         AddRouter();
     }
 
@@ -69,8 +70,8 @@ public partial class Main : PanelContainer
                 routes: [
                 (name: "/menu", endpoint: MainMenu.CreateMainMenu),
                 (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
-                (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(saveDatabase!, metadata!)),
-                (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))
+                (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(catalog!, metadata!)),
+                (name: "/load", endpoint: () => LoadGame.CreateLoadGame(catalog!))
             ]
         );
         

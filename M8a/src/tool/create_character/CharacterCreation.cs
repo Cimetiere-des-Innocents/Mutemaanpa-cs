@@ -2,6 +2,7 @@ namespace Mutemaanpa;
 
 using System;
 using Godot;
+using Kernel;
 
 public partial class CharacterCreation : Node3D
 {
@@ -9,14 +10,14 @@ public partial class CharacterCreation : Node3D
     [Export]
     CreationNavigator? creationNavigator;
 
-    public static CharacterCreation CreateCharacterCreation(SaveDatabase saveDatabase,
+    public static CharacterCreation CreateCharacterCreation(Catalog catalog,
                                                             MetadataManager metadata)
     {
         var node = ResourceLoader.Load<PackedScene>("res://scene/tool/create_character/character_creation.tscn")
             .Instantiate<CharacterCreation>();
         node.creationNavigator!.SetFinishCallback((stat, ability) =>
         {
-            var saveUuid = saveDatabase.NewSave();
+            var saveUuid = catalog.makeSave();
             metadata.CurrentSave = saveUuid;
             var characterDb = new CharacterDatabase($"Data Source=m8a_save_{saveUuid}.db");
             characterDb.Init();

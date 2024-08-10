@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using Dapper;
 using Godot;
+using Kernel;
 
 public partial class LoadGame : ScrollContainer
 {
@@ -16,7 +17,7 @@ public partial class LoadGame : ScrollContainer
     [Export]
     Button? backButton;
 
-    public static LoadGame CreateLoadGame(SaveDatabase saveDatabase)
+    public static LoadGame CreateLoadGame(Catalog catalog)
     {
         var node = ResourceLoader.Load<PackedScene>("res://scene/tool/load/load_game.tscn")
             .Instantiate<LoadGame>();
@@ -24,7 +25,7 @@ public partial class LoadGame : ScrollContainer
         {
             Router.Of(node).Pop();
         };
-        saveDatabase.QuerySaves().AsList()
+        catalog.querySaves().AsList()
             .ForEach((save) =>
             {
                 var saveFile = $"m8a_save_{save.Id}.db";
@@ -41,7 +42,7 @@ public partial class LoadGame : ScrollContainer
                 },
                 deleteSaveBehavior: () =>
                 {
-                    saveDatabase.Remove(save.Id);
+                    catalog.remove(save.Id);
                     node.saveList!.RemoveChild(node.saveIdToListIdx.TryGetValue(save.Id, out var value)
                         ? value
                         : throw new Exception($"Save {save.Id} not exist."));

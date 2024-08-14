@@ -5,7 +5,7 @@
     <RootNamespace>mutemaanpa_cs_test</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-
+    <IsGodotToolsProject>true</IsGodotToolsProject>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <GodotProjectDir>..\M8a\</GodotProjectDir>

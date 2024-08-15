@@ -12,7 +12,7 @@ namespace Kernel
     idempotent function, which is implemented via version numbers in
     an auxiliary table.
 *)
-module internal Migration =
+module Migration =
     open DuckDB.NET.Data
     open Dapper
     open System.Data
@@ -38,7 +38,7 @@ module internal Migration =
         CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
             version INTEGER,
             name TEXT,
-            checksum TEXT,
+            checksum INTEGER,
             migrated_time TIMESTAMP DEFAULT current_timestamp
         );
     """
@@ -46,6 +46,8 @@ module internal Migration =
     (*
         Migration file naming convention:
             "V" + version (monotone increasing) + "_" + description + ".sql"
+
+        We require the version is discrete continuous. It is a very convenient property.
     *)
     let (|MigrationFileName|_|) (str: string) =
         let regex = Regex(@"V(\d+)_(\w+).sql", RegexOptions.Compiled)
@@ -61,11 +63,22 @@ module internal Migration =
         | MigrationFileName mfs -> mfs
         | _ -> failwith $"Found wrong formatting migration file {s} (unreachable)"
 
-    type MigrationFile =
+    [<Struct>]
+    [<CLIMutable>]
+    type MigrationTuple =
         { version: int
           name: string
-          content: string }
+          checksum: int
+          content: string option }
 
+    let isSameMigration m1 m2 =
+        if m1.version <> m2.version then false
+        elif m1.name <> m2.name then false
+        elif m1.checksum <> m2.checksum then false
+        elif m1.content.IsSome && m2.content.IsSome then m1 = m2
+        else false
+
+    (* Load all embedded migrations during module initialize period, sorted by version number. *)
     let allEmbeddedMigrations =
         let assembly = System.Reflection.Assembly.GetExecutingAssembly()
 
@@ -77,33 +90,84 @@ module internal Migration =
 
             { version = version
               name = name
-              content = content }
+              checksum = content.GetHashCode()
+              content = Some content }
 
         let isMigration =
             function
             | MigrationFileName _ -> true
             | _ -> false
 
+        let verifyIsSeq (mList: MigrationTuple list) =
+            let sequential =
+                mList
+                |> Seq.zip (seq { 1 .. mList.Length })
+                |> Seq.forall (fun (n, { version = v }) -> n = v)
+
+            if sequential then
+                mList
+            else
+                failwith "the migrations are not sequentially arranged, please check source code."
+
         assembly.GetManifestResourceNames()
         |> Seq.filter isMigration
         |> Seq.map readMigration
+        |> Seq.sortBy _.version
+        |> Seq.toList
+        |> verifyIsSeq
 
     let migrate dbPath =
         use db = new DuckDBConnection(dbPath)
-        use _ = db.BeginTransaction IsolationLevel.ReadCommitted
-        db.Execute(SCHEMA) |> ignore
+        use tx = db.BeginTransaction IsolationLevel.ReadCommitted
+        db.Execute(SCHEMA, transaction = tx) |> ignore
 
-        let lastMigration =
-            let version =
-                db.Query<string>($"SELECT version FROM {TABLE_NAME} ORDER BY migrated_time DESC LIMIT 1;")
+        let allAppliedMigrations =
+            db.Query(
+                $"SELECT * FROM {TABLE_NAME} ORDER BY version;",
+                (fun version name checksum ->
+                    { version = version
+                      name = name
+                      checksum = checksum
+                      content = None }),
+                transaction = tx
+            )
+            |> Seq.sortBy _.version
+            |> Seq.toList
 
-            if Seq.isEmpty version then
-                0
+        let doMigration
+            { version = version
+              name = name
+              checksum = checksum
+              content = content }
+            =
+            if content.IsSome then
+                db.Execute(content.Value, transaction = tx) |> ignore
+
+                db.Execute(
+                    $"""
+                    INSERT INTO {TABLE_NAME}(version, name, checksum)
+                    VALUES ($version, $name, $checksum)
+                    """,
+                    {| version = version
+                       name = name
+                       checksum = checksum |}
+                )
+                |> ignore
             else
-                version |> Seq.head |> int
+                failwith "you cannot do an empty migration"
 
-        let currentMigration = 1
 
-        ()
+        if allAppliedMigrations.Length > allEmbeddedMigrations.Length then
+            failwith "the save file is newer than the game version"
+        elif
+            allAppliedMigrations
+            |> List.zip allEmbeddedMigrations[0 .. allAppliedMigrations.Length - 1]
+            |> List.exists (fun (m1, m2) -> not (isSameMigration m1 m2))
+        then
+            failwith "The save file has tainted past migrations"
+        else
+            allEmbeddedMigrations[allAppliedMigrations.Length ..]
+            |> List.map doMigration
+            |> ignore
 
-    let a = 1
+            tx.Commit()

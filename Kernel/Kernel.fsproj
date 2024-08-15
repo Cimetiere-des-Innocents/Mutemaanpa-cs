@@ -11,6 +11,9 @@
     <Compile Include="Session.fs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migration/*.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="DuckDB.Net.Data.Full" Version="1.0.2" />
   </ItemGroup>

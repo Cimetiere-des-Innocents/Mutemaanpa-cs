@@ -9,6 +9,10 @@ type SaveData =
       CreatedAt: DateTime
       LastPlayed: DateTime }
 
+(*
+Catalog:
+    Catalog maintains a list of game sessions, 
+*)
 module Catalog =
     open DuckDB.NET.Data
     open Dapper
@@ -50,8 +54,6 @@ module Catalog =
         """
         )
 
-    let hasSave = querySaves >> Seq.isEmpty >> not
-
     let remove dbPath uuid =
         use db = new DuckDBConnection(dbPath)
 
@@ -66,8 +68,7 @@ module Catalog =
 open Catalog
 
 type Catalog(dbPath: string) =
-    member _.init() = init dbPath
+    do init dbPath |> ignore
     member _.makeSave() = makeSave dbPath
     member _.querySaves() = querySaves dbPath
-    member _.hasSave() = hasSave dbPath
     member _.remove id = remove dbPath id

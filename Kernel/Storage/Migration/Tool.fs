@@ -22,8 +22,7 @@ module Migration =
     let TABLE_NAME = "_migration"
 
     (*
-        Internal migration table, keeps record of what migrations has
-        applied and what has not.
+        Internal migration table, keeps record of what migrations has applied.
 
         By convention, we must arrange our migrations in serial versions
         V1, ..., V128. The save file must has an equal or smaller serial
@@ -76,7 +75,7 @@ module Migration =
         elif m1.name <> m2.name then false
         elif m1.checksum <> m2.checksum then false
         elif m1.content.IsSome && m2.content.IsSome then m1 = m2
-        else false
+        else true
 
     (* Load all embedded migrations during module initialize period, sorted by version number. *)
     let allEmbeddedMigrations =
@@ -116,7 +115,7 @@ module Migration =
         |> Seq.toList
         |> verifyIsSeq
 
-    let migrate dbPath =
+    let migrate dbPath logger =
         use db = new DuckDBConnection(dbPath)
         use tx = db.BeginTransaction IsolationLevel.ReadCommitted
         db.Execute(SCHEMA, transaction = tx) |> ignore
@@ -142,6 +141,7 @@ module Migration =
             =
             if content.IsSome then
                 db.Execute(content.Value, transaction = tx) |> ignore
+                logger $"executed migration {content.Value}"
 
                 db.Execute(
                     $"""
@@ -150,7 +150,8 @@ module Migration =
                     """,
                     {| version = version
                        name = name
-                       checksum = checksum |}
+                       checksum = checksum |},
+                    transaction = tx
                 )
                 |> ignore
             else

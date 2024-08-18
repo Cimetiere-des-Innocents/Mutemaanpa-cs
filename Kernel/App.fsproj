@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="Storage/Storage.fsproj" />
+    <ProjectReference Include="Logic/Logic.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Logger.fs" />
+    <Compile Include="Game.fs" />
+  </ItemGroup>
+</Project>

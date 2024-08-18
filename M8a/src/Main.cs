@@ -40,7 +40,7 @@ using Kernel;
 public partial class Main : PanelContainer
 {
     MetadataManager? metadata;
-    Catalog? catalog;
+    Game? game;
 
     public override void _Ready()
     {
@@ -58,8 +58,7 @@ public partial class Main : PanelContainer
     {
         metadata = new MetadataManager();
 
-        catalog = new Catalog($"Data Source=mutemaanpa.db");
-        catalog.init();
+        game = GameModule.makeGame($"Data Source=mutemaanpa.db");
         AddRouter();
     }
 
@@ -70,11 +69,11 @@ public partial class Main : PanelContainer
                 routes: [
                 (name: "/menu", endpoint: MainMenu.CreateMainMenu),
                 (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
-                (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(catalog!, metadata!)),
-                (name: "/load", endpoint: () => LoadGame.CreateLoadGame(catalog!))
+                (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(game!.Catalog, metadata!)),
+                (name: "/load", endpoint: () => LoadGame.CreateLoadGame(game!.Catalog))
             ]
         );
-        
+
         Node GetGameOverScene()
         {
             GetTree().Paused = true;

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="TypeExtension.fs" />
+    <Compile Include="Component.fs" />
+    <Compile Include="Session.fs" />
+  </ItemGroup>
+</Project>

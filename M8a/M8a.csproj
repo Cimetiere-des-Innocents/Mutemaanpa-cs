@@ -10,6 +10,6 @@
     <PackageReference Include="DuckDB.NET.Data.Full" Version="1.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kernel\Kernel.fsproj" />
+    <ProjectReference Include="..\Kernel\App.fsproj" />
   </ItemGroup>
 </Project>

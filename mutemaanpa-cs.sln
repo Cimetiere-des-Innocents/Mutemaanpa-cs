@@ -6,6 +6,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test project", "Test\Test.c
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "App", "Kernel\App.fsproj", "{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kernel", "Kernel", "{F00850E0-2FB1-4E09-AA3B-673A4BE15E29}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Logic", "Kernel\Logic\Logic.fsproj", "{37C45835-E25C-408C-A6E3-C8295202D301}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Storage", "Kernel\Storage\Storage.fsproj", "{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,5 +37,21 @@ Global
 		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
 		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC7FAAC4-71F6-462C-A3C4-04FA0D2254EC}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+		{37C45835-E25C-408C-A6E3-C8295202D301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C45835-E25C-408C-A6E3-C8295202D301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C45835-E25C-408C-A6E3-C8295202D301}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C45835-E25C-408C-A6E3-C8295202D301}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{37C45835-E25C-408C-A6E3-C8295202D301}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C45835-E25C-408C-A6E3-C8295202D301}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37C45835-E25C-408C-A6E3-C8295202D301} = {F00850E0-2FB1-4E09-AA3B-673A4BE15E29}
+		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9} = {F00850E0-2FB1-4E09-AA3B-673A4BE15E29}
 	EndGlobalSection
 EndGlobal

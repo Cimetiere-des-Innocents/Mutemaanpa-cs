@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Logger.fs" />
     <Compile Include="TypeExtension.fs" />
     <Compile Include="Component.fs" />
     <Compile Include="Session.fs" />

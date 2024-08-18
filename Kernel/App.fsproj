@@ -8,7 +8,6 @@
     <ProjectReference Include="Logic/Logic.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Logger.fs" />
     <Compile Include="Game.fs" />
   </ItemGroup>
 </Project>

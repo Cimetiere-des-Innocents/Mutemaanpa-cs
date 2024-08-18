@@ -2,7 +2,7 @@ namespace Kernel
 
 (* 
  Migration:
-    This code prepares a correct initial state for the game session.
+    This module prepares a correct initial state for the game session.
 
     During the setup period, the Session must ensure the save database
     is in a regular state because other db access codes require so.

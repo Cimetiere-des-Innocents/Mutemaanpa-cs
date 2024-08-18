@@ -1,19 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Migration/Tool.fs" />
+    <Compile Include="Component.fs" />
     <Compile Include="Catalog.fs" />
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Include="Migration/*.sql" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="DuckDB.Net.Data.Full" Version="1.0.2" />

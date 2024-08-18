@@ -11,7 +11,8 @@ type SaveData =
 
 (*
 Catalog:
-    Catalog maintains a list of game sessions, 
+    Catalog maintains a list of game sessions. DB access code can use these data to fetch all game
+    data.
 *)
 module Catalog =
     open DuckDB.NET.Data

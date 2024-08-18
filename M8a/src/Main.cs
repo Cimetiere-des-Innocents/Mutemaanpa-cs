@@ -58,7 +58,7 @@ public partial class Main : PanelContainer
     {
         metadata = new MetadataManager();
 
-        game = GameModule.makeGame($"Data Source=mutemaanpa.db");
+        game = GameModule.makeGame($"Data Source=mutemaanpa.db", GD.Print);
         AddRouter();
     }
 

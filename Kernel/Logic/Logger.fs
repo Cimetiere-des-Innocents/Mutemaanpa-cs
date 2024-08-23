@@ -1,5 +1,15 @@
 namespace Kernel
 
+(*
+Logger:
+    Helps us to observe what happened inside our system.
+
+    Default output is through stdout.
+    Using Godot output:
+    ```
+    Logger.setLogger GD.Print
+    ```
+*)
 module Logger =
     open System
 

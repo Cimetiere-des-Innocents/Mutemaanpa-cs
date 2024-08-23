@@ -1,6 +1,6 @@
 namespace Kernel
 
-type Session = { position: int }
+type Session = { World: World.World }
 
 module Session =
     let bootstrap = ()

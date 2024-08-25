@@ -2,7 +2,8 @@ namespace Kernel
 
 (*
 Logger:
-    Helps us to observe what happened inside our system.
+    Helps us to observe what event happened inside our system.
+    Global static object.
 
     Default output is through stdout.
     Using Godot output:

@@ -12,6 +12,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Logic", "Kernel\Logic\Logic
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Storage", "Kernel\Storage\Storage.fsproj", "{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Test", "Kernel\Test\Test.fsproj", "{4856C7F1-7D79-449A-9CF1-F961347EBA52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,9 +51,16 @@ Global
 		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
 		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
+		{4856C7F1-7D79-449A-9CF1-F961347EBA52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4856C7F1-7D79-449A-9CF1-F961347EBA52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4856C7F1-7D79-449A-9CF1-F961347EBA52}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4856C7F1-7D79-449A-9CF1-F961347EBA52}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{4856C7F1-7D79-449A-9CF1-F961347EBA52}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{4856C7F1-7D79-449A-9CF1-F961347EBA52}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{37C45835-E25C-408C-A6E3-C8295202D301} = {F00850E0-2FB1-4E09-AA3B-673A4BE15E29}
 		{3C9545D3-405E-4FB2-B1E9-A948CAAC6CF9} = {F00850E0-2FB1-4E09-AA3B-673A4BE15E29}
+		{4856C7F1-7D79-449A-9CF1-F961347EBA52} = {F00850E0-2FB1-4E09-AA3B-673A4BE15E29}
 	EndGlobalSection
 EndGlobal

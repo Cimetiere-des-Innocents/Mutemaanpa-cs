@@ -87,9 +87,12 @@ module Migration =
             use readStream = new StreamReader(fileStream)
             let content = readStream.ReadToEnd()
 
+            let computeChecksum (s: string) =
+                s.ToCharArray() |> Array.map int |> Array.fold (+) 0
+
             { version = version
               name = name
-              checksum = content.GetHashCode()
+              checksum = computeChecksum content
               content = Some content }
 
         let isMigration =
@@ -115,9 +118,10 @@ module Migration =
         |> Seq.toList
         |> verifyIsSeq
 
-    let migrate dbPath logger =
+    let migrate dbPath =
         use db = new DuckDBConnection(dbPath)
-        use tx = db.BeginTransaction IsolationLevel.ReadCommitted
+        db.Open()
+        use tx = db.BeginTransaction IsolationLevel.Snapshot // DuckDB only support this
         db.Execute(SCHEMA, transaction = tx) |> ignore
 
         let allAppliedMigrations =
@@ -128,6 +132,7 @@ module Migration =
                       name = name
                       checksum = checksum
                       content = None }),
+                splitOn = "name,checksum",
                 transaction = tx
             )
             |> Seq.sortBy _.version
@@ -141,7 +146,7 @@ module Migration =
             =
             if content.IsSome then
                 db.Execute(content.Value, transaction = tx) |> ignore
-                logger $"executed migration {content.Value}"
+                Logger.info $"executed migration {content.Value}"
 
                 db.Execute(
                     $"""
@@ -160,15 +165,19 @@ module Migration =
 
         if allAppliedMigrations.Length > allEmbeddedMigrations.Length then
             failwith "the save file is newer than the game version"
-        elif
-            allAppliedMigrations
-            |> List.zip allEmbeddedMigrations[0 .. allAppliedMigrations.Length - 1]
-            |> List.exists (fun (m1, m2) -> not (isSameMigration m1 m2))
-        then
-            failwith "The save file has tainted past migrations"
         else
-            allEmbeddedMigrations[allAppliedMigrations.Length ..]
-            |> List.map doMigration
-            |> ignore
+            let zippedComparison =
+                allAppliedMigrations
+                |> List.zip allEmbeddedMigrations[0 .. allAppliedMigrations.Length - 1]
+
+            let notSameMigration (m1, m2) = not (isSameMigration m1 m2)
+
+            if zippedComparison |> List.exists notSameMigration then
+                let pair = zippedComparison |> List.find notSameMigration in
+                failwith $"The save file has tainted past migrations {pair}"
+            else
+                allEmbeddedMigrations[allAppliedMigrations.Length ..]
+                |> List.map doMigration
+                |> ignore
 
             tx.Commit()

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS position (
     z FLOAT,
 );
 
-CREATE TABLE IF NO EXISTS name (
+CREATE TABLE IF NOT EXISTS name (
     id UUID PRIMARY KEY,
     name TEXT
 );
@@ -34,5 +34,6 @@ CREATE TABLE IF NOT EXISTS mp (
 
 CREATE TABLE IF NOT EXISTS perk (
     id UUID,
-    perk TEXT
+    perk TEXT,
+    PRIMARY KEY(id, perk)
 );

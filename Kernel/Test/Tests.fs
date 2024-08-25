@@ -9,7 +9,7 @@ type TestClass() =
 
     [<TestMethod>]
     member this.TestMethodPassing() =
-        let PerkPersister = Perk.persist |> Component.makePersister
+        let PerkPersister = Perk.setPersister |> Component.makePersister
 
         let source = "Data Source=test.db"
 
@@ -27,4 +27,7 @@ type TestClass() =
         let uuid = Guid.NewGuid()
         comp.Add(uuid, Kernel.Perks perks)
         PerkPersister source comp |> ignore
-        Assert.IsTrue(true)
+        let world = Persistance.load source
+
+        let ans = Kernel.World.tryQuery<Kernel.Perks> world uuid
+        Assert.AreEqual(ans, Some(Kernel.Perks perks))

@@ -8,12 +8,14 @@ ECS:
     "World" where the logic acts upon.
 
     These data is called "Resource". For one type of resource we only allow one instance. If
-    you want to reuse data structures, you can use sum type to create new type(note that is
+    you want to reuse data structures, you can use records to create new type(note that is
     not the same as type alias, it's a new type), like this:
 
     ```fsharp
-    type Health = Health of float
+    type Health = { Health: int}
     ```
+
+    Here we must use record because sum types are not very compatible to C#.
 *)
 
 open System
@@ -39,6 +41,11 @@ module World =
         world.Add(typeof<Component<'a>>, Component<'a>())
         world
 
+    let addComponent<'a> (comp: Component<'a>) (world: World) =
+        world.Add(comp.GetType(), comp)
+        world
+
+
     (* In compile time! *)
     let tryGetResource<'a> (world: World) =
         world.TryGet typeof<'a> |> Option.map (fun x -> x :?> 'a)
@@ -46,7 +53,7 @@ module World =
     let tryGetComponent<'a> (world: World) = world |> tryGetResource<Component<'a>>
 
     let tryQuery<'a> world uuid =
-        world |> tryGetComponent<'a> |> Option.map (fun x -> x.TryGet uuid)
+        world |> tryGetComponent<'a> |> Option.bind (fun x -> x.TryGet uuid)
 
 
 [<Struct>]
@@ -56,10 +63,16 @@ type Vector3 =
       mutable Y: float
       mutable Z: float }
 
-type Position = Position of Vector3
+[<Struct>]
+[<CLIMutable>]
+type Position = { Position: Vector3 }
 
-type Velocity = Velocity of Vector3
+[<Struct>]
+[<CLIMutable>]
+type Velocity = { Velocity: Vector3 }
 
+[<Struct>]
+[<CLIMutable>]
 type CharacterStat =
     { strength: uint8
       stamina: uint8
@@ -68,10 +81,16 @@ type CharacterStat =
       intelligence: uint8
       wisdom: uint8 }
 
-type Name = Name of string
+[<Struct>]
+[<CLIMutable>]
+type Name = { Name: string }
 
+[<Struct>]
+[<CLIMutable>]
 type Hp = { MaxHp: float; Hp: float }
 
+[<Struct>]
+[<CLIMutable>]
 type Mp = { MaxMp: int; Mp: int }
 
 type Perk =

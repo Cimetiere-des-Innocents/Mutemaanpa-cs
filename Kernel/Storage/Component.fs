@@ -21,6 +21,10 @@ module Component =
                                         | None -> ""
                                         | Some args -> $" with {args}\n"}"""
 
+    let logSqlp template arg = logSql template (Some arg)
+
+    let logSqlnp template = logSql template None
+
     ///
     /// persist save's `comp` to `dbPath` using `serializer`
     ///
@@ -46,20 +50,27 @@ module Component =
         fun (db: DuckDBConnection) x ->
             let (template, mapper) = sql
             let param = mapper x
-            logSql template (Some param)
+            logSqlp template param
             db.Execute(template, param)
 
     /// Make a persister who will persist world's component to dbPath.
     let makeRowPersister x = (makeRowSerializer x) |> makePersister
 
-    let load<'a, 'b> dbPath (args: string * ('a -> 'b)) =
+    let load<'a, 'b> (aggregator: (Guid * 'a) seq -> (Guid * 'b) seq) dbPath (stat: string) =
         use db = new DuckDBConnection(dbPath)
         let mutable dict = Dictionary()
-        let (stat, mapper) = args
-        logSql stat None
+        logSqlnp stat
 
-        db.Query<Guid, 'a, Guid * 'b>(stat, (fun guid a -> (guid, mapper a)))
-        |> Seq.map (fun (u, v) -> dict.Add(u, v))
+        let results =
+            db.Query<'a, Guid, Guid * 'a>(stat, (fun a uuid -> (uuid, a))) |> aggregator
+
+        // Because Seq is lazy, we need manual enumeration.
+        for (k, v) in results do
+            dict.Add(k, v)
+
+        dict
+
+    let loadRow<'a> x = load<'a, 'a> id x
 
 (*
 Position:
@@ -67,15 +78,15 @@ Position:
 *)
 module Position =
 
-    let persistOne =
+    let persistRow =
         ("""
             INSERT OR REPLACE INTO position(id, x, y, z)
             VALUES ($Uuid, $X, $Y, $Z);
         """,
-         fun (id: Entity, Position { X = x; Y = y; Z = z }) -> {| Uuid = id; X = x; Y = y; Z = z |})
+         fun (id: Entity, { Position = { X = x; Y = y; Z = z } }) -> {| Uuid = id; X = x; Y = y; Z = z |})
 
 
-    let load = ("SELECT * FROM position;", (fun x y z -> { X = x; Y = y; Z = z }))
+    let load = "SELECT * FROM position;"
 
 (*
 Character Stat:
@@ -83,7 +94,7 @@ Character Stat:
 *)
 module CharacterStat =
 
-    let persistOne =
+    let rowPersister =
         ("""
             INSERT OR REPLACE INTO character_stat(id, strength, stamina, dexterity, constitution, intelligence, wisdom)
             VALUES ($Uuid, $Strength, $Stamina, $Dexterity, $Constitution, $Intelligence, $Wisdom);
@@ -104,16 +115,21 @@ module CharacterStat =
                 Intelligence = intelligence
                 Wisdom = wisdom |})
 
+    let load = "SELECT * FROM character_stat;"
+
 module Name =
-    let persistOne =
+    let rowPersister =
         ("""
             INSERT OR REPLACE INTO name(id, name)
             VALUES ($Uuid, $Name);
             """,
-         fun (id: Entity, Name name) -> {| Uuid = id; Name = name |})
+         fun (id: Entity, { Name = name }) -> {| Uuid = id; Name = name |})
+
+
+    let load = "SELECT * FROM name;"
 
 module Hp =
-    let persistOne =
+    let rowPersister =
         ("""
                 INSERT OR REPLACE INTO hp(id, hp, max_hp)
                 VALUES ($Uuid, $Hp, $MaxHp);
@@ -123,8 +139,10 @@ module Hp =
                 Hp = hp.Hp
                 MaxHp = hp.MaxHp |})
 
+    let load = "SELECT * FROM hp;"
+
 module Mp =
-    let persistOne =
+    let rowPersister =
         ("""
                 INSERT OR REPLACE INTO mp(id, hp, max_hp)
                 VALUES ($Uuid, $Mp, $MaxMp);
@@ -134,8 +152,10 @@ module Mp =
                 Mp = mp.Mp
                 MaxMp = mp.MaxMp |})
 
+    let load = "SELECT * FROM mp;"
+
 module Perk =
-    let persist (db: DuckDBConnection) (uuid: Entity, Perks perks) =
+    let setPersister (db: DuckDBConnection) (uuid: Entity, Perks perks) =
         let sql =
             """
             INSERT OR REPLACE INTO perk(id, perk)
@@ -145,8 +165,24 @@ module Perk =
         perks
         |> Set.map (fun x ->
             let param = {| Uuid = uuid; Perk = x.ToString() |}
-            Component.logSql sql (Some param)
+            Component.logSqlp sql param
             db.Execute(sql, param))
+
+    let parse s =
+        match s with
+        | "Scholar" -> Scholar
+        | "Soldier" -> Soldier
+        | _ -> failwith $"unknown perk {s}"
+
+    let load dbPath =
+        Component.load
+            (Seq.groupBy (fun (uuid, _) -> uuid)
+             >> Seq.map (fun (uuid, entries) ->
+                 let perks = entries |> Seq.map (fun (_, v) -> parse v) |> Set |> Perks
+                 (uuid, perks)))
+            dbPath
+            """SELECT * FROM perk;"""
+
 
 module Persistance =
 
@@ -161,17 +197,28 @@ module Persistance =
 
             (world, dbPath)
 
-        let persist x =
+        let usePersister x =
             x |> Component.makePersister |> makeWorldPersister
 
         /// transforms a single row sql mapper to a chained persister
-        let persistRow (persistSqlMapper: string * (Entity * 'Item -> 'b)) =
-            persistSqlMapper |> Component.makeRowSerializer |> persist
+        let useRowPersister (persistSqlMapper: string * (Entity * 'Item -> 'b)) =
+            persistSqlMapper |> Component.makeRowSerializer |> usePersister
 
-        persistRow Position.persistOne
-        >> persistRow CharacterStat.persistOne
-        >> persistRow Name.persistOne
-        >> persistRow Hp.persistOne
-        >> persistRow Mp.persistOne
-        >> (Perk.persist |> persist)
+        useRowPersister Position.persistRow
+        >> useRowPersister CharacterStat.rowPersister
+        >> useRowPersister Name.rowPersister
+        >> useRowPersister Hp.rowPersister
+        >> useRowPersister Mp.rowPersister
+        >> (usePersister Perk.setPersister)
         >> ignore
+
+    let load dbPath =
+        let world = World.World()
+
+        world
+        |> addComponent (Component.loadRow<Position> dbPath Position.load)
+        |> addComponent (Component.loadRow<CharacterStat> dbPath CharacterStat.load)
+        |> addComponent (Component.loadRow<Name> dbPath Name.load)
+        |> addComponent (Component.loadRow<Hp> dbPath Hp.load)
+        |> addComponent (Component.loadRow<Mp> dbPath Mp.load)
+        |> addComponent (Perk.load dbPath)

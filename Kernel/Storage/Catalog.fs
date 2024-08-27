@@ -65,6 +65,8 @@ module Catalog =
             {| id = uuid |}
         )
 
+    let toSaveName uuid = $"m8a_save_{uuid}.db"
+
 (* For C# *)
 open Catalog
 

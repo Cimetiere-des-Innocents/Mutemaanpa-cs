@@ -3,19 +3,18 @@
 [ext_resource type="PackedScene" uid="uid://bbjph8hyqamat" path="res://scene/game/dialogue/interaction.tscn" id="1_51uv7"]
 [ext_resource type="Script" path="res://src/game/world/Lena.cs" id="2_lxqtk"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_w3vv6"]
-size = Vector3(0.942383, 1, 1)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rht3s"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_il1h7"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_psv7x"]
 
 [node name="Lena" type="RigidBody3D"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0193576, -0.0130316, 0)
-shape = SubResource("BoxShape3D_w3vv6")
+shape = SubResource("CapsuleShape3D_rht3s")
 
 [node name="NPCMesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_il1h7")
+mesh = SubResource("CapsuleMesh_psv7x")
 skeleton = NodePath("../..")
 
 [node name="Interaction" parent="." instance=ExtResource("1_51uv7")]

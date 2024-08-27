@@ -55,6 +55,16 @@ module World =
     let tryQuery<'a> world uuid =
         world |> tryGetComponent<'a> |> Option.bind (fun x -> x.TryGet uuid)
 
+    let addComponentResource world uuid item =
+        let comp =
+            match tryGetComponent world with
+            | Some comp -> comp
+            | None ->
+                registerComponent world |> ignore
+                tryGetComponent(world).Value
+
+        comp.Add(uuid, item)
+
 
 [<Struct>]
 [<CLIMutable>] // to make dapper work

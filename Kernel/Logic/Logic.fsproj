@@ -3,7 +3,6 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Logger.fs" />
     <Compile Include="TypeExtension.fs" />

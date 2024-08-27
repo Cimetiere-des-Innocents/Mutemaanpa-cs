@@ -3,19 +3,19 @@
 [ext_resource type="Script" path="res://src/game/world/Player.cs" id="1_ioonr"]
 [ext_resource type="PackedScene" uid="uid://bbjph8hyqamat" path="res://scene/game/dialogue/interaction.tscn" id="2_dtrj6"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_3e4jx"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h7qcn"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_3b7t0"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_80gam"]
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84954, 0, 0)
 script = ExtResource("1_ioonr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_3e4jx")
+shape = SubResource("CapsuleShape3D_h7qcn")
 
 [node name="PlayerMesh" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_3b7t0")
+mesh = SubResource("CapsuleMesh_80gam")
 
 [node name="PlayerController" type="Node3D" parent="."]
 

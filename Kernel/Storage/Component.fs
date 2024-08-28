@@ -155,7 +155,7 @@ module Mp =
     let load = "SELECT * FROM mp;"
 
 module Perk =
-    let setPersister (db: DuckDBConnection) (uuid: Entity, Perks perks) =
+    let setPersister (db: DuckDBConnection) (uuid: Entity, { Perks = perks }) =
         let sql =
             """
             INSERT OR REPLACE INTO perk(id, perk)
@@ -178,7 +178,9 @@ module Perk =
         Component.load
             (Seq.groupBy (fun (uuid, _) -> uuid)
              >> Seq.map (fun (uuid, entries) ->
-                 let perks = entries |> Seq.map (fun (_, v) -> parse v) |> Set |> Perks
+                 let perks =
+                     entries |> Seq.map (fun (_, v) -> parse v) |> (fun x -> { Perks = Set x })
+
                  (uuid, perks)))
             dbPath
             """SELECT * FROM perk;"""

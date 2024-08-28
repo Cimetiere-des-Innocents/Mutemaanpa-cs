@@ -8,5 +8,8 @@
     <Compile Include="TypeExtension.fs" />
     <Compile Include="Component.fs" />
     <Compile Include="Session.fs" />
+    <Compile Include="Character.fs" />
+    <Compile Include="Caster.fs" />
+    <Compile Include="M8aWorld.fs" />
   </ItemGroup>
 </Project>

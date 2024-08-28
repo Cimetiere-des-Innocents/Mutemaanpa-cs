@@ -2,6 +2,8 @@ namespace Kernel
 
 (* 
 ECS:
+    This file contains logic around ECS framework.
+    
     We use ECS architecture to process game logic.
 
     In ECS, game logic are separated to many many parts ("systems"). Game data is stored in
@@ -55,6 +57,7 @@ module World =
     let tryQuery<'a> world uuid =
         world |> tryGetComponent<'a> |> Option.bind (fun x -> x.TryGet uuid)
 
+    (* If component does not exist, this function will create it. *)
     let addComponentResource world uuid item =
         let comp =
             match tryGetComponent world with
@@ -64,60 +67,3 @@ module World =
                 tryGetComponent(world).Value
 
         comp.Add(uuid, item)
-
-
-[<Struct>]
-[<CLIMutable>] // to make dapper work
-type Vector3 =
-    { mutable X: float
-      mutable Y: float
-      mutable Z: float }
-
-[<Struct>]
-[<CLIMutable>]
-type Position = { Position: Vector3 }
-
-[<Struct>]
-[<CLIMutable>]
-type Velocity = { Velocity: Vector3 }
-
-[<Struct>]
-[<CLIMutable>]
-type CharacterStat =
-    { strength: uint8
-      stamina: uint8
-      dexterity: uint8
-      constitution: uint8
-      intelligence: uint8
-      wisdom: uint8 }
-
-[<Struct>]
-[<CLIMutable>]
-type Name = { Name: string }
-
-[<Struct>]
-[<CLIMutable>]
-type Hp = { MaxHp: float; Hp: float }
-
-[<Struct>]
-[<CLIMutable>]
-type Mp = { MaxMp: int; Mp: int }
-
-type Perk =
-    | Soldier
-    | Scholar
-
-type Perks = Perks of Set<Perk>
-
-module M8aWorld =
-    open World
-
-    let makeM8aWorld () =
-        World.World()
-        |> registerComponent<Position>
-        |> registerComponent<Velocity>
-        |> registerComponent<CharacterStat>
-        |> registerComponent<Name>
-        |> registerComponent<Hp>
-        |> registerComponent<Mp>
-        |> registerComponent<Perks>

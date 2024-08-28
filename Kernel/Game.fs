@@ -28,7 +28,7 @@ type Game(catalog: Catalog, gameState: GameState) =
     member _.saveSession() =
         match gameState with
         | InSession session -> Storage.Persistance.persist (session.world, Catalog.toSaveName session.id)
-        | OutSession -> info "You cannot save the game when you are not in game."
+        | OutSession -> failwith "You cannot save the game when you are not in game."
 
     member self.quitSession saveWhenQuit =
         if saveWhenQuit then self.saveSession () else ()

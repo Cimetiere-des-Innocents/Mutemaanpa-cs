@@ -1,7 +1,6 @@
 namespace Mutemaanpa;
 
 using Godot;
-
 public partial class SetAbility : MarginContainer
 {
     [Export]
@@ -25,14 +24,16 @@ public partial class SetAbility : MarginContainer
     [Export]
     public Button? FinishButton;
 
-    public CharacterAbility GetAbility() => new()
+    public Kernel.CharacterStat GetAbility()
     {
-        Strength = Strength!.Value,
-        Stamina = Stamina!.Value,
-        Dexterity = Dexterity!.Value,
-        Constitution = Constitution!.Value,
-        Intelligence = Intelligence!.Value,
-        Wisdom = Wisdom!.Value
-    };
+        return new(
+         strength: Strength!.Value,
+         stamina: Stamina!.Value,
+         dexterity: Dexterity!.Value,
+         constitution: Constitution!.Value,
+         intelligence: Intelligence!.Value,
+         wisdom: Wisdom!.Value
+        );
+    }
 
 }

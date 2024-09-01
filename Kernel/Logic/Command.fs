@@ -22,8 +22,8 @@ module Command =
             (resolveBuiltinCommand world v) |> ignore
             resolveCommand world
 
-    let createUser world stat name =
-        let commands = World.tryGetResource<Command> world
+    let createUser session stat name =
+        let commands = World.tryGetResource<Command> session.world
 
         match commands with
         | None -> failwith "No command pipe registered"

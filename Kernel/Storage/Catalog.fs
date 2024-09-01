@@ -27,6 +27,8 @@ module Catalog =
         );
     """
 
+    let toSaveName uuid = $"m8a_save_{uuid}.db"
+
     let init dbPath =
         use db = new DuckDBConnection(dbPath)
         db.Execute(SCHEMA)
@@ -65,7 +67,6 @@ module Catalog =
             {| id = uuid |}
         )
 
-    let toSaveName uuid = $"m8a_save_{uuid}.db"
 
 (* For C# *)
 open Catalog

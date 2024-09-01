@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Kernel;
 
 namespace Mutemaanpa;
 
@@ -14,27 +15,21 @@ enum Level
 /// </summary>
 public partial class GameMain : PanelContainer
 {
-    public CharacterMemory? CharacterMemory { get; set; }
+    public Session? Session { get; set; }
     public Journal? Journal { get; set; }
-    public Guid? Save { get; set; }
+    Action? Saver;
     PauseMenu? pauseMenu;
-    /// <summary>
-    /// worldHud put here, because it must have a Control parent, otherwise mouse events will not
-    /// propagate and the whole ui breaks.
-    /// </summary>
-    WorldHud? worldHud;
     Router? router;
     DialogueBox? dialogueBox;
 
-    public static GameMain CreateGameMain(CharacterMemory characterMemory,
-                                          Journal journal,
-                                          Guid save)
+    public static GameMain CreateGameMain(Session session,
+                                          Action saver)
     {
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
-        gameMain.CharacterMemory = characterMemory;
-        gameMain.Journal = journal;
-        gameMain.Save = save;
+        gameMain.Session = session;
+        gameMain.Journal = new Journal($"m8a_save_{session.id}.db");
+        gameMain.Saver = saver;
         return gameMain;
     }
 
@@ -49,12 +44,16 @@ public partial class GameMain : PanelContainer
     {
         base._Ready();
         AddRouter();
-        AddWorldHud(BindPlayerInfo, BindPlayerHpMp());
         AddPauseMenu();
         AddGameOverScene();
         LoadLevel();
     }
 
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
+        Session!.update();
+    }
 
     private void AddRouter()
     {
@@ -64,7 +63,6 @@ public partial class GameMain : PanelContainer
         {
             SetLevel(Level.GLOBULIN);
             router.Overwrite(World.CreateWorld());
-            worldHud!.Show();
         });
         router.Register(("/intermission/opening", GetOpeningScene));
         router.Register(("/globulin", World.CreateWorld));
@@ -80,13 +78,7 @@ public partial class GameMain : PanelContainer
     private void SaveGame()
     {
         Journal!.Store();
-        CharacterMemory!.Store();
-    }
-
-    private void AddWorldHud(Action playerCallback, MemberLiveData memberLiveData)
-    {
-        worldHud = WorldHud.CreateWorldHud(playerCallback, memberLiveData);
-        AddChild(worldHud);
+        Saver!.Invoke();
     }
 
     private void LoadLevel()
@@ -95,29 +87,11 @@ public partial class GameMain : PanelContainer
         {
             case Level.OPENING:
                 router!.Push("/intermission/opening");
-                worldHud!.Hide();
                 break;
             case Level.GLOBULIN:
                 router!.Overwrite("/globulin");
-                worldHud!.Show();
                 break;
         }
-    }
-
-    private void BindPlayerInfo()
-    {
-        var info = CharacterInformation.From(CharacterMemory!.GetPlayerState());
-        worldHud!.AddChild(info);
-    }
-
-    private MemberLiveData BindPlayerHpMp()
-    {
-        return new MemberLiveData(
-            GetMaxHp: () => CharacterMemory!.GetPlayerState().Runtime.MaxHitPoint,
-            GetCurHp: () => CharacterMemory!.GetPlayerState().Data.Stat.Hp,
-            GetMaxMp: () => CharacterMemory!.GetPlayerState().Runtime.MaxManaPoint,
-            GetCurMp: () => CharacterMemory!.GetPlayerState().Data.Stat.Mp
-        );
     }
 
     private void AddGameOverScene()
@@ -127,12 +101,7 @@ public partial class GameMain : PanelContainer
 
     private void GameOverHandler(DeadEvent dead)
     {
-        if (dead.Character.Data.Player is null)
-        {
             return;
-        }
-        // Notice GameMain cannot collect its garbages, so we need a special scene to do this.
-        Router.Of(this).Push("/gameOver", removeOld: false);
     }
 
     /// <summary>
@@ -163,10 +132,10 @@ public partial class GameMain : PanelContainer
 
     private void SetGlobalFlag(string key, string value)
     {
-        Journal!.Set(Save!.Value, key, value);
+        Journal!.Set(Session!.id, key, value);
     }
 
-    private string? GetGlobalFlag(string key) => Journal!.Get(Save!.Value, key);
+    private string? GetGlobalFlag(string key) => Journal!.Get(Session!.id, key);
 
     private Level GetLevel() => GetGlobalFlag("level") switch
     {

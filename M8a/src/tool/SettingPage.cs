@@ -27,10 +27,7 @@ public partial class SettingPage : MarginContainer
     public override void _Ready()
     {
         base._Ready();
-        _CancelButton!.ButtonUp += () =>
-        {
-            Router.Of(this).Pop();
-        };
+        _CancelButton!.ButtonUp += Router.Of(this).Pop;
         _OkayButton!.ButtonUp += () =>
         {
             metadataManager!.WriteToDisk();

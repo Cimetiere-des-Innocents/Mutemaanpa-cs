@@ -4,14 +4,11 @@ using Godot;
 
 public partial class Player : CharacterBody3D
 {
-    private Character? player;
     private double lastDamaged = 0.0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        player = GetNode<GameMain>("../../..").CharacterMemory!.GetPlayer();
-        Position = player.Dump().Position!.Value;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -41,14 +38,12 @@ public partial class Player : CharacterBody3D
                 lastDamaged += delta;
                 if (lastDamaged > 0.5)
                 {
-                    player!.Hit(1.0f);
                     lastDamaged -= 0.5;
                 }
             }
         }
 
-        Velocity = player!.GetVelocity(input);
+        Velocity = 2 * input;
         MoveAndSlide();
-        player.Move(Position);
     }
 }

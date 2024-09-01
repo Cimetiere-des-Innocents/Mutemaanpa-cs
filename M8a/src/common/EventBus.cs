@@ -10,9 +10,8 @@ public class HitEvent(string victim, float damage) : EventArgs
     public float Damage { get; } = damage;
 }
 
-public class DeadEvent(CharacterState character) : EventArgs
+public class DeadEvent() : EventArgs
 {
-    public CharacterState Character { get; } = character;
 }
 
 /// <summary>

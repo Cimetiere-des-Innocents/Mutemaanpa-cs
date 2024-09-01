@@ -21,7 +21,7 @@ type Game(catalog: Catalog, gameState: GameState) =
     member _.loadSession uuid =
         let saveFile = Catalog.toSaveName uuid
         Migration.migrate saveFile
-        let session = Storage.Persistance.load saveFile |> Session.bootstrap uuid
+        let session = Storage.Persistance.load saveFile |> M8aWorld.bootstrap uuid
         gameState <- InSession session
         session
 
@@ -33,6 +33,10 @@ type Game(catalog: Catalog, gameState: GameState) =
     member self.quitSession saveWhenQuit =
         if saveWhenQuit then self.saveSession () else ()
         gameState <- OutSession
+    
+    member _.remove uuid =
+        catalog.remove uuid |> ignore
+        System.IO.File.Delete(Catalog.toSaveName uuid)
 
 module Game =
     let makeGame dbPath logger =

@@ -27,12 +27,14 @@ type Session =
         World.registerResource<'a> self.world |> ignore
         self
 
+    member public self.update () =
+        self.scheduler.run self.world
+
+
 module Session =
-    let bootstrap uuid world =
+    let newSession uuid world =
         let mainScheduler = Scheduler.newScheduler ()
 
         { world = world
           id = uuid
           scheduler = mainScheduler }
-
-    let update session = session.scheduler.run session.world

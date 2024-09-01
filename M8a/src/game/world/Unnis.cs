@@ -36,7 +36,6 @@ public partial class Unnis : Interaction
             Next: null,
             Effect: () =>
             {
-                gameMain!.Journal!.Set(gameMain.Save!.Value, "food", "Cookie");
                 EndDialogue();
             }
         ),
@@ -45,7 +44,6 @@ public partial class Unnis : Interaction
             Next: null,
             Effect: () =>
             {
-                gameMain!.Journal!.Set(gameMain.Save!.Value, "food", "cookie");
                 EndDialogue();
             }
         )

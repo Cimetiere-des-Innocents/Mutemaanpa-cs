@@ -62,15 +62,38 @@ public partial class Main : PanelContainer
         AddRouter();
     }
 
+    GameMain NewGameHandler()
+    {
+        var session = game!.newSession();
+        var newGame = GameMain.CreateGameMain(session, game!.saveSession);
+        return newGame;
+    }
+
+    LoadGame LoadGameHandler()
+    {
+        return LoadGame.CreateLoadGame(game!);
+    }
+
+    MainMenu MainMenuHandler()
+    {
+        return MainMenu.CreateMainMenu();
+    }
+
+
+    SettingPage SettingPageHandler()
+    {
+        return SettingPage.CreateSettingPage(metadata!);
+    }
+
     private void AddRouter()
     {
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
-                (name: "/menu", endpoint: MainMenu.CreateMainMenu),
-                (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
-                (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(game!.Catalog, metadata!)),
-                (name: "/load", endpoint: () => LoadGame.CreateLoadGame(game!.Catalog))
+                (name: "/menu", endpoint: MainMenuHandler),
+                (name: "/setting", endpoint: SettingPageHandler),
+                (name: "/newGame", endpoint: NewGameHandler),
+                (name: "/load", endpoint: LoadGameHandler)
             ]
         );
 

@@ -4,7 +4,7 @@ using Godot;
 
 public partial class NumberBar : PanelContainer
 {
-    public int Value { get; set; }
+    public byte Value { get; set; }
 
     [Export]
     private Label? Ability;

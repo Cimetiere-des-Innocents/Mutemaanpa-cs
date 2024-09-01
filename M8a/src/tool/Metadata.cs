@@ -20,7 +20,6 @@ public class MetadataManager
 {
     private static readonly string MetadataPath = "user://setting";
     public bool FirstTimeLaunch { get; private set; } = false;
-    public Guid? CurrentSave { get; set; } = null;
 
     public MetadataState Metadata;
 

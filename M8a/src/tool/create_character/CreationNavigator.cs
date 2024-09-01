@@ -2,6 +2,7 @@ namespace Mutemaanpa;
 
 using System;
 using Godot;
+using Kernel;
 
 public partial class CreationNavigator : PanelContainer
 {
@@ -12,10 +13,10 @@ public partial class CreationNavigator : PanelContainer
     [Export]
     private SetAbility? SetAbility;
 
-    public void SetFinishCallback(Action<CharacterStat, CharacterAbility> action)
+    public void SetFinishCallback(Action<CharacterStat, Name> action)
     {
-        SetAbility!.FinishButton!.Pressed += () => action(SetInfo!.GetCharacterStat(),
-                                                          SetAbility!.GetAbility());
+        SetAbility!.FinishButton!.Pressed += () => action(SetAbility!.GetAbility(),
+                                                          SetInfo!.GetCharacterName());
     }
 
     public override void _Ready()

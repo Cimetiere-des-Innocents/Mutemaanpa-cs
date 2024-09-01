@@ -20,7 +20,6 @@ public partial class GameLog : Control
 
     private void DeadHandler(DeadEvent dead)
     {
-        LogBox?.AppendText($"{dead.Character.Data.Stat.Name} is dead!\n");
     }
 
     public override void _Notification(int what)

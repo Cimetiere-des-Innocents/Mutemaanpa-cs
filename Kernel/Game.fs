@@ -12,6 +12,9 @@ Game:
 *)
 type Game(catalog: Catalog, gameState: GameState) =
     let mutable gameState = gameState
+
+    let toDbPath file = $"Data Source={file}"
+    let uuidToDbPath uuid = uuid |> Catalog.toSaveName |> toDbPath
     member _.catalog = catalog
 
     member self.newSession() =
@@ -19,21 +22,21 @@ type Game(catalog: Catalog, gameState: GameState) =
         self.loadSession uuid
 
     member _.loadSession uuid =
-        let saveFile = Catalog.toSaveName uuid
-        Migration.migrate saveFile
-        let session = Storage.Persistance.load saveFile |> M8aWorld.bootstrap uuid
+        let dbPath = uuidToDbPath uuid
+        Migration.migrate dbPath
+        let session = Storage.Persistance.load dbPath |> M8aWorld.bootstrap uuid
         gameState <- InSession session
         session
 
     member _.saveSession() =
         match gameState with
-        | InSession session -> Storage.Persistance.persist (session.world, Catalog.toSaveName session.id)
+        | InSession session -> Storage.Persistance.persist (session.world, uuidToDbPath session.id)
         | OutSession -> failwith "You cannot save the game when you are not in game."
 
     member self.quitSession saveWhenQuit =
         if saveWhenQuit then self.saveSession () else ()
         gameState <- OutSession
-    
+
     member _.remove uuid =
         catalog.remove uuid |> ignore
         System.IO.File.Delete(Catalog.toSaveName uuid)

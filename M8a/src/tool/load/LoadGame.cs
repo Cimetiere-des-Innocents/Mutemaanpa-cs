@@ -18,7 +18,10 @@ public partial class LoadGame : ScrollContainer
         var node = ResourceLoader.Load<PackedScene>("res://scene/tool/load/load_game.tscn")
             .Instantiate<LoadGame>();
         node.Game = game;
-        node.backButton!.Pressed += Router.Of(node).Pop;
+        node.backButton!.Pressed += () => {
+            Router.Of(node).Pop();
+        };
+        node.Sync();
         return node;
     }
 

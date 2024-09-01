@@ -112,11 +112,4 @@ module Character =
               Hp = hp
               Perks = perks }
 
-    let addCharacterPlugin (session: Session) =
-        session
-            .registerComponent<Position>()
-            .registerComponent<Velocity>()
-            .registerComponent<CharacterStat>()
-            .registerComponent<Name>()
-            .registerComponent<Hp>()
-            .registerComponent<Perks> ()
+    let addCharacterPlugin (session: Session) = session

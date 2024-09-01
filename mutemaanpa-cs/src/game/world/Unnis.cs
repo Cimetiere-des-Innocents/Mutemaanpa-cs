@@ -4,7 +4,6 @@ public partial class Unnis : Interaction
 {
     public override void _Ready()
     {
-        base._Ready();
         interactiveText = UnnisDialogue();
     }
 
@@ -13,7 +12,8 @@ public partial class Unnis : Interaction
         new Transition(
             Text: "Bye unnis.",
             Next: null,
-            Effect: EndDialogue
+            // Effect: EndDialogue
+            Effect: null
         ),
         new Transition(
             Text: "Hi Unnis.",
@@ -36,8 +36,7 @@ public partial class Unnis : Interaction
             Next: null,
             Effect: () =>
             {
-                gameMain!.Journal!.Set(gameMain.Save!.Value, "food", "Cookie");
-                EndDialogue();
+                // EndDialogue();
             }
         ),
         new Transition(
@@ -45,8 +44,7 @@ public partial class Unnis : Interaction
             Next: null,
             Effect: () =>
             {
-                gameMain!.Journal!.Set(gameMain.Save!.Value, "food", "cookie");
-                EndDialogue();
+                // EndDialogue();
             }
         )
     );

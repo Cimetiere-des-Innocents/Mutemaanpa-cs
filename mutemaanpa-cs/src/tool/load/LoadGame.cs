@@ -1,22 +1,17 @@
-namespace Mutemaanpa;
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Dapper;
 using Godot;
 
+namespace Mutemaanpa;
 public partial class LoadGame : ScrollContainer
 {
     [Export]
     VBoxContainer? saveList;
 
-    readonly Dictionary<Guid, Node> saveIdToListIdx = [];
+    Catalog? catalog;
 
     [Export]
     Button? backButton;
 
-    public static LoadGame CreateLoadGame(SaveDatabase saveDatabase)
+    public static LoadGame CreateLoadGame(Catalog catalog)
     {
         var node = ResourceLoader.Load<PackedScene>("res://scene/tool/load/load_game.tscn")
             .Instantiate<LoadGame>();
@@ -24,33 +19,34 @@ public partial class LoadGame : ScrollContainer
         {
             Router.Of(node).Pop();
         };
-        saveDatabase.QuerySaves().AsList()
+        node.catalog = catalog;
+        node.Sync();
+        return node;
+    }
+
+    private void Sync()
+    {
+        foreach (var c in saveList!.GetChildren())
+        {
+            saveList!.RemoveChild(c);
+            c.QueueFree();
+        }
+        catalog!.Saves
             .ForEach((save) =>
             {
                 var saveFile = $"m8a_save_{save.Id}.db";
                 var child = SaveSlot.CreateSaveSlot(save,
                 loadGameBehavior: () =>
                 {
-                    var characterDb = new CharacterDatabase($"Data Source={saveFile}");
-                    var characterMemory = new CharacterMemory(characterDb);
-                    characterMemory.Load();
-                    var journal = new Journal(saveFile);
-                    var gameMain = GameMain.CreateGameMain(characterMemory, journal, save.Id);
-                    Router.Of(node).Overwrite(gameMain);
-
+                    var gameMain = GameMain.CreateGameMain(save.Id);
+                    Router.Of(this).Overwrite(gameMain);
                 },
                 deleteSaveBehavior: () =>
                 {
-                    saveDatabase.Remove(save.Id);
-                    node.saveList!.RemoveChild(node.saveIdToListIdx.TryGetValue(save.Id, out var value)
-                        ? value
-                        : throw new Exception($"Save {save.Id} not exist."));
-                    node.saveIdToListIdx.Remove(save.Id);
-                    File.Delete(saveFile);
+                    catalog.Remove(save.Id);
+                    Sync();
                 });
-                node.saveList!.AddChild(child);
-                node.saveIdToListIdx.Add(save.Id, child);
+                saveList!.AddChild(child);
             });
-        return node;
     }
 }

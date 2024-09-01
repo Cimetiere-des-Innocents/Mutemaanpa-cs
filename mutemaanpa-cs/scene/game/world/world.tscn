@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://bns3248d85gon"]
+[gd_scene load_steps=7 format=3 uid="uid://bns3248d85gon"]
 
 [ext_resource type="Script" path="res://src/game/world/World.cs" id="1_ro40x"]
-[ext_resource type="PackedScene" uid="uid://crqy6imwv38t8" path="res://scene/game/world/player.tscn" id="2_fs31l"]
 [ext_resource type="PackedScene" uid="uid://dc4rm6g1r00ju" path="res://scene/game/world/lena.tscn" id="3_ydii5"]
 [ext_resource type="PackedScene" uid="uid://bh54atlvr8qhi" path="res://scene/game/world/unnis.tscn" id="4_akdn2"]
 
@@ -26,8 +25,6 @@ shape = SubResource("BoxShape3D_vvi8o")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("BoxMesh_3y0qn")
-
-[node name="Player" parent="." instance=ExtResource("2_fs31l")]
 
 [node name="Lena" parent="." instance=ExtResource("3_ydii5")]
 

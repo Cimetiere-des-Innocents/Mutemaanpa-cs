@@ -39,41 +39,39 @@ using Godot;
 public partial class Main : PanelContainer
 {
     MetadataManager? metadata;
-    SaveDatabase? saveDatabase;
+
+    Catalog? catalog;
 
     public override void _Ready()
     {
-        base._Ready();
-        ConfigureExternalLibraries();
-        Bootstrap();
-    }
-
-    private static void ConfigureExternalLibraries()
-    {
-        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-    }
-
-    private void Bootstrap()
-    {
         metadata = new MetadataManager();
-
-        saveDatabase = new SaveDatabase($"Data Source=mutemaanpa.db");
-        saveDatabase.InitDatabase();
+        catalog = new Catalog();
+        AddChild(catalog);
         AddRouter();
     }
 
     private void AddRouter()
     {
+        Node newGameHandler()
+        {
+            var save = catalog!.NewSave();
+            return GameMain.CreateGameMain(save);
+        }
+
+        Node settingHandler() { return SettingPage.CreateSettingPage(metadata!); }
+
+        Node loadGameHandler() => LoadGame.CreateLoadGame(catalog!);
+
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
                 (name: "/menu", endpoint: MainMenu.CreateMainMenu),
-                (name: "/setting", endpoint: () => SettingPage.CreateSettingPage(metadata!)),
-                (name: "/newGame", endpoint: () => CharacterCreation.CreateCharacterCreation(saveDatabase!, metadata!)),
-                (name: "/load", endpoint: () => LoadGame.CreateLoadGame(saveDatabase!))
+                (name: "/setting", endpoint: settingHandler),
+                (name: "/newGame", endpoint: newGameHandler),
+                (name: "/load", endpoint: loadGameHandler)
             ]
         );
-        
+
         Node GetGameOverScene()
         {
             GetTree().Paused = true;

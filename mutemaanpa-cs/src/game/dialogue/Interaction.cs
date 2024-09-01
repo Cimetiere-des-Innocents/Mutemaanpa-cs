@@ -1,6 +1,5 @@
 namespace Mutemaanpa;
 
-using Dapper;
 using Godot;
 using System.Linq;
 
@@ -24,7 +23,7 @@ public partial class Interaction : Node3D
         RegisterOutlineHandler();
         RegisterBanterBox();
         SetClickHandler();
-        gameMain = GameMain.Of(this);
+        // gameMain = GameMain.Of(this);
     }
 
     private void RegisterOutlineHandler()
@@ -39,7 +38,7 @@ public partial class Interaction : Node3D
     private void RegisterShader()
     {
         var body = GetParent<PhysicsBody3D>();
-        var meshes = (from c in body.GetChildren() where c is MeshInstance3D select c as MeshInstance3D).AsList();
+        var meshes = (from c in body.GetChildren() where c is MeshInstance3D select c as MeshInstance3D).ToList();
         if (meshes.Count == 0)
         {
             return;
@@ -103,7 +102,7 @@ public partial class Interaction : Node3D
                     ShowBanter(banter);
                     break;
                 case IDialogue dialogue:
-                    ShowDialogue(dialogue);
+                    // ShowDialogue(dialogue);
                     break;
                 default:
                     break;
@@ -121,15 +120,15 @@ public partial class Interaction : Node3D
         timer.Timeout += () => inBanter = false;
     }
 
-    private void ShowDialogue(IDialogue dialogue)
-    {
-        gameMain!.AddDialogueBox(dialogue);
-    }
+    // private void ShowDialogue(IDialogue dialogue)
+    // {
+    //     gameMain!.AddDialogueBox(dialogue);
+    // }
 
-    protected void EndDialogue()
-    {
-        gameMain!.RemoveDialogueBox();
-    }
+    // protected void EndDialogue()
+    // {
+    //     gameMain!.RemoveDialogueBox();
+    // }
 }
 
 

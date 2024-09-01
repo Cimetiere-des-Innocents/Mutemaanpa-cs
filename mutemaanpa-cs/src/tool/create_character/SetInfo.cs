@@ -16,8 +16,6 @@ public partial class SetInfo : MarginContainer
     public CharacterStat GetCharacterStat() => new()
     {
         Name = CharacterName!.Text,
-        Hp = 0.0f,
-        Mp = 0,
         Origin = (Origin)Origin!.Selected
     };
 

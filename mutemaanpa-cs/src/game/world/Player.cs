@@ -1,5 +1,6 @@
 namespace Mutemaanpa;
 
+using System;
 using Godot;
 
 public partial class Player : CharacterBody3D
@@ -7,11 +8,13 @@ public partial class Player : CharacterBody3D
     private Character? player;
     private double lastDamaged = 0.0;
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    public static Player CreatePlayer(CharacterStat stat, CharacterAbility ability)
     {
-        player = GetNode<GameMain>("../../..").CharacterMemory!.GetPlayer();
-        Position = player.Dump().Position!.Value;
+        var player = ResourceLoader.Load<PackedScene>("res://scene/game/world/player.tscn")
+            .Instantiate<Player>();
+        player.player = Character.NewCharacter(ability, stat);
+        player.Position = Vector3.Left;
+        return player;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -49,6 +52,5 @@ public partial class Player : CharacterBody3D
 
         Velocity = player!.GetVelocity(input);
         MoveAndSlide();
-        player.Move(Position);
     }
 }

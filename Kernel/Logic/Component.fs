@@ -32,38 +32,45 @@ type Resource = Object
 (* Component is linked with entities, each entity has some components. *)
 type Component<'a when 'a :> Resource> = Dictionary<Entity, 'a>
 
-module World =
-    type World = Dictionary<Type, Resource>
+type World = Dictionary<Type, Resource>
 
-    let registerResource (world: World) resource =
+module World =
+
+    let registerResource<'a when 'a :> Resource and 'a: (new: unit -> 'a)> (world: World) =
+        world.Add(typeof<'a>, new 'a ())
+        world
+
+    let addResource (world: World) resource =
         world.Add(resource.GetType(), resource)
         world
 
-    let registerComponent<'a> (world: World) =
-        world.Add(typeof<Component<'a>>, Component<'a>())
-        world
+    let registerComponent<'a> (world: World) = registerResource<Component<'a>> world
 
-    let addComponent<'a> (comp: Component<'a>) (world: World) =
-        world.Add(comp.GetType(), comp)
-        world
-
+    let addComponent<'a> (comp: Component<'a>) (world: World) = addResource world comp
 
     (* In compile time! *)
     let tryGetResource<'a> (world: World) =
         world.TryGet typeof<'a> |> Option.map (fun x -> x :?> 'a)
 
+    let getOrCreateResource<'a when 'a :> Resource and 'a: (new: unit -> 'a)> (world: World) =
+        tryGetResource<'a> world
+        |> Option.orElseWith (fun () -> world |> registerResource<'a> |> tryGetResource<'a>)
+        |> Option.get
+
     let tryGetComponent<'a> (world: World) = world |> tryGetResource<Component<'a>>
+
+    let getOrAddComponent<'a> (world: World) =
+        world |> getOrCreateResource<Component<'a>>
 
     let tryQuery<'a> world uuid =
         world |> tryGetComponent<'a> |> Option.bind (fun x -> x.TryGet uuid)
 
     (* If component does not exist, this function will create it. *)
-    let addComponentResource world uuid item =
-        let comp =
-            match tryGetComponent world with
-            | Some comp -> comp
-            | None ->
-                registerComponent world |> ignore
-                tryGetComponent(world).Value
-
+    let addComponentItem world uuid item =
+        let comp = getOrAddComponent world
         comp.Add(uuid, item)
+
+    let spawn world ([<ParamArray>] arr: Resource array) =
+        let uuid = Guid.NewGuid()
+        arr |> Array.map (addComponentItem world uuid) |> ignore
+        uuid

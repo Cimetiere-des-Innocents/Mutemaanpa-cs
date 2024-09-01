@@ -215,7 +215,7 @@ module Persistance =
         >> ignore
 
     let load dbPath =
-        let world = World.World()
+        let world = World()
 
         world
         |> addComponent (Component.loadRow<Position> dbPath Position.load)

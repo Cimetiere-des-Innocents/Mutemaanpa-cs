@@ -8,7 +8,7 @@ open Microsoft.VisualStudio.TestTools.UnitTesting
 type TestClass() =
 
     [<TestMethod>]
-    member this.TestMethodPassing() =
+    member _.TestMethodPassing() =
         let PerkPersister = Perk.setPersister |> Component.makePersister
 
         let source = "Data Source=test.db"
@@ -25,9 +25,9 @@ type TestClass() =
 
         let comp = Kernel.Component()
         let uuid = Guid.NewGuid()
-        comp.Add(uuid, Kernel.Perks perks)
+        comp.Add(uuid, { Kernel.Perks = perks })
         PerkPersister source comp |> ignore
         let world = Persistance.load source
 
         let ans = Kernel.World.tryQuery<Kernel.Perks> world uuid
-        Assert.AreEqual(ans, Some(Kernel.Perks perks))
+        Assert.AreEqual(ans, Some({ Kernel.Perks = perks }))

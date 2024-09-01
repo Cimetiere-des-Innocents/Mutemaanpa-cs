@@ -4,7 +4,7 @@ module M8aWorld =
     open World
 
     let makeM8aWorld () =
-        World.World()
+        World()
         |> registerComponent<Position>
         |> registerComponent<Velocity>
         |> registerComponent<CharacterStat>

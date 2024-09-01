@@ -3,13 +3,36 @@ namespace Kernel
 open System
 
 type Session =
-    { world: World.World
-      id: Guid }
+    { world: World
+      id: Guid
+      scheduler: Scheduler }
 
-    member public self.spawn([<ParamArray>] arr: Resource array) =
-        let uuid = Guid.NewGuid()
-        arr |> Array.map (World.addComponentResource self.world uuid) |> ignore
-        uuid
+    member public self.addSystem sys =
+        self.scheduler.add sys
+        self
+
+    member public self.addComponent<'a> comp =
+        World.addComponent comp |> ignore
+        self
+
+    member public self.registerComponent<'a>() =
+        World.registerComponent self.world |> ignore
+        self
+
+    member public self.addResource<'a> res =
+        World.addResource self.world res |> ignore
+        self
+
+    member public self.registerResource<'a when 'a: (new: unit -> 'a)>() =
+        World.registerResource<'a> self.world |> ignore
+        self
 
 module Session =
-    let bootstrap uuid world = { world = world; id = uuid }
+    let bootstrap uuid world =
+        let mainScheduler = Scheduler.newScheduler ()
+
+        { world = world
+          id = uuid
+          scheduler = mainScheduler }
+
+    let update session = session.scheduler.run session.world

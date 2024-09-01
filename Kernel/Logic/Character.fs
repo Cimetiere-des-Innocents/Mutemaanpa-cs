@@ -36,12 +36,12 @@ Character Stat:
 [<Struct>]
 [<CLIMutable>]
 type CharacterStat =
-    { strength: uint8
-      stamina: uint8
-      dexterity: uint8
-      constitution: uint8
-      intelligence: uint8
-      wisdom: uint8 }
+    { mutable strength: uint8
+      mutable stamina: uint8
+      mutable dexterity: uint8
+      mutable constitution: uint8
+      mutable intelligence: uint8
+      mutable wisdom: uint8 }
 
 (* For everyone that has a name. *)
 [<Struct>]
@@ -55,7 +55,9 @@ type Name = { Name: string }
  *)
 [<Struct>]
 [<CLIMutable>]
-type Hp = { MaxHp: float; Hp: float }
+type Hp =
+    { mutable MaxHp: float
+      mutable Hp: float }
 
 (* Perk. Used in dialogue system. *)
 type Perk =
@@ -83,16 +85,17 @@ module Character =
           Hp: Hp
           Perks: Perks }
 
-    let spawn (session: Session) (bundle: CharacterBundle) =
-        session.spawn
-            [ bundle.Position :> Resource
-              bundle.Velocity
-              bundle.CharacterStat
-              bundle.Name
-              bundle.Hp
-              bundle.Perks ]
+    let spawn world (bundle: CharacterBundle) =
+        World.spawn
+            world
+            [| bundle.Position
+               bundle.Velocity
+               bundle.CharacterStat
+               bundle.Name
+               bundle.Hp
+               bundle.Perks |]
 
-    let create (session: Session) (stat: CharacterStat) spawnPoint name =
+    let create world (stat: CharacterStat) name =
         let velocity =
             let speed = Velocity.speed stat
             { Velocity = { X = speed; Y = speed; Z = speed } }
@@ -101,8 +104,8 @@ module Character =
         let perks = { Perks = Set.empty }
 
         spawn
-            session
-            { Position = spawnPoint
+            world
+            { Position = { Position = { X = 1.0; Y = 1.0; Z = 0.0 } }
               Velocity = velocity
               CharacterStat = stat
               Name = name

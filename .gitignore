@@ -7,7 +7,7 @@ local/
 temp/
 
 # ide specific files
-.vscode/
+.vscode/*
 .vs/
 
 bin/
@@ -16,3 +16,9 @@ TestResults/
 
 .fake
 *.db
+
+# Launch settings
+!.vscode/launch.json
+!.vscode/ruleset.xml
+!.vscode/tasks.json
+!.vscode/extensions.json

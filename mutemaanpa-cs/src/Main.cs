@@ -5,8 +5,6 @@ using Godot;
 /// <summary>
 /// Main class controls the whole game wide configuration / states.
 ///
-/// Main also does dependency injection for Mutemaanpa.
-/// https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection
 ///
 /// # Main States
 ///
@@ -38,8 +36,14 @@ using Godot;
 /// </summary>
 public partial class Main : PanelContainer
 {
+    /// <summary>
+    /// Manage game settings
+    /// </summary>
     MetadataManager? metadata;
 
+    /// <summary>
+    /// Manage game saves 
+    /// </summary>
     Catalog? catalog;
 
     public override void _Ready()

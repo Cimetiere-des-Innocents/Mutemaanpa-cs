@@ -11,6 +11,10 @@ public record struct SaveData(
     DateTime LastPlayed
 );
 
+/// <summary>
+/// Catalog manages the metadata about all game sessions. It tells the game how many saves we have,
+/// then give sufficient information for gameMain to bootstrap itself.
+/// </summary>
 public partial class Catalog : Node
 {
     public static readonly string m8aDir = "m8a/";
@@ -34,6 +38,10 @@ public partial class Catalog : Node
         Saves = System.Text.Json.JsonSerializer.Deserialize<List<SaveData>>(data)!;
     }
 
+    /// <summary>
+    /// ToGameFS returns the root user directory of the game.
+    /// </summary>
+    /// <returns></returns>
     public static DirAccess ToGameFS()
     {
         var dir = DirAccess.Open(".");
@@ -71,5 +79,13 @@ public partial class Catalog : Node
         }
         dir.ChangeDir("..");
         dir.Remove(saveDir);
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationWMCloseRequest)
+        {
+            Save();
+        }
     }
 }

@@ -16,6 +16,7 @@ public enum Level
 /// </summary>
 public partial class GameMain : PanelContainer
 {
+    public static readonly string SAVE_FILE = "/mainGame.json";
     public DirAccess? Save { get; set; }
     Level? GameLevel { get; set; }
 
@@ -27,16 +28,22 @@ public partial class GameMain : PanelContainer
         return $"m8a_{save}";
     }
 
+    /// <summary>
+    /// CreateGameMain loads the game if save exists, create a new one if save does not exist.
+    /// </summary>
+    /// <param name="save"></param>
+    /// <returns></returns>
     public static GameMain CreateGameMain(Guid save)
     {
         var gameMain = ResourceLoader.Load<PackedScene>("res://scene/game/game_main.tscn")
             .Instantiate<GameMain>();
         var dir = Catalog.ToGameFS();
+        gameMain.Save = dir;
         var saveDir = GetSaveDirname(save);
         if (dir.DirExists(saveDir))
         {
             dir.ChangeDir(saveDir);
-            using var file = FileAccess.Open(dir.GetCurrentDir() + "/gameMain.json", FileAccess.ModeFlags.Read);
+            using var file = FileAccess.Open(dir.GetCurrentDir() + SAVE_FILE, FileAccess.ModeFlags.Read);
             gameMain.GameLevel = JsonSerializer.Deserialize<Level>(file.GetAsText());
         }
         else
@@ -44,9 +51,9 @@ public partial class GameMain : PanelContainer
             gameMain.GameLevel = Level.OPENING;
             dir.MakeDir(saveDir);
             dir.ChangeDir(saveDir);
+            gameMain.SaveGame();
         }
-        gameMain.Save = dir;
-        gameMain.LoadWorld();
+        gameMain.SpawnWorld();
         return gameMain;
     }
 
@@ -55,7 +62,7 @@ public partial class GameMain : PanelContainer
         GameLevel = Level.CREATE;
         RemoveChild(node);
         node.QueueFree();
-        LoadWorld();
+        SpawnWorld();
     }
 
     public void CreateToGlobulin(CharacterCreation node, CharacterStat stat, CharacterAbility ability)
@@ -66,7 +73,7 @@ public partial class GameMain : PanelContainer
         world = World.CreateWorld(stat, ability);
         AddChild(world);
     }
-    private void LoadWorld()
+    private void SpawnWorld()
     {
         switch (GameLevel)
         {
@@ -99,6 +106,9 @@ public partial class GameMain : PanelContainer
 
     private void SaveGame()
     {
+        using var file = FileAccess.Open(Save!.GetCurrentDir() + SAVE_FILE, FileAccess.ModeFlags.Write);
+        var s = JsonSerializer.Serialize(GameLevel!.Value);
+        file.StoreLine(s);
     }
 
     // private void AddGameOverScene()

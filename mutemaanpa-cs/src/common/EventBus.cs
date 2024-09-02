@@ -10,11 +10,6 @@ public class HitEvent(string victim, float damage) : EventArgs
     public float Damage { get; } = damage;
 }
 
-public class DeadEvent(CharacterState character) : EventArgs
-{
-    public CharacterState Character { get; } = character;
-}
-
 /// <summary>
 /// EventBus broadcasts events from multiple publisher to multiple subscribers.
 /// 

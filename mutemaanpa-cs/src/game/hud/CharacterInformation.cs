@@ -40,20 +40,19 @@ public partial class CharacterInformation : CenterContainer
     [Export]
     Button? QuitButton;
 
-    public static CharacterInformation From(CharacterState state)
+    public static CharacterInformation From(Character character)
     {
         var info = ResourceLoader.Load<PackedScene>("res://scene/game/hud/character_information.tscn")
             .Instantiate<CharacterInformation>();
-        info.CharacterName!.Text = state.Data.Stat.Name;
-        info.HitPointDisplay!.SetLabelValue("HP", $"{state.Data.Stat.Hp} / {state.Runtime.MaxHitPoint}");
-        info.ManaPointDisplay!.SetLabelValue("MP", $"{state.Data.Stat.Mp} / {state.Runtime.MaxManaPoint}");
-        info.OriginDisplay!.SetLabelValue("Origin", state.Data.Stat.Origin.ToString());
-        info.StrengthDisplay!.SetLabelValue("Strength", state.Data.Ability.Strength.ToString());
-        info.StaminaDisplay!.SetLabelValue("Stamina", state.Data.Ability.Stamina.ToString());
-        info.DexterityDisplay!.SetLabelValue("Dexterity", state.Data.Ability.Stamina.ToString());
-        info.ConstitutionDisplay!.SetLabelValue("Constitution", state.Data.Ability.Stamina.ToString());
-        info.IntelligenceDisplay!.SetLabelValue("Intelligence", state.Data.Ability.Stamina.ToString());
-        info.WisdomDisplay!.SetLabelValue("Wisdom", state.Data.Ability.Stamina.ToString());
+        info.CharacterName!.Text = character.inner.Stat.Name;
+        info.HitPointDisplay!.SetLabelValue("HP", $"{character.hp.hp} / {character.hp.maxHp}");
+        info.OriginDisplay!.SetLabelValue("Origin", character.inner.Stat.Origin.ToString());
+        info.StrengthDisplay!.SetLabelValue("Strength", character.inner.Ability.Strength.ToString());
+        info.StaminaDisplay!.SetLabelValue("Stamina", character.inner.Ability.Stamina.ToString());
+        info.DexterityDisplay!.SetLabelValue("Dexterity", character.inner.Ability.Stamina.ToString());
+        info.ConstitutionDisplay!.SetLabelValue("Constitution", character.inner.Ability.Stamina.ToString());
+        info.IntelligenceDisplay!.SetLabelValue("Intelligence", character.inner.Ability.Stamina.ToString());
+        info.WisdomDisplay!.SetLabelValue("Wisdom", character.inner.Ability.Stamina.ToString());
         return info;
     }
  

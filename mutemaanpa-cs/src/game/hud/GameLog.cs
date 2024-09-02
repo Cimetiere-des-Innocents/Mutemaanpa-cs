@@ -10,7 +10,7 @@ public partial class GameLog : Control
     public override void _Ready()
     {
         EventBus.Subscribe<HitEvent>(HitHandler);
-        EventBus.Subscribe<DeadEvent>(DeadHandler);
+        // EventBus.Subscribe<DeadEvent>(DeadHandler);
     }
 
     private void HitHandler(HitEvent hit)
@@ -18,10 +18,10 @@ public partial class GameLog : Control
         LogBox?.AppendText($"{hit.Victim} was hit by damage {hit.Damage}.\n");
     }
 
-    private void DeadHandler(DeadEvent dead)
-    {
-        LogBox?.AppendText($"{dead.Character.Data.Stat.Name} is dead!\n");
-    }
+    // private void DeadHandler(DeadEvent dead)
+    // {
+    //     LogBox?.AppendText($"{dead.Character.Data.Stat.Name} is dead!\n");
+    // }
 
     public override void _Notification(int what)
     {
@@ -34,6 +34,6 @@ public partial class GameLog : Control
     private void GameOverHandler()
     {
         EventBus.Unsubscribe<HitEvent>(HitHandler);
-        EventBus.Unsubscribe<DeadEvent>(DeadHandler);
+        // EventBus.Unsubscribe<DeadEvent>(DeadHandler);
     }
 }

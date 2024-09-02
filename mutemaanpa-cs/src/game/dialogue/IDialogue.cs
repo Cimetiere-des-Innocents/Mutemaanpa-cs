@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Dapper;
+using System.Linq;
 
 namespace Mutemaanpa;
 
@@ -48,7 +48,7 @@ public record struct Transition
 
 public class Dialogue(string text, params Transition[] transitions) : IDialogue
 {
-    public List<Transition> GetNext() => transitions.AsList();
+    public List<Transition> GetNext() => [.. transitions];
 
     public string GetText() => text;
 

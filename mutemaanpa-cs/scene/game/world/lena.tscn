@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dc4rm6g1r00ju"]
+
+[ext_resource type="PackedScene" uid="uid://bbjph8hyqamat" path="res://scene/game/dialogue/interaction.tscn" id="1_51uv7"]
+[ext_resource type="Script" path="res://src/game/world/Lena.cs" id="2_lxqtk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w3vv6"]
+size = Vector3(0.942383, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_il1h7"]
+
+[node name="Lena" type="RigidBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0193576, -0.0130316, 0)
+shape = SubResource("BoxShape3D_w3vv6")
+
+[node name="NPCMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_il1h7")
+skeleton = NodePath("../..")
+
+[node name="Interaction" parent="." instance=ExtResource("1_51uv7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.84954, 0, 0)
+script = ExtResource("2_lxqtk")
+
+[node name="Head" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0308208, 0.710168, 0)
+text = "Did you expect a needle"

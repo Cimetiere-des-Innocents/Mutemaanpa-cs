@@ -5,9 +5,9 @@ using Godot;
 
 public partial class OpeningScene : PanelContainer
 {
-    Action? onFinished;
+    Action<OpeningScene>? onFinished;
 
-    public static OpeningScene CreateOpeningScene(Action onFinished)
+    public static OpeningScene CreateOpeningScene(Action<OpeningScene> onFinished)
     {
         var node = ResourceLoader.Load<PackedScene>("res://scene/game/intermission/opening_scene.tscn")
             .Instantiate<OpeningScene>();
@@ -20,7 +20,7 @@ public partial class OpeningScene : PanelContainer
         if (@event.IsActionReleased("ui_accept") 
             || (@event is InputEventMouseButton m && m.IsReleased()))
         {
-            onFinished?.Invoke();
+            onFinished?.Invoke(this);
         }
     }
 }

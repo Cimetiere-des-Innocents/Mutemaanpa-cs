@@ -13,12 +13,11 @@ public partial class SetInfo : MarginContainer
     [Export]
     private Button? BackButton;
 
-    public CharacterStat GetCharacterStat() => new(
-        CharacterName!.Text,
-        0.0f,
-        0,
-        (Origin)Origin!.Selected
-    );
+    public CharacterStat GetCharacterStat() => new()
+    {
+        Name = CharacterName!.Text,
+        Origin = (Origin)Origin!.Selected
+    };
 
     public override void _Ready()
     {

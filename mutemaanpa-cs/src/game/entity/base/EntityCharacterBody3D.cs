@@ -32,11 +32,13 @@ public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBo
 	public void Load(SaveDict data)
 	{
 		Transform = SaveUtil.LoadTransform((SaveList)data["transform"]);
+		EntityUtil.LoadCustomData(data, this);
 	}
 
 	public void Save(SaveDict data)
 	{
 		data["transform"] = SaveUtil.SaveTransform(Transform);
+		EntityUtil.SaveCustomData(data, this);
 	}
 
 	public void DefineData(EntityDataBuilder builder) { }

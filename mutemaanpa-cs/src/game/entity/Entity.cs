@@ -1,5 +1,6 @@
 global using SaveDict = Godot.Collections.Dictionary<string, Godot.Variant>;
 global using SaveList = Godot.Collections.Array<Godot.Variant>;
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -23,9 +24,9 @@ public abstract class EntityDataKeyBase(string name)
 {
     public readonly string Name = name;
 
-    public abstract Variant? Serialize(object value);
+    public abstract Variant? Serialize(object? value);
 
-    public abstract object? Deserialize(Variant value);
+    public abstract object? Deserialize(Variant? value);
 
     public override int GetHashCode()
     {
@@ -43,14 +44,14 @@ public class EntityDataKey<T>(string name, EntityDataSerializer<T> serializer) :
         set { entity.DataMap.Data[this] = value; }
     }
 
-    public override object? Deserialize(Variant value)
+    public override object? Deserialize(Variant? value)
     {
         return Serializer.Deserialize(value);
     }
 
-    public override Variant? Serialize(object value)
+    public override Variant? Serialize(object? value)
     {
-        return Serializer.Serialize((T)value);
+        return Serializer.Serialize((T?)value);
     }
 };
 
@@ -72,10 +73,32 @@ public class EntityUtil
 
         foreach (var i in entity.DataMap.Data)
         {
-            customDict[i.Key.Name] = i.Key.Serialize(i.Value);
+            customDict[i.Key.Name] = i.Key.Serialize(i.Value) ?? new Variant();
         }
 
         saveDict["custom"] = customDict;
+    }
+
+    public static void LoadCustomData(SaveDict saveDict, Entity<Node3D> entity)
+    {
+        var customDict = saveDict["custom"].As<SaveDict>();
+        if (customDict == null)
+        {
+            throw new Exception("Cannot get custom dict");
+        }
+
+        foreach (var i in entity.DataMap.Data.Keys)
+        {
+            var variant = customDict[i.Name];
+            if (variant.VariantType == Variant.Type.Nil)
+            {
+                entity.DataMap.Data[i] = i.Deserialize(null);
+            }
+            else
+            {
+                entity.DataMap.Data[i] = i.Deserialize(variant);
+            }
+        }
     }
 }
 

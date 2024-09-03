@@ -6,12 +6,12 @@ using Godot;
 
 namespace Mutemaanpa;
 
-using EntityTypeDict = Dictionary<string, EntityType<Entity<Node3D>>>;
+using EntityTypeDict = Dictionary<string, IEntityType<Entity<Node3D>>>;
 
 public class EntityRegistryEvent(EntityTypeDict entities) : EventArgs
 {
     private EntityTypeDict entities = entities;
-    public void Register(EntityType<Entity<Node3D>> entityType)
+    public void Register(IEntityType<Entity<Node3D>> entityType)
     {
         entities[entityType.Name] = entityType;
     }
@@ -29,7 +29,7 @@ public class EntityRegistry
         EventBus.Publish(new EntityRegistryEvent(entities));
     }
 
-    public EntityType<Entity<Node3D>> this[string name]
+    public IEntityType<Entity<Node3D>> this[string name]
     {
         get { return entities[name]; }
     }
@@ -49,8 +49,15 @@ public class EntityRegistryBuilder
             var entityClasses = classes.Where(t => t.GetCustomAttributes<EntityAttribute>().Any()).ToList();
             foreach (var entityClass in entityClasses)
             {
-                var entityType = entityClass.GetCustomAttribute<EntityAttribute>()!.EntityType;
-                registryEvent.Register(entityType);
+                var typeField = entityClass.GetField("TYPE", BindingFlags.Public | BindingFlags.Static);
+                if (typeField != null)
+                {
+                    var value = typeField.GetValue(null);
+                    if (value is IEntityType<Entity<Node3D>> entityType)
+                    {
+                        registryEvent.Register(entityType);
+                    }
+                }
             }
         });
     }

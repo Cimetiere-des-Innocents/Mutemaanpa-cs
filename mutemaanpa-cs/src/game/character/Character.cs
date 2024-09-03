@@ -35,15 +35,15 @@ public partial class Character : EntityCharacterBody3D
     [Export]
     private double maxHp = 0;
 
-    public static EntityDataKey<int> STRENGTH = new("strength", EntityDataSerializers.INT);
-    public static EntityDataKey<int> STAMINA = new("stamina", EntityDataSerializers.INT);
-    public static EntityDataKey<int> DEXTERITY = new("dexterity", EntityDataSerializers.INT);
-    public static EntityDataKey<int> CONSTITUTION = new("constitution", EntityDataSerializers.INT);
-    public static EntityDataKey<int> INTELLIGENCE = new("intelligence", EntityDataSerializers.INT);
-    public static EntityDataKey<int> WISDOM = new("wisdom", EntityDataSerializers.INT);
-    public static EntityDataKey<string> NAME = new("name", EntityDataSerializers.STRING);
-    public static EntityDataKey<Origin> ORIGIN = new("origin", EntityDataSerializers.ENUM<Origin>());
-    public static EntityDataKey<Guid> UUID = new("uuid", EntityDataSerializers.UUID);
+    public static readonly EntityDataKey<int> STRENGTH = new("strength", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> STAMINA = new("stamina", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> DEXTERITY = new("dexterity", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> CONSTITUTION = new("constitution", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> INTELLIGENCE = new("intelligence", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> WISDOM = new("wisdom", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<string> NAME = new("name", EntityDataSerializers.STRING);
+    public static readonly EntityDataKey<Origin> ORIGIN = new("origin", EntityDataSerializers.ENUM<Origin>());
+    public static readonly EntityDataKey<Guid> UUID = new("uuid", EntityDataSerializers.UUID);
 
     internal Vector3 GetVelocity(Vector3 input)
     {

@@ -1,8 +1,12 @@
 using Godot;
 
 namespace Mutemaanpa;
+
+[Entity]
 public partial class Player : Character
 {
+    public static readonly EntityType<Player> TYPE = EntityTypeUtil.FromScene<Player>("player", "res://scene/game/world/player.tscn");
+
     private double lastDamaged = 0.0;
 
     public override void _PhysicsProcess(double delta)

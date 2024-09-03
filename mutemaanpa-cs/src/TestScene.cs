@@ -7,9 +7,43 @@ public partial class TestScene : Node3D
     [Export]
     private EntitySpawner? playerSpawner;
 
+    private Player? player;
+
+    public static DirAccess ToGameFS()
+    {
+        var dir = DirAccess.Open(".");
+        if (!dir.DirExists("m8a"))
+        {
+            dir.MakeDir("m8a");
+        }
+        dir.ChangeDir("m8a");
+        return dir;
+    }
+
     public void SpawnPlayer()
     {
-        var player = playerSpawner?.SpawnEntity<Player>();
+        player = playerSpawner?.SpawnEntity<Player>();
+        var dir = ToGameFS();
+        if (dir.FileExists("testSave.json"))
+        {
+            using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Read);
+            var content = file.GetAsText();
+            var parseResult = Json.ParseString(content);
+            player!.Load(parseResult.As<SaveDict>());
+        }
+    }
+
+    public void SavePlayer()
+    {
+        if (player != null)
+        {
+            var dir = ToGameFS();
+            using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Write);
+            var saveDict = new SaveDict();
+            player.Save(saveDict);
+            var saveJson = Json.Stringify(saveDict);
+            file.StoreString(saveJson);
+        }
     }
 
     public void QuitGame()

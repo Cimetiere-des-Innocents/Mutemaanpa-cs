@@ -49,4 +49,5 @@ text = "Quit"
 transform = Transform3D(1, 0, 0, 0, 0.49555, 0.86858, 0, -0.86858, 0.49555, 0, 0, 0)
 
 [connection signal="pressed" from="UI/StartButton" to="." method="SpawnPlayer"]
+[connection signal="pressed" from="UI/SaveButton" to="." method="SavePlayer"]
 [connection signal="pressed" from="UI/QuitButton" to="." method="QuitGame"]

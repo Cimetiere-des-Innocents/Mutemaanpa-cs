@@ -1,0 +1,43 @@
+using System;
+using Godot;
+
+namespace Mutemaanpa;
+
+public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBody3D>
+{
+	private EntityType<Entity<Node3D>>? type;
+
+	public EntityType<Entity<Node3D>> Type
+	{
+		get
+		{
+			if (type == null)
+			{
+				throw new Exception($"Trying to access entity type of class {GetType().Name} before _Ready is called");
+			}
+			return type;
+		}
+	}
+
+	private readonly EntityDataMap dataMap = new();
+
+	public EntityDataMap DataMap => dataMap;
+
+	public override void _Ready()
+	{
+		type = EntityTypeUtil.Reflect(this);
+		DefineData(new EntityDataBuilder(this));
+	}
+
+	public void Load(SaveDict data)
+	{
+		Transform = SaveUtil.LoadTransform((SaveList)data["transform"]);
+	}
+
+	public void Save(SaveDict data)
+	{
+		data["transform"] = SaveUtil.SaveTransform(Transform);
+	}
+
+	public void DefineData(EntityDataBuilder builder) { }
+}

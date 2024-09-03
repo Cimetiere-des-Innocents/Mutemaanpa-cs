@@ -1,8 +1,8 @@
-namespace Mutemaanpa;
 
 using System;
 using Godot;
 
+namespace Mutemaanpa;
 public partial class MemberState : AspectRatioContainer
 {
     [Export]
@@ -18,7 +18,7 @@ public partial class MemberState : AspectRatioContainer
     {
         (hpBar!.GetMaximumValue, hpBar!.GetCurrentValue, mpBar!.GetMaximumValue, mpBar!.GetCurrentValue)
             = memberLiveData;
-       playerButton!.Pressed += pressedCallback; 
+        playerButton!.Pressed += pressedCallback;
     }
 
     public override void _Ready()

@@ -1,7 +1,7 @@
-namespace Mutemaanpa;
 
 using Godot;
 
+namespace Mutemaanpa;
 public partial class SetAbility : MarginContainer
 {
     [Export]

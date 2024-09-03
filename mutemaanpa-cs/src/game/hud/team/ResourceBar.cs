@@ -1,8 +1,8 @@
-namespace Mutemaanpa;
 
 using Godot;
 using System;
 
+namespace Mutemaanpa;
 public partial class ResourceBar : MarginContainer
 {
     [Export]

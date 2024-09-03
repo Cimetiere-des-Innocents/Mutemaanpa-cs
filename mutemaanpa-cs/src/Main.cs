@@ -1,7 +1,7 @@
-namespace Mutemaanpa;
 
 using Godot;
 
+namespace Mutemaanpa;
 /// <summary>
 /// Main class controls the whole game wide configuration / states.
 ///

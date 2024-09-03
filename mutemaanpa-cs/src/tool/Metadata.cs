@@ -1,10 +1,9 @@
-namespace Mutemaanpa;
 
 using System;
 using System.Text.Json;
 using Godot;
 
-
+namespace Mutemaanpa;
 public record struct MetadataState
 (
     bool Test

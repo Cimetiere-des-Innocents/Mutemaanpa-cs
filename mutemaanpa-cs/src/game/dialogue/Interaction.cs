@@ -1,8 +1,8 @@
-namespace Mutemaanpa;
 
 using Godot;
 using System.Linq;
 
+namespace Mutemaanpa;
 /// <summary>
 /// Interaction adds interactive functionality to PhysicsBody3D.
 /// 

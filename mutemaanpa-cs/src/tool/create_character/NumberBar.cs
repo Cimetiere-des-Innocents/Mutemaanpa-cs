@@ -1,7 +1,7 @@
-namespace Mutemaanpa;
 
 using Godot;
 
+namespace Mutemaanpa;
 public partial class NumberBar : PanelContainer
 {
     public int Value { get; set; }
@@ -17,11 +17,13 @@ public partial class NumberBar : PanelContainer
 
     public override void _Ready()
     {
-        AddOne!.Pressed += () => {
+        AddOne!.Pressed += () =>
+        {
             Value += 1;
             Ability!.Text = Value.ToString();
         };
-        MinusOne!.Pressed += () => {
+        MinusOne!.Pressed += () =>
+        {
             Value -= 1;
             Ability!.Text = Value.ToString();
         };

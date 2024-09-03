@@ -1,8 +1,8 @@
-namespace Mutemaanpa;
 
 using System;
 using Godot;
 
+namespace Mutemaanpa;
 public record struct MemberLiveData
 (
     Func<double> GetMaxHp,

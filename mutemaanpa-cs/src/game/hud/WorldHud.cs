@@ -1,8 +1,8 @@
-namespace Mutemaanpa;
 
 using System;
 using Godot;
 
+namespace Mutemaanpa;
 /// <summary>
 /// Hud of the game world.
 /// </summary>

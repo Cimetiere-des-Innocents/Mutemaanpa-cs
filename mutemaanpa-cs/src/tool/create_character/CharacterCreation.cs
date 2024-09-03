@@ -1,8 +1,8 @@
-namespace Mutemaanpa;
 
 using System;
 using Godot;
 
+namespace Mutemaanpa;
 public partial class CharacterCreation : Node3D
 {
 

@@ -5,66 +5,56 @@ namespace Mutemaanpa;
 
 public interface EntityDataSerializer<T>
 {
-    Variant? Serialize(T? value);
-    T? Deserialize(Variant? value);
+    Variant Serialize(T value);
+    T Deserialize(Variant value);
 }
 
-class IntSerializer : EntityDataSerializer<int>
+public class SimpleSerializer<[MustBeVariant] T> : EntityDataSerializer<T>
 {
-    public int Deserialize(Variant? value)
+    public T Deserialize(Variant value)
     {
-        return value?.As<int>() ?? 0;
+        return value.As<T>();
     }
 
-    public Variant? Serialize(int value)
+    public Variant Serialize(T value)
     {
-        return Variant.CreateFrom(value);
-    }
-}
-
-class FloatSerializer : EntityDataSerializer<float>
-{
-    public float Deserialize(Variant? value)
-    {
-        return value?.As<float>() ?? 0;
-    }
-
-    public Variant? Serialize(float value)
-    {
-        return Variant.CreateFrom(value);
+        return Variant.From(value);
     }
 }
 
-class DoubleSerializer : EntityDataSerializer<double>
+public class EnumSerializer<T> : EntityDataSerializer<T> where T : Enum
 {
-    public double Deserialize(Variant? value)
+    public T Deserialize(Variant value)
     {
-        return value?.As<double>() ?? 0;
+        return (T)Enum.ToObject(typeof(T), (byte)value.As<int>());
     }
 
-    public Variant? Serialize(double value)
+    public Variant Serialize(T value)
     {
-        return Variant.CreateFrom(value);
+        return Variant.CreateFrom((int)(object)value);
     }
 }
 
-class BoolSerializer : EntityDataSerializer<bool>
+public class UUIDSerializer : EntityDataSerializer<Guid>
 {
-    public bool Deserialize(Variant? value)
+    public Guid Deserialize(Variant value)
     {
-        return value?.As<bool>() ?? false;
+        return Guid.Parse(value.As<string>());
     }
 
-    public Variant? Serialize(bool value)
+    public Variant Serialize(Guid value)
     {
-        return Variant.CreateFrom(value);
+        return Variant.From(value.ToString());
     }
 }
 
 public class EntityDataSerializers
 {
-    public static EntityDataSerializer<int> INT = new IntSerializer();
-    public static EntityDataSerializer<float> FLOAT = new FloatSerializer();
-    public static EntityDataSerializer<double> DOUBLE = new DoubleSerializer();
-    public static EntityDataSerializer<bool> BOOL = new BoolSerializer();
+    public static EntityDataSerializer<int> INT = new SimpleSerializer<int>();
+    public static EntityDataSerializer<float> FLOAT = new SimpleSerializer<float>();
+    public static EntityDataSerializer<double> DOUBLE = new SimpleSerializer<double>();
+    public static EntityDataSerializer<bool> BOOL = new SimpleSerializer<bool>();
+    public static EntityDataSerializer<string> STRING = new SimpleSerializer<string>();
+    public static EntityDataSerializer<Guid> UUID = new UUIDSerializer();
+    public static EntityDataSerializer<T> ENUM<T>() where T : Enum { return new EnumSerializer<T>(); }
 }

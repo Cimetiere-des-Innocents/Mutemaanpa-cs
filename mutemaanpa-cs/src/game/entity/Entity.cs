@@ -24,9 +24,9 @@ public abstract class EntityDataKeyBase(string name)
 {
     public readonly string Name = name;
 
-    public abstract Variant? Serialize(object? value);
+    public abstract Variant Serialize(object value);
 
-    public abstract object? Deserialize(Variant? value);
+    public abstract object? Deserialize(Variant value);
 
     public override int GetHashCode()
     {
@@ -44,14 +44,14 @@ public class EntityDataKey<T>(string name, EntityDataSerializer<T> serializer) :
         set { entity.DataMap.Data[this] = value; }
     }
 
-    public override object? Deserialize(Variant? value)
+    public override object? Deserialize(Variant value)
     {
         return Serializer.Deserialize(value);
     }
 
-    public override Variant? Serialize(object? value)
+    public override Variant Serialize(object value)
     {
-        return Serializer.Serialize((T?)value);
+        return Serializer.Serialize((T)value);
     }
 };
 
@@ -73,7 +73,11 @@ public class EntityUtil
 
         foreach (var i in entity.DataMap.Data)
         {
-            customDict[i.Key.Name] = i.Key.Serialize(i.Value) ?? new Variant();
+            if (i.Value == null)
+            {
+                continue;
+            }
+            customDict[i.Key.Name] = i.Key.Serialize(i.Value);
         }
 
         saveDict["custom"] = customDict;
@@ -89,14 +93,18 @@ public class EntityUtil
 
         foreach (var i in entity.DataMap.Data.Keys)
         {
-            var variant = customDict[i.Name];
-            if (variant.VariantType == Variant.Type.Nil)
+            try
             {
-                entity.DataMap.Data[i] = i.Deserialize(null);
-            }
-            else
-            {
+                var variant = customDict[i.Name];
+                if (variant.VariantType == Variant.Type.Nil)
+                {
+                    continue;
+                }
                 entity.DataMap.Data[i] = i.Deserialize(variant);
+            }
+            catch (KeyNotFoundException)
+            {
+                continue;
             }
         }
     }

@@ -1,7 +1,7 @@
-namespace Mutemaanpa;
 
 using Godot;
 
+namespace Mutemaanpa;
 /// <summary>
 /// CharacterInformation shows the character stat in a in-game popup window.
 /// </summary>
@@ -55,7 +55,7 @@ public partial class CharacterInformation : CenterContainer
         info.WisdomDisplay!.SetLabelValue("Wisdom", character.inner.Ability.Stamina.ToString());
         return info;
     }
- 
+
     public override void _Ready()
     {
         QuitButton!.Pressed += QueueFree;

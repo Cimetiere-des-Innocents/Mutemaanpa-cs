@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Mutemaanpa;
 
@@ -54,9 +53,9 @@ public class Dialogue(string text, params Transition[] transitions) : IDialogue
 
     public static Dialogue MakeSeqDialogue(Transition lastTo, params string[] texts) => texts switch
     {
-        [] => throw new Exception("At least one text to make a series of conversation."),
-        [var lastText] => new(lastText, lastTo),
-        [var nextText, .. var remainingTexts] => new(nextText, new Transition(null, MakeSeqDialogue(lastTo, remainingTexts), null))
+    [] => throw new Exception("At least one text to make a series of conversation."),
+    [var lastText] => new(lastText, lastTo),
+    [var nextText, .. var remainingTexts] => new(nextText, new Transition(null, MakeSeqDialogue(lastTo, remainingTexts), null))
     };
 }
 

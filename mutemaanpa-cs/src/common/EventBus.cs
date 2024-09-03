@@ -1,9 +1,8 @@
-namespace Mutemaanpa;
 
 using System;
 using System.Collections.Generic;
 
-
+namespace Mutemaanpa;
 public class HitEvent(string victim, float damage) : EventArgs
 {
     public string Victim { get; } = victim;

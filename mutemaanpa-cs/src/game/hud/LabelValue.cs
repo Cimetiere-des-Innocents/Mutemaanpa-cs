@@ -1,7 +1,7 @@
-namespace Mutemaanpa;
 
 using Godot;
 
+namespace Mutemaanpa;
 /// <summary>
 /// LabelValue is use to display <key>:<value> pair of things.
 /// </summary>

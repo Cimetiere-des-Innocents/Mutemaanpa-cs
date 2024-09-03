@@ -29,17 +29,17 @@ public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBo
 		DefineData(new EntityDataBuilder(this));
 	}
 
-	public void Load(SaveDict data)
+	public virtual void Load(SaveDict data)
 	{
 		Transform = SaveUtil.LoadTransform((SaveList)data["transform"]);
 		EntityUtil.LoadCustomData(data, this);
 	}
 
-	public void Save(SaveDict data)
+	public virtual void Save(SaveDict data)
 	{
 		data["transform"] = SaveUtil.SaveTransform(Transform);
 		EntityUtil.SaveCustomData(data, this);
 	}
 
-	public void DefineData(EntityDataBuilder builder) { }
+	public virtual void DefineData(EntityDataBuilder builder) { }
 }

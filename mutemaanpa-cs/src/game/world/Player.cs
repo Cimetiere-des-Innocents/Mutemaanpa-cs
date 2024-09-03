@@ -1,41 +1,14 @@
-namespace Mutemaanpa;
-
-using System;
 using Godot;
 
-public partial class Player : CharacterBody3D
+namespace Mutemaanpa;
+public partial class Player : Character
 {
-    private Character? player;
     private double lastDamaged = 0.0;
-
-    public static Player CreatePlayer(CharacterStat stat, CharacterAbility ability)
-    {
-        var player = ResourceLoader.Load<PackedScene>("res://scene/game/world/player.tscn")
-            .Instantiate<Player>();
-        player.player = Character.NewCharacter(ability, stat);
-        player.Position = Vector3.Left;
-        return player;
-    }
 
     public override void _PhysicsProcess(double delta)
     {
-        var input = new Vector3();
-        if (Input.IsActionPressed("move_forward"))
-        {
-            input += Vector3.Forward;
-        }
-        if (Input.IsActionPressed("move_backward"))
-        {
-            input += Vector3.Back;
-        }
-        if (Input.IsActionPressed("move_left"))
-        {
-            input += Vector3.Left;
-        }
-        if (Input.IsActionPressed("move_right"))
-        {
-            input += Vector3.Right;
-        }
+        var input2d = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
+        var input = new Vector3(input2d.X, 0, input2d.Y);
 
         foreach (var kinematicCollision3D in this.GetSlideCollisions())
         {
@@ -44,13 +17,13 @@ public partial class Player : CharacterBody3D
                 lastDamaged += delta;
                 if (lastDamaged > 0.5)
                 {
-                    player!.Hit(1.0f);
+                    Hit(1.0f);
                     lastDamaged -= 0.5;
                 }
             }
         }
 
-        Velocity = player!.GetVelocity(input);
+        Velocity = GetVelocity(input);
         MoveAndSlide();
     }
 }

@@ -1,8 +1,8 @@
-namespace Mutemaanpa;
 
 using System;
 using Godot;
 
+namespace Mutemaanpa;
 /// <summary>
 /// DialogueBox is the widget for long, stateful conversation between interactions. It is used to
 /// pass user input to controller and then show internal states. It is by its nature not stateful.

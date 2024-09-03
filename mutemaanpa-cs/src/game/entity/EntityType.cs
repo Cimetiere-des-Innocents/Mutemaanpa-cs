@@ -5,7 +5,6 @@ using Godot;
 namespace Mutemaanpa;
 
 using BaseEntityType = EntityType<Entity<Node3D>>;
-
 public class EntityType<T>(string name, Func<T> factory) where T : Entity<Node3D>
 {
     public readonly string Name = name;

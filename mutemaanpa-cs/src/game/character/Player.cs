@@ -5,7 +5,7 @@ namespace Mutemaanpa;
 [Entity]
 public partial class Player : Character
 {
-    public static readonly EntityType<Player> TYPE = EntityTypeUtil.FromScene<Player>("player", "res://scene/game/world/player.tscn");
+    public static readonly EntityType<Player> TYPE = EntityTypeUtil.FromScene<Player>("player", "res://scene/game/character/player.tscn");
 
     private double lastDamaged = 0.0;
 

@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://cao2e6k8dd7ka"]
+
+[ext_resource type="Script" path="res://src/game/character/Player.cs" id="1_tgnq8"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jerlx"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kpb68"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_tgnq8")
+strength = 10
+stamina = 10
+dexterity = 10
+constitution = 10
+intelligence = 10
+wisdom = 10
+name = "Player"
+maxHp = 20.0
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_jerlx")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_kpb68")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 4, 6)

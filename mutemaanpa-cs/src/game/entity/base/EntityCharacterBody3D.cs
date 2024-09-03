@@ -5,9 +5,9 @@ namespace Mutemaanpa;
 
 public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBody3D>
 {
-	private EntityType<Entity<Node3D>>? type;
+	private IEntityType<Entity<Node3D>>? type;
 
-	public EntityType<Entity<Node3D>> Type
+	public IEntityType<Entity<Node3D>> Type
 	{
 		get
 		{

@@ -9,7 +9,7 @@ namespace Mutemaanpa;
 
 public interface Entity<out T> where T : Node3D
 {
-    EntityType<Entity<Node3D>> Type { get; }
+    IEntityType<Entity<Node3D>> Type { get; }
 
     EntityDataMap DataMap { get; }
 

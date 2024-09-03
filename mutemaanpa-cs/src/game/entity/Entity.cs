@@ -18,6 +18,8 @@ public interface Entity<out T> where T : Node3D
     void Save(SaveDict data);
 
     void Load(SaveDict data);
+
+    T Value { get; }
 };
 
 public abstract class EntityDataKeyBase(string name)

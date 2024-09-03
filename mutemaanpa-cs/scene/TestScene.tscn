@@ -1,3 +1,52 @@
-[gd_scene format=3 uid="uid://da0ridqs6bwv1"]
+[gd_scene load_steps=6 format=3 uid="uid://da0ridqs6bwv1"]
 
-[node name="TestScene" type="Node3D"]
+[ext_resource type="Script" path="res://src/TestScene.cs" id="1_fwb67"]
+[ext_resource type="Script" path="res://src/game/entity/EntitySpawner.cs" id="1_h2fu7"]
+[ext_resource type="PackedScene" uid="uid://cao2e6k8dd7ka" path="res://scene/game/character/Player.tscn" id="2_cjlbs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vrup3"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_euehp"]
+size = Vector2(20, 20)
+
+[node name="TestScene" type="Node3D" node_paths=PackedStringArray("playerSpawner")]
+script = ExtResource("1_fwb67")
+playerSpawner = NodePath("PlayerSpawner")
+
+[node name="PlayerSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("1_h2fu7")
+packedScene = ExtResource("2_cjlbs")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_vrup3")
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("PlaneMesh_euehp")
+skeleton = NodePath("../..")
+
+[node name="UI" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StartButton" type="Button" parent="UI"]
+layout_mode = 2
+text = "Start"
+
+[node name="SaveButton" type="Button" parent="UI"]
+layout_mode = 2
+text = "Save"
+
+[node name="QuitButton" type="Button" parent="UI"]
+layout_mode = 2
+text = "Quit"
+
+[node name="Light" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.49555, 0.86858, 0, -0.86858, 0.49555, 0, 0, 0)
+
+[connection signal="pressed" from="UI/StartButton" to="." method="SpawnPlayer"]
+[connection signal="pressed" from="UI/QuitButton" to="." method="QuitGame"]

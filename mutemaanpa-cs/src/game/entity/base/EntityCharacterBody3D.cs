@@ -23,6 +23,8 @@ public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBo
 
 	public EntityDataMap DataMap => dataMap;
 
+	public CharacterBody3D Value => this;
+
 	public override void _Ready()
 	{
 		type = EntityTypeUtil.Reflect(this);

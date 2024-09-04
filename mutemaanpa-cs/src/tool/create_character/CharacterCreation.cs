@@ -12,7 +12,8 @@ public partial class CharacterCreation : Node3D
 
     public override void _EnterTree()
     {
-        var state = new Character();
+        var state = new CreatingCharacter();
+        AddChild(state);
         character = state;
         creationNavigator!.character = state;
         creationNavigator.SetFinishCallback(() =>

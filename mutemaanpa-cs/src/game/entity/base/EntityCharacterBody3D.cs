@@ -33,15 +33,16 @@ public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBo
 
 	public virtual void Load(SaveDict data)
 	{
-		Transform = SaveUtil.LoadTransform((SaveList)data["transform"]);
-		EntityUtil.LoadCustomData(data, this);
+		EntityUtil.LoadData(data, this);
 	}
 
 	public virtual void Save(SaveDict data)
 	{
-		data["transform"] = SaveUtil.SaveTransform(Transform);
-		EntityUtil.SaveCustomData(data, this);
+		EntityUtil.SaveData(data, this);
 	}
 
-	public virtual void DefineData(EntityDataBuilder builder) { }
+	public virtual void DefineData(EntityDataBuilder builder)
+	{
+		builder.define(GodotDataKeys.TRANSFORM);
+	}
 }

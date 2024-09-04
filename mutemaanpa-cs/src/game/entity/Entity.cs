@@ -60,56 +60,8 @@ public class EntityDataKey<T>(string name, EntityDataSerializer<T> serializer) :
 public class EntityDataMap
 {
     public Dictionary<EntityDataKeyBase, object?> Data = new();
-}
-
-public class EntityUtil
-{
-    public static EntityDataKey<T> CreateDataKey<T>(string name, EntityDataSerializer<T> serializer)
-    {
-        return new EntityDataKey<T>(name, serializer);
-    }
-
-    public static void SaveCustomData(SaveDict saveDict, Entity<Node3D> entity)
-    {
-        var customDict = new SaveDict();
-
-        foreach (var i in entity.DataMap.Data)
-        {
-            if (i.Value == null)
-            {
-                continue;
-            }
-            customDict[i.Key.Name] = i.Key.Serialize(i.Value);
-        }
-
-        saveDict["custom"] = customDict;
-    }
-
-    public static void LoadCustomData(SaveDict saveDict, Entity<Node3D> entity)
-    {
-        var customDict = saveDict["custom"].As<SaveDict>();
-        if (customDict == null)
-        {
-            throw new Exception("Cannot get custom dict");
-        }
-
-        foreach (var i in entity.DataMap.Data.Keys)
-        {
-            try
-            {
-                var variant = customDict[i.Name];
-                if (variant.VariantType == Variant.Type.Nil)
-                {
-                    continue;
-                }
-                entity.DataMap.Data[i] = i.Deserialize(variant);
-            }
-            catch (KeyNotFoundException)
-            {
-                continue;
-            }
-        }
-    }
+    public Dictionary<EntityDataKeyBase, bool> DoSave = new();
+    public Dictionary<GodotDataKey, bool> GodotData = new();
 }
 
 public class EntityDataBuilder(Entity<Node3D> entity)
@@ -119,5 +71,110 @@ public class EntityDataBuilder(Entity<Node3D> entity)
     public void define<T>(EntityDataKey<T> key, T value)
     {
         entity.DataMap.Data[key] = value;
+        entity.DataMap.DoSave[key] = true;
+    }
+
+    public void define(GodotDataKey key)
+    {
+        entity.DataMap.GodotData[key] = true;
+    }
+
+    public void unDefine<T>(EntityDataKey<T> key)
+    {
+        entity.DataMap.DoSave[key] = false;
+    }
+
+    public void unDefine(GodotDataKey key)
+    {
+        entity.DataMap.GodotData[key] = false;
+    }
+}
+
+public class EntityUtil
+{
+    public static EntityDataKey<T> CreateDataKey<T>(string name, EntityDataSerializer<T> serializer)
+    {
+        return new EntityDataKey<T>(name, serializer);
+    }
+
+    public static void SaveData(SaveDict saveDict, Entity<Node3D> entity)
+    {
+        var godotDict = new SaveDict();
+
+        foreach (var i in entity.DataMap.GodotData)
+        {
+            if (i.Value)
+            {
+                godotDict[i.Key.Name] = i.Key.Serialize(entity.Value);
+            }
+        }
+
+        saveDict["godot"] = godotDict;
+
+        var customDict = new SaveDict();
+
+        foreach (var i in entity.DataMap.Data)
+        {
+            if (i.Value == null || !entity.DataMap.DoSave[i.Key])
+            {
+                continue;
+            }
+            customDict[i.Key.Name] = i.Key.Serialize(i.Value);
+        }
+
+        saveDict["custom"] = customDict;
+    }
+
+    public static void LoadData(SaveDict saveDict, Entity<Node3D> entity)
+    {
+        var godotDict = saveDict["godot"].As<SaveDict>();
+        if (godotDict != null)
+        {
+            foreach (var i in entity.DataMap.GodotData)
+            {
+                if (i.Value)
+                {
+                    try
+                    {
+                        var variant = godotDict[i.Key.Name];
+                        if (variant.VariantType == Variant.Type.Nil)
+                        {
+                            continue;
+                        }
+
+                        i.Key.Deserialize(variant, entity.Value);
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+
+        var customDict = saveDict["custom"].As<SaveDict>();
+        if (customDict != null)
+        {
+            foreach (var i in entity.DataMap.Data.Keys)
+            {
+                try
+                {
+                    var variant = customDict[i.Name];
+                    if (variant.VariantType == Variant.Type.Nil)
+                    {
+                        continue;
+                    }
+
+                    if (entity.DataMap.DoSave[i])
+                    {
+                        entity.DataMap.Data[i] = i.Deserialize(variant);
+                    }
+                }
+                catch (KeyNotFoundException)
+                {
+                    continue;
+                }
+            }
+        }
     }
 }

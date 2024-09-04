@@ -14,7 +14,7 @@ public enum Origin
     NAMELESS_ONE
 }
 
-public partial class Character : EntityCharacterBody3D
+public abstract partial class Character : EntityCharacterBody3D
 {
     [Export]
     private int strength = 0;

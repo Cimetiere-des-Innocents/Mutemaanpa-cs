@@ -1,0 +1,74 @@
+[gd_scene load_steps=2 format=3 uid="uid://lgt5fb5pu42q"]
+
+[ext_resource type="Script" path="res://src/tool/create_character/SetInfo.cs" id="1_vmses"]
+
+[node name="SetInfo" type="MarginContainer" node_paths=PackedStringArray("CharacterName", "Origin", "BackButton")]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 291.0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_vmses")
+CharacterName = NodePath("VBoxContainer/MarginContainer/VBoxContainer/NameLine")
+Origin = NodePath("VBoxContainer/MarginContainer/VBoxContainer/OriginOptions")
+BackButton = NodePath("VBoxContainer/HBoxContainer/BackButton")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "INFO"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Name"
+
+[node name="NameLine" type="LineEdit" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Cdi"
+
+[node name="OriginLabel" type="Label" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Origin"
+
+[node name="OriginOptions" type="OptionButton" parent="VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+item_count = 7
+popup/item_0/text = "Soldier"
+popup/item_0/id = 0
+popup/item_1/text = "Cleric"
+popup/item_1/id = 1
+popup/item_2/text = "Rogue"
+popup/item_2/id = 2
+popup/item_3/text = "Hunter"
+popup/item_3/id = 3
+popup/item_4/text = "Bureaucrat"
+popup/item_4/id = 4
+popup/item_5/text = "Spy"
+popup/item_5/id = 5
+popup/item_6/text = "Nameless One"
+popup/item_6/id = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"

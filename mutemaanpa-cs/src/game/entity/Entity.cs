@@ -103,6 +103,19 @@ public interface Entity<out T> where T : Node3D
     T Value { get; }
 };
 
+public static class EntityExt
+{
+    public static void SaveExt<T>(Entity<T> e, SaveDict saveDict) where T : Node3D
+    {
+        e.Save(saveDict);
+    }
+
+    public static void LoadExt<T>(Entity<T> e, SaveDict saveDict) where T : Node3D
+    {
+        e.Load(saveDict);
+    }
+}
+
 public abstract class EntityDataKeyBase(string name)
 {
     public readonly string Name = name;

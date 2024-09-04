@@ -92,6 +92,8 @@ public class EntityDataBuilder(Entity<Node3D> entity)
 
 public class EntityUtil
 {
+    public static readonly EntityDataKey<Guid> UUID = new("uuid", EntityDataSerializers.UUID);
+
     public static EntityDataKey<T> CreateDataKey<T>(string name, EntityDataSerializer<T> serializer)
     {
         return new EntityDataKey<T>(name, serializer);

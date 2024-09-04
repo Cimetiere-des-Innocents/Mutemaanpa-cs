@@ -43,7 +43,6 @@ public partial class Character : EntityCharacterBody3D
     public static readonly EntityDataKey<int> WISDOM = new("wisdom", EntityDataSerializers.INT);
     public static readonly EntityDataKey<string> NAME = new("name", EntityDataSerializers.STRING);
     public static readonly EntityDataKey<Origin> ORIGIN = new("origin", EntityDataSerializers.ENUM<Origin>());
-    public static readonly EntityDataKey<Guid> UUID = new("uuid", EntityDataSerializers.UUID);
 
     internal Vector3 GetVelocity(Vector3 input)
     {
@@ -65,7 +64,6 @@ public partial class Character : EntityCharacterBody3D
         builder.define(INTELLIGENCE, intelligence);
         builder.define(WISDOM, wisdom);
         builder.define(ORIGIN, origin);
-        builder.define(UUID, Guid.NewGuid());
         Hp.DefineHp(builder, maxHp, maxHp);
     }
 }

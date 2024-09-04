@@ -8,7 +8,7 @@ public partial class EntitySpawner : Node3D
 	[Export]
 	private PackedScene? packedScene;
 
-	public T? SpawnEntity<T>(bool asChild = false, bool freeThis = true) where T : class, Entity<Node3D>
+	public virtual T? SpawnEntity<T>(bool asChild = false, bool freeThis = true) where T : class, Entity<Node3D>
 	{
 		var entity = packedScene?.Instantiate<Node3D>();
 
@@ -26,7 +26,10 @@ public partial class EntitySpawner : Node3D
 			GetParent().AddChild(entity);
 		}
 
-		//TODO: load entity data
+		if (!Engine.IsEditorHint() && entity is Entity<Node3D> realEntity)
+		{
+			loadData(realEntity);
+		}
 
 		if (!asChild && freeThis)
 		{
@@ -40,6 +43,8 @@ public partial class EntitySpawner : Node3D
 		Logger.Warn("Entity Spawner spawned wrong type");
 		return null;
 	}
+
+	protected virtual void loadData(Entity<Node3D> entity) { }
 
 	public override void _Ready()
 	{

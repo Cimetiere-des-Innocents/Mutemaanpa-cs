@@ -44,5 +44,6 @@ public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBo
 	public virtual void DefineData(EntityDataBuilder builder)
 	{
 		builder.define(GodotDataKeys.TRANSFORM);
+		builder.define(EntityUtil.UUID, Guid.NewGuid());
 	}
 }

@@ -11,6 +11,8 @@ public partial class Player : Character
 
 	public override void _PhysicsProcess(double delta)
 	{
+		base._PhysicsProcess(delta);
+
 		var input2d = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
 		var input = new Vector3(input2d.X, 0, input2d.Y);
 

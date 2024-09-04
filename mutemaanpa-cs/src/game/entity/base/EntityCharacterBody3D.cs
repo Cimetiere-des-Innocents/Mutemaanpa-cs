@@ -25,20 +25,12 @@ public partial class EntityCharacterBody3D : CharacterBody3D, Entity<CharacterBo
 
 	public CharacterBody3D Value => this;
 
+	public Guid uuid => EntityUtil.UUID[this];
+
 	public override void _Ready()
 	{
 		type = EntityTypeUtil.Reflect(this);
 		DefineData(new EntityDataBuilder(this));
-	}
-
-	public virtual void Load(SaveDict data)
-	{
-		EntityUtil.LoadData(data, this);
-	}
-
-	public virtual void Save(SaveDict data)
-	{
-		EntityUtil.SaveData(data, this);
 	}
 
 	public virtual void DefineData(EntityDataBuilder builder)

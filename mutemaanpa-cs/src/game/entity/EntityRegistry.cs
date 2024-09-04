@@ -22,7 +22,7 @@ public class EntityRegistry
     private EntityRegistry() { }
     public static readonly EntityRegistry INSTANCE = new EntityRegistry();
 
-    private EntityTypeDict entities = new();
+    private EntityTypeDict entities = [];
 
     public void emitRegistryEvent()
     {

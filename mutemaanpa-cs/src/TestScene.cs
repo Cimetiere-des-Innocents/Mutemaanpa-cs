@@ -29,7 +29,7 @@ public partial class TestScene : Node3D
 			using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Read);
 			var content = file.GetAsText();
 			var parseResult = Json.ParseString(content);
-			player!.Load(parseResult.As<SaveDict>());
+			(player! as Entity<Node3D>).Load(parseResult.As<SaveDict>());
 		}
 	}
 
@@ -40,7 +40,7 @@ public partial class TestScene : Node3D
 			var dir = ToGameFS();
 			using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Write);
 			var saveDict = new SaveDict();
-			player.Save(saveDict);
+			(player as Entity<Node3D>).Save(saveDict);
 			var saveJson = Json.Stringify(saveDict);
 			file.StoreString(saveJson);
 		}

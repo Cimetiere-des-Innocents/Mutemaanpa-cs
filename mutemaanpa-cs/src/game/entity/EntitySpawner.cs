@@ -26,9 +26,11 @@ public partial class EntitySpawner : Node3D
 			GetParent().AddChild(entity);
 		}
 
+		entity?.AddToGroup("entity");
+
 		if (!Engine.IsEditorHint() && entity is Entity<Node3D> realEntity)
 		{
-			loadData(realEntity);
+			initEntity(realEntity);
 		}
 
 		if (!asChild && freeThis)
@@ -44,7 +46,7 @@ public partial class EntitySpawner : Node3D
 		return null;
 	}
 
-	protected virtual void loadData(Entity<Node3D> entity) { }
+	protected virtual void initEntity(Entity<Node3D> entity) { }
 
 	public override void _Ready()
 	{

@@ -19,7 +19,10 @@ public partial class SetInfo : MarginContainer
         CharacterName!.TextChanged += (newText) =>
         {
             Character.NAME[character!] = newText;
-            Character.ORIGIN[character!] = (Origin)Origin!.Selected;
+        };
+        Origin!.ItemSelected += (long selected) =>
+        {
+            Character.ORIGIN[character!] = (Origin)selected;
         };
         BackButton!.Pressed += () =>
         {

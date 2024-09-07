@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mutemaanpa;
 public class HitEvent(string victim, float damage) : EventArgs
@@ -22,7 +23,7 @@ public class HitEvent(string victim, float damage) : EventArgs
 /// </summary>
 public static class EventBus
 {
-    private static readonly Dictionary<Type, List<Delegate>> eventHandlers = [];
+    private static readonly Dictionary<Type, List<(Delegate, bool)>> eventHandlers = [];
     private static readonly object Lock = new();
 
     /// <summary>
@@ -42,13 +43,18 @@ public static class EventBus
         Type type = typeof(T);
         lock (Lock)
         {
-            if (!eventHandlers.TryGetValue(type, out List<Delegate>? value))
+            if (!eventHandlers.TryGetValue(type, out List<(Delegate, bool)>? value))
             {
                 value ??= [];
                 eventHandlers[type] = value;
             }
-            value?.Add(handler);
+            value?.Add((handler, true));
         }
+    }
+
+    private static List<(Delegate, bool)> Vacuum(List<(Delegate, bool)> subscribers)
+    {
+        return subscribers.Where(f => f.Item2).ToList();
     }
 
     public static void Unsubscribe<T>(Action<T> handler) where T : EventArgs
@@ -56,13 +62,12 @@ public static class EventBus
         Type type = typeof(T);
         lock (Lock)
         {
-            if (eventHandlers.TryGetValue(type, out List<Delegate>? value))
+            if (eventHandlers.TryGetValue(type, out List<(Delegate, bool)>? value))
             {
-                value.Remove(handler);
-                if (value.Count == 0)
-                {
-                    eventHandlers.Remove(type);
-                }
+                var idx = value.FindIndex(f => f.Item1.Equals(handler));
+                var item = value[idx];
+                item.Item2 = false;
+                value[idx] = item;
             }
         }
     }
@@ -72,13 +77,14 @@ public static class EventBus
         Type type = typeof(T);
         lock (Lock)
         {
-            if (eventHandlers.TryGetValue(type, out List<Delegate>? value))
+            if (eventHandlers.TryGetValue(type, out List<(Delegate, bool)>? value))
             {
-                foreach (var handler in value)
+                foreach (var (handler, _) in value)
                 {
                     ((Action<T>)handler)(args);
                 }
             }
+            eventHandlers[type] = Vacuum(eventHandlers[type]);
         }
     }
 }

@@ -18,10 +18,7 @@ public partial class CharacterCreation : Node3D
         creationNavigator!.character = state;
         creationNavigator.SetFinishCallback(() =>
         {
-            var dict = new SaveDict();
-            (character as Entity<CharacterBody3D>).Save(dict);
-            // EntityExt.SaveExt(character!, dict);
-            GD.Print(dict);
+            var serialized = EntityExt.SerializeAll(character!);
         });
     }
 }

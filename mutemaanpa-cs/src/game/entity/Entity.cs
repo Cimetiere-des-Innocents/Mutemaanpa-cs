@@ -105,12 +105,19 @@ public interface Entity<out T> where T : Node3D
 
 public static class EntityExt
 {
-    public static void SaveExt<T>(Entity<T> e, SaveDict saveDict) where T : Node3D
+    public static void Save<T>(Entity<T> e, SaveDict saveDict) where T : Node3D
     {
         e.Save(saveDict);
     }
 
-    public static void LoadExt<T>(Entity<T> e, SaveDict saveDict) where T : Node3D
+    public static SaveDict SerializeAll<T>(Entity<T> e) where T : Node3D
+    {
+        var dict = new SaveDict();
+        Save(e, dict);
+        return dict;
+    }
+
+    public static void Load<T>(Entity<T> e, SaveDict saveDict) where T : Node3D
     {
         e.Load(saveDict);
     }

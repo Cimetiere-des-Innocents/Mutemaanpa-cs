@@ -64,6 +64,7 @@ public abstract partial class Character : EntityCharacterBody3D
         builder.define(INTELLIGENCE, intelligence);
         builder.define(WISDOM, wisdom);
         builder.define(ORIGIN, origin);
+        builder.define(NAME, name);
         Hp.DefineHp(builder, maxHp, maxHp);
     }
 }

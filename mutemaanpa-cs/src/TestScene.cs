@@ -7,11 +7,15 @@ public partial class TestScene : Node3D
     [Export]
     private EntitySpawner? playerSpawner;
 
+    [Export]
+    private EntitySpawner? unnisSpawner;
+
     private Player? player;
 
     public void SpawnPlayer()
     {
         player = playerSpawner?.SpawnEntity<Player>();
+        unnisSpawner?.SpawnEntity<Entity<Node3D>>();
         var dir = Catalog.Pwd(this)!;
         if (dir.FileExists("testSave.json"))
         {

@@ -1,21 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://cao2e6k8dd7ka"]
+[gd_scene load_steps=6 format=3 uid="uid://dxkieb3070yph"]
 
-[ext_resource type="Script" path="res://src/game/character/Player.cs" id="1_tgnq8"]
+[ext_resource type="Script" path="res://src/game/character/Unnis.cs" id="1_np8y2"]
+[ext_resource type="PackedScene" uid="uid://bbjph8hyqamat" path="res://scene/game/dialogue/interaction.tscn" id="2_8vtv7"]
+[ext_resource type="Script" path="res://src/game/dialogue/UnnisBanter.cs" id="3_j2bc7"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_jerlx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kpb68"]
 
-[node name="Player" type="CharacterBody3D"]
-script = ExtResource("1_tgnq8")
-strength = 10
-stamina = 10
-dexterity = 10
-constitution = 10
-intelligence = 10
-wisdom = 10
-name = "Player"
-maxHp = 20.0
+[node name="Unnis" type="CharacterBody3D"]
+script = ExtResource("1_np8y2")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -25,9 +19,9 @@ mesh = SubResource("CapsuleMesh_jerlx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_kpb68")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 4, 6)
-
 [node name="Head" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.16573, 0)
 text = "Did you expect a needle?"
+
+[node name="Interaction" parent="." instance=ExtResource("2_8vtv7")]
+script = ExtResource("3_j2bc7")

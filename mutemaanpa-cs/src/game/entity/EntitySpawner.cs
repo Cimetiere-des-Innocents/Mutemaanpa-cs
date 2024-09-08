@@ -8,9 +8,19 @@ public partial class EntitySpawner : Node3D
     [Export]
     private PackedScene? packedScene;
 
+    protected IEntityType<Entity<Node3D>>? entityType;
+
     public virtual T? SpawnEntity<T>(bool asChild = false, bool freeThis = true) where T : class, Entity<Node3D>
     {
-        var entity = packedScene?.Instantiate<Node3D>();
+        Node3D? entity;
+        if (packedScene != null)
+        {
+            entity = packedScene?.Instantiate<Node3D>();
+        }
+        else
+        {
+            entity = entityType?.Factory().Value;
+        }
 
         if (entity == null)
         {

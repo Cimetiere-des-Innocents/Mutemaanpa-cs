@@ -52,6 +52,8 @@ public partial class Main : PanelContainer
         Logger.endpoint = GD.Print;
         setting = new Setting();
         catalog = new Catalog();
+        EntityRegistryBuilder.INSTANCE.registerAllEntities();
+        EntityRegistry.INSTANCE.emitRegistryEvent();
         AddChild(catalog);
         AddRouter();
     }
@@ -63,8 +65,8 @@ public partial class Main : PanelContainer
             var uuid = catalog!.NewSave();
             catalog!.UseGame(uuid);
             return ResourceLoader
-                .Load<PackedScene>("res://scene/TestScene.tscn")
-                .Instantiate<TestScene>();
+                .Load<PackedScene>("res://scene/world/world.tscn")
+                .Instantiate<Node3D>();
         }
 
         Node settingHandler()

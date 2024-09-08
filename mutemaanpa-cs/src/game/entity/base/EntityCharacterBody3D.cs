@@ -27,14 +27,6 @@ public abstract partial class EntityCharacterBody3D : CharacterBody3D, Entity<Ch
 
     public Guid uuid => EntityUtil.UUID[this];
 
-    IEntityType<Entity<Node3D>> Entity<CharacterBody3D>.Type => throw new NotImplementedException();
-
-    EntityDataMap Entity<CharacterBody3D>.DataMap => throw new NotImplementedException();
-
-    Guid Entity<CharacterBody3D>.uuid => throw new NotImplementedException();
-
-    CharacterBody3D Entity<CharacterBody3D>.Value => throw new NotImplementedException();
-
     protected Vector3 gravity;
 
     public override void _Ready()
@@ -59,4 +51,6 @@ public abstract partial class EntityCharacterBody3D : CharacterBody3D, Entity<Ch
     }
 
     public virtual void OnSpawned() { }
+
+    public virtual void OnChunkTick(Chunk chunk) { }
 }

@@ -28,9 +28,22 @@ public partial class Chunk : Node3D
         return spawned[spawner.Name];
     }
 
+    public void SetSpawned(ChunkEntitySpawner spawner)
+    {
+        spawned[spawner.Name] = true;
+    }
+
     public void AddEntity(Entity<Node3D> entity)
     {
         entities[entity.uuid] = entity;
+    }
+
+    public void RemoveEntity(Entity<Node3D> entity)
+    {
+        if (entities.ContainsKey(entity.uuid))
+        {
+            entities.Remove(entity.uuid);
+        }
     }
 
     public void Save(DirAccess baseDir)
@@ -38,7 +51,10 @@ public partial class Chunk : Node3D
         var savedEntities = new SaveList();
         foreach (var i in entities)
         {
-            savedEntities.Add(i.Key.ToString());
+            savedEntities.Add(new SaveDict() {
+                {"uuid", i.Key.ToString()},
+                {"type", i.Value.Type.Name}
+            });
         }
 
         var savedSpawned = new SaveList();
@@ -68,17 +84,20 @@ public partial class Chunk : Node3D
     {
         if (baseDir.FileExists($"chunk-{ChunkX}-{ChunkZ}.json"))
         {
-            using var file = FileAccess.Open($"{baseDir.GetCurrentDir()}/chunk-{ChunkX}-{ChunkZ}.json", FileAccess.ModeFlags.Write);
+            using var file = FileAccess.Open($"{baseDir.GetCurrentDir()}/chunk-{ChunkX}-{ChunkZ}.json", FileAccess.ModeFlags.Read);
             var savedChunk = Json.ParseString(file.GetAsText()).As<SaveDict>();
             var savedEntities = savedChunk["saved_entities"].As<SaveList>();
             var savedSpawned = savedChunk["saved_spawned"].As<SaveList>();
 
             foreach (var i in savedEntities)
             {
-                var uuid = Guid.Parse(i.As<string>());
+                var dict = i.As<SaveDict>();
+                var type = dict["type"].As<string>();
+                var uuid = Guid.Parse(dict["uuid"].As<string>());
+
                 AddChild
                 (
-                    new SavedEntitySpawner()
+                    new SavedEntitySpawner(type)
                     {
                         Uuid = uuid,
                         SaveDir = baseDir
@@ -99,7 +118,21 @@ public partial class Chunk : Node3D
         {
             if (node is EntitySpawner entitySpawner)
             {
-                entitySpawner.SpawnEntity<Entity<Node3D>>();
+                var entity = entitySpawner.SpawnEntity<Entity<Node3D>>();
+                if (!Engine.IsEditorHint() && entity != null)
+                {
+                    AddEntity(entity);
+                    if (entitySpawner is ChunkEntitySpawner chunkEntitySpawner)
+                    {
+                        SetSpawned(chunkEntitySpawner);
+                        entity.Value.Position = new Vector3()
+                        {
+                            X = entitySpawner.Position.X + (ChunkX - 128) * 128,
+                            Y = entitySpawner.Position.Y,
+                            Z = entitySpawner.Position.Z + (ChunkZ - 128) * 128
+                        };
+                    }
+                }
             }
         }
     }
@@ -127,8 +160,11 @@ public partial class Chunk : Node3D
                 return;
             }
             chunk.RemoveChild(entity.Value);
+            chunk.RemoveEntity(entity);
             newChunk.AddChild(entity.Value);
+            newChunk.AddEntity(entity);
         }
+        entity.OnChunkTick(entity.Value.GetParent<Chunk>());
     }
 
     // TODO: real spawn (currently just plane)

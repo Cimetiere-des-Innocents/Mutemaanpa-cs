@@ -100,6 +100,8 @@ public interface Entity<out T> where T : Node3D
 
     void OnSpawned();
 
+    void OnChunkTick(Chunk chunk);
+
     T Value { get; }
 };
 

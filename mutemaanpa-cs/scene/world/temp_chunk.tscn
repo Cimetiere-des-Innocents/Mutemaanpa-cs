@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cegc87ku8yky4"]
+[gd_scene load_steps=4 format=3 uid="uid://cegc87ku8yky4"]
+
+[ext_resource type="Script" path="res://src/game/world/TempChunk.cs" id="1_68vew"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_d271m"]
 size = Vector2(128, 128)
@@ -7,7 +9,9 @@ center_offset = Vector3(64, 0, 64)
 [sub_resource type="BoxShape3D" id="BoxShape3D_5gqt5"]
 size = Vector3(128, 1, 128)
 
-[node name="TempChunk" type="Node3D"]
+[node name="TempChunk" type="Node3D" node_paths=PackedStringArray("meshInstance")]
+script = ExtResource("1_68vew")
+meshInstance = NodePath("ChunkMesh")
 
 [node name="ChunkMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_d271m")

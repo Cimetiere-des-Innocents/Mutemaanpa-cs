@@ -1,13 +1,11 @@
 using System;
 using Godot;
-using Mutemaanpa;
+
+namespace Mutemaanpa;
 
 [Tool]
 public partial class ChunkEntitySpawner : EntitySpawner
 {
-    [Export]
-    public string SpawnerName = "";
-
     public Chunk Chunk
     {
         get
@@ -52,17 +50,6 @@ public partial class ChunkEntitySpawner : EntitySpawner
             return null;
         }
 
-        var entity = base.SpawnEntity<T>(asChild, freeThis);
-        if (!Engine.IsEditorHint() && entity != null)
-        {
-            Chunk.AddEntity(entity);
-            entity.Value.Position = new Vector3()
-            {
-                X = Position.X + (Chunk.ChunkX - 128) * 128,
-                Y = Position.Y,
-                Z = Position.Z + (Chunk.ChunkZ - 128) * 128
-            };
-        }
-        return entity;
+        return base.SpawnEntity<T>(asChild, freeThis);
     }
 }

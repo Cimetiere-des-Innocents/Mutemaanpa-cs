@@ -5,6 +5,16 @@ namespace Mutemaanpa;
 
 public partial class SavedEntitySpawner : EntitySpawner
 {
+    public SavedEntitySpawner(string typeName)
+    {
+        var type = EntityRegistry.INSTANCE[typeName];
+        if (type == null)
+        {
+            throw new Exception($"Trying to load unknown entity type '{type}'");
+        }
+        entityType = type;
+    }
+
     public required Guid Uuid;
     public required DirAccess SaveDir;
 

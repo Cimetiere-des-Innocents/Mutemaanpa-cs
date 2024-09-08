@@ -37,8 +37,8 @@ public partial class LoadGame : ScrollContainer
         {
             void loadGameBehavior()
             {
-                var testScene = ResourceLoader.Load<PackedScene>("res://scene/TestScene.tscn")
-                    .Instantiate<TestScene>();
+                var testScene = ResourceLoader.Load<PackedScene>("res://scene/world/world.tscn")
+                    .Instantiate<Node3D>();
                 catalog.UseGame(save.Id);
                 Router.Of(this).Overwrite(testScene);
             }

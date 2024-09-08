@@ -13,7 +13,7 @@ public partial class TestScene : Node3D
     [Export]
     private EntitySpawner? lenaSpawner;
 
-    private Player? player;
+	private Player? player;
 
     public void SpawnPlayer()
     {
@@ -30,21 +30,21 @@ public partial class TestScene : Node3D
         }
     }
 
-    public void SavePlayer()
-    {
-        if (player != null)
-        {
-            var dir = Catalog.Pwd(this)!;
-            using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Write);
-            var saveDict = new SaveDict();
-            (player as Entity<Node3D>).Save(saveDict);
-            var saveJson = Json.Stringify(saveDict);
-            file.StoreString(saveJson);
-        }
-    }
+	public void SavePlayer()
+	{
+		if (player != null)
+		{
+			var dir = Catalog.Pwd(this)!;
+			using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Write);
+			var saveDict = new SaveDict();
+			(player as Entity<Node3D>).Save(saveDict);
+			var saveJson = Json.Stringify(saveDict);
+			file.StoreString(saveJson);
+		}
+	}
 
-    public void QuitGame()
-    {
-        Router.Of(this).Pop();
-    }
+	public void QuitGame()
+	{
+		Router.Of(this).Pop();
+	}
 }

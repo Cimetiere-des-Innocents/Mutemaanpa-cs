@@ -1,13 +1,11 @@
 using System;
 using Godot;
-using Mutemaanpa;
+
+namespace Mutemaanpa;
 
 [Tool]
 public partial class ChunkEntitySpawner : EntitySpawner
 {
-    [Export]
-    public string SpawnerName = "";
-
     public Chunk Chunk
     {
         get
@@ -31,7 +29,7 @@ public partial class ChunkEntitySpawner : EntitySpawner
 
         foreach (var node in Chunk.GetChildren())
         {
-            if (node is ChunkEntitySpawner spawner && spawner.Name == Name)
+            if (node is ChunkEntitySpawner spawner && node != this && spawner.Name == Name)
             {
                 return ["Duplicate ChunkEntitySpawner names in one chunk"];
             }
@@ -42,16 +40,16 @@ public partial class ChunkEntitySpawner : EntitySpawner
 
     public override T? SpawnEntity<T>(bool asChild = false, bool freeThis = true) where T : class
     {
+        if (Engine.IsEditorHint())
+        {
+            return base.SpawnEntity<T>(asChild, freeThis);
+        }
+
         if (Chunk.HasSpawned(this))
         {
             return null;
         }
 
-        var entity = base.SpawnEntity<T>(asChild, freeThis);
-        if (!Engine.IsEditorHint() && entity != null)
-        {
-            Chunk.AddEntity(entity);
-        }
-        return entity;
+        return base.SpawnEntity<T>(asChild, freeThis);
     }
 }

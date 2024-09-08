@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cs0u2gdee35a"]
+
+[ext_resource type="Script" path="res://src/game/world/Chunk.cs" id="1_wdqje"]
+[ext_resource type="Script" path="res://src/game/world/ChunkEntitySpawner.cs" id="2_faxn2"]
+[ext_resource type="PackedScene" uid="uid://cao2e6k8dd7ka" path="res://scene/game/character/Player.tscn" id="3_4cltg"]
+
+[node name="InitialChunk" type="Node3D"]
+script = ExtResource("1_wdqje")
+ChunkX = 128
+ChunkZ = 128
+
+[node name="PlayerSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_faxn2")
+SpawnerName = "player"
+packedScene = ExtResource("3_4cltg")

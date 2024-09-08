@@ -46,7 +46,12 @@ public abstract partial class Character : EntityCharacterBody3D
 
     internal Vector3 GetVelocity(Vector3 input)
     {
-        return DEXTERITY[this] * input;
+        return new Vector3()
+        {
+            X = DEXTERITY[this] * input.X,
+            Y = input.Y,
+            Z = dexterity * input.Z
+        };
     }
 
     internal void Hit(double v)

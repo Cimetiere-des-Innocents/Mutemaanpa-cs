@@ -12,6 +12,8 @@ public partial class Chunk : Node3D
     [Export]
     public required int ChunkZ;
 
+    public bool IsEdge = false;
+
     private readonly Dictionary<Guid, Entity<Node3D>> entities = [];
 
     private readonly Dictionary<string, bool> spawned = [];
@@ -98,6 +100,33 @@ public partial class Chunk : Node3D
             {
                 entitySpawner.SpawnEntity<Entity<Node3D>>();
             }
+        }
+    }
+
+    public static void ProcessEntity(Entity<Node3D> entity)
+    {
+        var entityValue = entity.Value;
+        var chunk = entityValue.GetParent<Chunk>();
+        if (chunk == null)
+        {
+            return;
+        }
+        var world = chunk.GetParent<World>();
+        if (world == null)
+        {
+            throw new Exception("Chunk not in world");
+        }
+        var realChunkPos = World.ToChunkCoordinate(entityValue.Position.X, entityValue.Position.Z);
+        if (realChunkPos.X != chunk.ChunkX || realChunkPos.Y != chunk.ChunkZ)
+        {
+            var newChunk = world.GetChunk(realChunkPos);
+            if (newChunk == null)
+            {
+                world.MarkEscaped(entity);
+                return;
+            }
+            chunk.RemoveChild(entity.Value);
+            newChunk.AddChild(entity.Value);
         }
     }
 }

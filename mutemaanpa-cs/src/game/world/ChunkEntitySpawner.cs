@@ -24,7 +24,7 @@ public partial class ChunkEntitySpawner : EntitySpawner
     public override string[] _GetConfigurationWarnings()
     {
         var parent = GetParent();
-        if (!(parent is Chunk))
+        if (parent is not Mutemaanpa.Chunk)
         {
             return ["ChunkEntitySpawner must be placed in a chunk"];
         }

@@ -6,4 +6,6 @@
     <RootNamespace>mutemaanpacs</RootNamespace>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <Import Project="addons\YarnSpinner-Godot\YarnSpinner-Godot.props" />
 </Project>
+

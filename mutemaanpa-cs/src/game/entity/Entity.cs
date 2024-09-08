@@ -98,7 +98,7 @@ public interface Entity<out T> where T : Node3D
         }
     }
 
-    protected void onSpawned() { }
+    void OnSpawned();
 
     T Value { get; }
 };

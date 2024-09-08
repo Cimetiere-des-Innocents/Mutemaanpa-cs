@@ -34,4 +34,17 @@ public partial class Player : Character
         Velocity = velocity;
         MoveAndSlide();
     }
+
+    public override void OnSpawned()
+    {
+        var parent = GetParent();
+        if (parent != null)
+        {
+            var parentParent = parent.GetParent();
+            if (parentParent is World world)
+            {
+                world.Player = this;
+            }
+        }
+    }
 }

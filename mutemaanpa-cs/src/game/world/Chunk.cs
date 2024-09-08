@@ -4,6 +4,7 @@ using Godot;
 
 namespace Mutemaanpa;
 
+[Tool]
 public partial class Chunk : Node3D
 {
     [Export]
@@ -128,5 +129,18 @@ public partial class Chunk : Node3D
             chunk.RemoveChild(entity.Value);
             newChunk.AddChild(entity.Value);
         }
+    }
+
+    // TODO: real spawn (currently just plane)
+    public void RandomSpawn()
+    {
+        var terrain = GD.Load<PackedScene>("res://scene/world/temp_chunk.tscn").Instantiate<Node3D>();
+        AddChild(terrain);
+        terrain.Position = new Vector3()
+        {
+            X = (ChunkX - 128) * 128,
+            Y = 0,
+            Z = (ChunkZ - 128) * 128
+        };
     }
 }

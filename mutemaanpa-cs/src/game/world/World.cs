@@ -21,6 +21,8 @@ public partial class World : Node3D
 
     public required DirAccess currentSaveDir;
 
+    public Node3D? Player;
+
     public void FindPredefinedChunks()
     {
         var chunkDir = DirAccess.Open("res://scene");
@@ -97,6 +99,7 @@ public partial class World : Node3D
         }
 
         chunk.Load(currentSaveDir);
+        chunk.RandomSpawn();
         chunk.SpawnAllEntities();
     }
 

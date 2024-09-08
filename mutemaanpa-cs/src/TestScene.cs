@@ -9,21 +9,10 @@ public partial class TestScene : Node3D
 
     private Player? player;
 
-    public static DirAccess ToGameFS()
-    {
-        var dir = DirAccess.Open(".");
-        if (!dir.DirExists("m8a"))
-        {
-            dir.MakeDir("m8a");
-        }
-        dir.ChangeDir("m8a");
-        return dir;
-    }
-
     public void SpawnPlayer()
     {
         player = playerSpawner?.SpawnEntity<Player>();
-        var dir = ToGameFS();
+        var dir = Catalog.Pwd(this)!;
         if (dir.FileExists("testSave.json"))
         {
             using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Read);
@@ -37,7 +26,7 @@ public partial class TestScene : Node3D
     {
         if (player != null)
         {
-            var dir = ToGameFS();
+            var dir = Catalog.Pwd(this)!;
             using var file = FileAccess.Open($"{dir.GetCurrentDir()}/testSave.json", FileAccess.ModeFlags.Write);
             var saveDict = new SaveDict();
             (player as Entity<Node3D>).Save(saveDict);
@@ -48,6 +37,6 @@ public partial class TestScene : Node3D
 
     public void QuitGame()
     {
-        GetTree().Quit();
+        Router.Of(this).Pop();
     }
 }

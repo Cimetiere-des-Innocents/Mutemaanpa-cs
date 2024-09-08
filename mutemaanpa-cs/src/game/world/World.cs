@@ -175,6 +175,10 @@ public partial class World : Node3D
 
         var chunkCoordinate = ToChunkCoordinate(entity.Value.Position.X, entity.Value.Position.Z);
 
+        var chunk = entity.Value.GetParent<Chunk>();
+        chunk!.RemoveEntity(entity);
+        chunk!.RemoveChild(entity.Value);
+
         escapedEntities.Add(new EscapedEntityInfo
         {
             Type = entity.Type.Name,

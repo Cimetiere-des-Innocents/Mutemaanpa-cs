@@ -1,6 +1,5 @@
 namespace Mutemaanpa;
 
-using System;
 using System.Text.Json;
 using Godot;
 
@@ -44,6 +43,11 @@ public class Setting
             string s when s != "" => JsonSerializer.Deserialize<SettingData>(s),
             _ => ProvideDefaultMetadata(),
         };
+    }
+
+    public static SettingData Get(Node node)
+    {
+        return Main.Get(node).setting!.Metadata;
     }
 }
 

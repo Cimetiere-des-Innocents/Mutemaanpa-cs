@@ -34,6 +34,9 @@ public partial class CharacterCreation : Node3D
         creationNavigator.SetFinishCallback(() =>
         {
             var serialized = EntityExt.SerializeAll(character!);
+            var dir = Catalog.Pwd(this)!;
+            using var file = FileAccess.Open($"{dir.GetCurrentDir()}/created_character.json", FileAccess.ModeFlags.Write);
+            file.StoreString(Json.Stringify(serialized));
         });
     }
 }

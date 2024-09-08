@@ -3,12 +3,6 @@ namespace Mutemaanpa;
 using System;
 using Godot;
 
-public interface IGameState;
-
-public record struct InMenu : IGameState;
-
-public record struct InGame(Guid Guid) : IGameState;
-
 /// <summary>
 /// Main class controls the whole game wide configuration / states.
 ///
@@ -51,15 +45,13 @@ public partial class Main : PanelContainer
     /// <summary>
     /// Manage game saves 
     /// </summary>
-    Catalog? catalog;
-
-    IGameState? gameState;
+    public Catalog? catalog;
 
     public override void _Ready()
     {
+        Logger.endpoint = GD.Print;
         setting = new Setting();
         catalog = new Catalog();
-        gameState = new InMenu();
         AddChild(catalog);
         AddRouter();
     }
@@ -69,7 +61,7 @@ public partial class Main : PanelContainer
         Node newGameHandler()
         {
             var uuid = catalog!.NewSave();
-            gameState = new InGame(uuid);
+            catalog!.UseGame(uuid);
             return ResourceLoader
                 .Load<PackedScene>("res://scene/TestScene.tscn")
                 .Instantiate<TestScene>();
@@ -80,13 +72,18 @@ public partial class Main : PanelContainer
             return SettingPage.CreateSettingPage(setting!);
         }
 
+        Node loadGameHandler()
+        {
+            return LoadGame.CreateLoadGame(catalog!);
+        }
+
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
                 routes: [
                 (name: "/menu", endpoint: MainMenu.CreateMainMenu),
                 (name: "/setting", endpoint: settingHandler),
                 (name: "/newGame", endpoint: newGameHandler),
-                // (name: "/load", endpoint: loadGameHandler)
+                (name: "/load", endpoint: loadGameHandler)
             ]
         );
 
@@ -99,17 +96,4 @@ public partial class Main : PanelContainer
         Main main => main,
         _ => Get(node.GetParent())
     };
-
-    /// <summary>
-    /// Return the current save folder of m8a.
-    /// </summary>
-    /// <returns></returns>
-    public DirAccess? Pwd()
-    {
-        if (gameState is InGame inGame)
-        {
-            return Catalog.Pwd(inGame.Guid);
-        }
-        return null;
-    }
 }

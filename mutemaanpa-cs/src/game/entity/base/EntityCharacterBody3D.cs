@@ -44,13 +44,20 @@ public abstract partial class EntityCharacterBody3D : CharacterBody3D, Entity<Ch
 
     public override void _PhysicsProcess(double delta)
     {
-        if (GetParent() is Chunk)
+        if (GetParent() is Chunk chunk)
         {
             Chunk.ProcessEntity(this);
+
+            if (!chunk.IsEdge && !chunk.World.Paused)
+            {
+                Tick(delta);
+            }
         }
     }
 
     public virtual void OnSpawned() { }
 
     public virtual void OnChunkTick(Chunk chunk) { }
+
+    public virtual void Tick(double delta) { }
 }

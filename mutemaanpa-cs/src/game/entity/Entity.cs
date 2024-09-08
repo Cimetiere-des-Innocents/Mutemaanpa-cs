@@ -102,6 +102,8 @@ public interface Entity<out T> where T : Node3D
 
     void OnChunkTick(Chunk chunk);
 
+    void Tick(double delta);
+
     T Value { get; }
 };
 

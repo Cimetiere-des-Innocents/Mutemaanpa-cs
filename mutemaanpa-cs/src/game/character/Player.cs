@@ -11,10 +11,8 @@ public partial class Player : Character
 
     private Vector2 lastXZ = Vector2.Zero;
 
-    public override void _PhysicsProcess(double delta)
+    public override void Tick(double delta)
     {
-        base._PhysicsProcess(delta);
-
         var input2d = Input.GetVector("move_left", "move_right", "move_forward", "move_backward");
         var input = new Vector3(input2d.X, Velocity.Y, input2d.Y);
 
@@ -52,7 +50,7 @@ public partial class Player : Character
 
     public override void OnChunkTick(Chunk chunk)
     {
-        var world = chunk.GetParent<World>();
+        var world = chunk.World;
         if (Mathf.Abs(Position.X - lastXZ.X) >= 64 || Mathf.Abs(Position.Z - lastXZ.Y) >= 64)
         {
             world.UpdateChunks(Position.X, Position.Z);

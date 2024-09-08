@@ -40,6 +40,8 @@ public partial class World : Node3D
 
     public Node3D? Player;
 
+    public bool Paused = false;
+
     public void FindPredefinedChunks()
     {
         var chunkDir = DirAccess.Open("res://scene");

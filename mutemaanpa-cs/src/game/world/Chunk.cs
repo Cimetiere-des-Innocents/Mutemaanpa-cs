@@ -13,6 +13,11 @@ public partial class Chunk : Node3D
     [Export]
     public required int ChunkZ;
 
+    public World World
+    {
+        get { return GetParent<World>(); }
+    }
+
     public bool IsEdge = false;
 
     private readonly Dictionary<Guid, Entity<Node3D>> entities = [];
@@ -145,11 +150,7 @@ public partial class Chunk : Node3D
         {
             return;
         }
-        var world = chunk.GetParent<World>();
-        if (world == null)
-        {
-            throw new Exception("Chunk not in world");
-        }
+        var world = chunk.World;
         var realChunkPos = World.ToChunkCoordinate(entityValue.Position.X, entityValue.Position.Z);
         if (realChunkPos.X != chunk.ChunkX || realChunkPos.Y != chunk.ChunkZ)
         {

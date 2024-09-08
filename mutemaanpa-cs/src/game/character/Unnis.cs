@@ -1,5 +1,3 @@
-using Godot;
-
 namespace Mutemaanpa;
 
 [Entity]

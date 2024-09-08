@@ -2,6 +2,10 @@ namespace Mutemaanpa;
 
 using Godot;
 
+/// <summary>
+/// Character creation is a scene that helps to create new character. It writes new character to
+/// a disk file called "character_created.json". That file path can be override.
+/// </summary>
 public partial class CharacterCreation : Node3D
 {
 
@@ -9,6 +13,17 @@ public partial class CharacterCreation : Node3D
     CreationNavigator? creationNavigator;
 
     Character? character;
+
+    string OutputPath = "character_created.json";
+
+    public static CharacterCreation NewCreator(string output = "character_created.json")
+    {
+        var node = ResourceLoader
+                    .Load<PackedScene>("res://scene/tool/create_character/character_creation.tscn")
+                    .Instantiate<CharacterCreation>();
+        node.OutputPath = output;
+        return node;
+    }
 
     public override void _EnterTree()
     {

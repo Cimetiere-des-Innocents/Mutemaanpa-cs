@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://ciqjind208ws"]
+
+[ext_resource type="Script" path="res://src/game/character/Lena.cs" id="1_mc67k"]
+[ext_resource type="PackedScene" uid="uid://bbjph8hyqamat" path="res://scene/game/dialogue/interaction.tscn" id="2_prkum"]
+[ext_resource type="Script" path="res://src/game/dialogue/UnnisBanter.cs" id="3_aq11k"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jerlx"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kpb68"]
+
+[node name="Lena" type="CharacterBody3D"]
+script = ExtResource("1_mc67k")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_jerlx")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_kpb68")
+
+[node name="Head" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.16573, 0)
+text = "Did you expect a needle?"
+
+[node name="Interaction" parent="." instance=ExtResource("2_prkum")]
+script = ExtResource("3_aq11k")

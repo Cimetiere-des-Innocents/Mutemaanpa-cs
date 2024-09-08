@@ -83,8 +83,8 @@ public static class EventBus
                 {
                     ((Action<T>)handler)(args);
                 }
+                eventHandlers[type] = Vacuum(eventHandlers[type]);
             }
-            eventHandlers[type] = Vacuum(eventHandlers[type]);
         }
     }
 }

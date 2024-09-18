@@ -34,7 +34,10 @@ public partial class MainMenu : VBoxContainer
         };
         _NewGameButton!.Pressed += () => Router.Of(this).Push("/newGame");
         _LoadGameButton!.Pressed += () => Router.Of(this).Push("/load");
+    }
 
+    public override void _EnterTree()
+    {
         var musicPlayer = MusicPlayer.Of(this);
         if (musicPlayer.Status != "MainMenu")
         {

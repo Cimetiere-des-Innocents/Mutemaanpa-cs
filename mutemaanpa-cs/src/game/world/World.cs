@@ -202,7 +202,10 @@ public partial class World : Node3D
             return;
         }
         UpdateChunks(new Vector2I(initialChunkX, initialChunkZ));
+    }
 
+    public override void _EnterTree()
+    {
         var musicPlayer = MusicPlayer.Of(this);
         if (musicPlayer.Status != "World")
         {

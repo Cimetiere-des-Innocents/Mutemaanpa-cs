@@ -1,5 +1,6 @@
 namespace Mutemaanpa;
 
+using System;
 using Godot;
 
 /// <summary>
@@ -39,18 +40,25 @@ public partial class Main : PanelContainer
     /// <summary>
     /// Manage game settings
     /// </summary>
-    MetadataManager? metadata;
+    public Setting? Setting;
 
     /// <summary>
     /// Manage game saves 
     /// </summary>
-    Catalog? catalog;
+    public Catalog? Catalog;
+
+    public MusicPlayer? MusicPlayer;
 
     public override void _Ready()
     {
-        metadata = new MetadataManager();
-        catalog = new Catalog();
-        AddChild(catalog);
+        Logger.endpoint = GD.Print;
+        Setting = new Setting();
+        Catalog = new Catalog();
+        MusicPlayer = new MusicPlayer();
+        EntityRegistryBuilder.INSTANCE.registerAllEntities();
+        EntityRegistry.INSTANCE.emitRegistryEvent();
+        AddChild(Catalog);
+        AddChild(MusicPlayer);
         AddRouter();
     }
 
@@ -58,13 +66,22 @@ public partial class Main : PanelContainer
     {
         Node newGameHandler()
         {
-            var save = catalog!.NewSave();
-            return GameMain.CreateGameMain(save);
+            var uuid = Catalog!.NewSave();
+            Catalog!.UseGame(uuid);
+            return ResourceLoader
+                .Load<PackedScene>("res://scene/world/world.tscn")
+                .Instantiate<Node3D>();
         }
 
-        Node settingHandler() { return SettingPage.CreateSettingPage(metadata!); }
+        Node settingHandler()
+        {
+            return SettingPage.CreateSettingPage(Setting!);
+        }
 
-        Node loadGameHandler() => LoadGame.CreateLoadGame(catalog!);
+        Node loadGameHandler()
+        {
+            return LoadGame.CreateLoadGame(Catalog!);
+        }
 
         var router = Router.CreateRouter(
                 defaultPage: "/menu",
@@ -76,29 +93,13 @@ public partial class Main : PanelContainer
             ]
         );
 
-        Node GetGameOverScene()
-        {
-            GetTree().Paused = true;
-            void CleanGameSession()
-            {
-                GetTree().Paused = false;
-                foreach (var child in router.GetChildren())
-                {
-                    router.RemoveChild(child);
-                    child.QueueFree();
-                }
-                router.Push("/menu");
-            }
-            return GameOver.CreateGameOver(
-                ToTitleAction: CleanGameSession,
-                LoadGameAction: () =>
-                {
-                    CleanGameSession();
-                    router.Push("/load");
-                }
-            );
-        }
-        router.Register(("/gameOver", GetGameOverScene));
         AddChild(router);
     }
+
+    public static Main Get(Node node) => node switch
+    {
+        null => throw new Exception("empty parent"),
+        Main main => main,
+        _ => Get(node.GetParent())
+    };
 }

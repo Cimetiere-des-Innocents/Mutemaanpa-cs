@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2m2xn2jxjq1v"]
+
+[ext_resource type="Script" path="res://src/game/world/World.cs" id="1_acndb"]
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_acndb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.736912, 0.675989, 0, -0.675989, 0.736912, 0, 0, 0)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Press ESC to save and exit"

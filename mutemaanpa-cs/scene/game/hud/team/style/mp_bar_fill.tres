@@ -1,7 +1,0 @@
-[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://hljk5rh44tpn"]
-
-[sub_resource type="MeshTexture" id="MeshTexture_dxka1"]
-
-[resource]
-texture = SubResource("MeshTexture_dxka1")
-modulate_color = Color(0.0124951, 0.466978, 0.666093, 1)

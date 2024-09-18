@@ -16,10 +16,13 @@ SetAbility = NodePath("TabContainer/SetAbility")
 
 [node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 2
+current_tab = 0
 
 [node name="SetInfo" parent="TabContainer" instance=ExtResource("1_3fp1g")]
 layout_mode = 2
+metadata/_tab_index = 0
 
 [node name="SetAbility" parent="TabContainer" instance=ExtResource("2_ynkjv")]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1

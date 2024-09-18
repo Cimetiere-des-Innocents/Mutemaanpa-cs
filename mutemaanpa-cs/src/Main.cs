@@ -40,21 +40,25 @@ public partial class Main : PanelContainer
     /// <summary>
     /// Manage game settings
     /// </summary>
-    public Setting? setting;
+    public Setting? Setting;
 
     /// <summary>
     /// Manage game saves 
     /// </summary>
-    public Catalog? catalog;
+    public Catalog? Catalog;
+
+    public MusicPlayer? MusicPlayer;
 
     public override void _Ready()
     {
         Logger.endpoint = GD.Print;
-        setting = new Setting();
-        catalog = new Catalog();
+        Setting = new Setting();
+        Catalog = new Catalog();
+        MusicPlayer = new MusicPlayer();
         EntityRegistryBuilder.INSTANCE.registerAllEntities();
         EntityRegistry.INSTANCE.emitRegistryEvent();
-        AddChild(catalog);
+        AddChild(Catalog);
+        AddChild(MusicPlayer);
         AddRouter();
     }
 
@@ -62,8 +66,8 @@ public partial class Main : PanelContainer
     {
         Node newGameHandler()
         {
-            var uuid = catalog!.NewSave();
-            catalog!.UseGame(uuid);
+            var uuid = Catalog!.NewSave();
+            Catalog!.UseGame(uuid);
             return ResourceLoader
                 .Load<PackedScene>("res://scene/world/world.tscn")
                 .Instantiate<Node3D>();
@@ -71,12 +75,12 @@ public partial class Main : PanelContainer
 
         Node settingHandler()
         {
-            return SettingPage.CreateSettingPage(setting!);
+            return SettingPage.CreateSettingPage(Setting!);
         }
 
         Node loadGameHandler()
         {
-            return LoadGame.CreateLoadGame(catalog!);
+            return LoadGame.CreateLoadGame(Catalog!);
         }
 
         var router = Router.CreateRouter(

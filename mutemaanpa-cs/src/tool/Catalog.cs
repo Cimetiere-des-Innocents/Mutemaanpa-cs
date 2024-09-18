@@ -41,7 +41,7 @@ public partial class Catalog : Node
 
     private static Catalog Get(Node node)
     {
-        return Main.Get(node)!.catalog!;
+        return Main.Get(node)!.Catalog!;
     }
 
     /// <summary>

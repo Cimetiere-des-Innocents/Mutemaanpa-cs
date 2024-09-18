@@ -47,7 +47,7 @@ public class Setting
 
     public static SettingData Get(Node node)
     {
-        return Main.Get(node).setting!.Metadata;
+        return Main.Get(node).Setting!.Metadata;
     }
 }
 

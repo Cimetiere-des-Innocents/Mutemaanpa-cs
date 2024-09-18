@@ -202,6 +202,13 @@ public partial class World : Node3D
             return;
         }
         UpdateChunks(new Vector2I(initialChunkX, initialChunkZ));
+
+        var musicPlayer = MusicPlayer.Of(this);
+        if (musicPlayer.Status != "World")
+        {
+            musicPlayer.Status = "World";
+            musicPlayer.Stop();
+        }
     }
 
     public void UpdateChunks(float x, float z)

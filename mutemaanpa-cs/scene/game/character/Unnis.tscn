@@ -23,5 +23,6 @@ shape = SubResource("CapsuleShape3D_kpb68")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.16573, 0)
 text = "Did you expect a needle?"
 
-[node name="Interaction" parent="." instance=ExtResource("2_8vtv7")]
+[node name="Interaction" parent="." node_paths=PackedStringArray("banterBox") instance=ExtResource("2_8vtv7")]
 script = ExtResource("3_j2bc7")
+banterBox = NodePath("../Head")

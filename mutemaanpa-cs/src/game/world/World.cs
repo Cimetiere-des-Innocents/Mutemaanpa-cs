@@ -211,7 +211,7 @@ public partial class World : Node3D
         {
             musicPlayer.Status = "World";
             musicPlayer.StopMusic();
-            musicPlayer.Stream = GD.Load<AudioStream>("res://asset/music/mutemaanpa.ogg");
+            musicPlayer.Stream = GD.Load<AudioStream>("res://asset/music/globulin.ogg");
             musicPlayer.PlayDelayed(1.5);
         }
     }

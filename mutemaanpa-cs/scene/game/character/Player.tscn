@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://cao2e6k8dd7ka"]
+
+[ext_resource type="Script" path="res://src/game/character/Player.cs" id="1_tgnq8"]
+[ext_resource type="Environment" uid="uid://bx7xrhlvjkcju" path="res://asset/misc/render_environment.tres" id="2_3hhs0"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jerlx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xiwm3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kpb68"]
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_tgnq8")
+strength = 10
+stamina = 10
+dexterity = 10
+constitution = 10
+intelligence = 10
+wisdom = 10
+name = "Player"
+maxHp = 20.0
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_jerlx")
+surface_material_override/0 = SubResource("StandardMaterial3D_xiwm3")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_kpb68")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.906308, 0.422618, 0, -0.422618, 0.906308, 0, 4, 3.77539)
+environment = ExtResource("2_3hhs0")
+
+[node name="Head" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.16573, 0)
+text = "Did you expect a needle?"

@@ -1,10 +1,13 @@
 namespace Mutemaanpa;
 
+using System;
 using Godot;
 
 public partial class NumberBar : PanelContainer
 {
     public int Value { get; set; }
+
+    public event Action<int>? OnValueChanged;
 
     [Export]
     private Label? Ability;
@@ -17,14 +20,19 @@ public partial class NumberBar : PanelContainer
 
     public override void _Ready()
     {
-        AddOne!.Pressed += () => {
-            Value += 1;
-            Ability!.Text = Value.ToString();
+        OnValueChanged += (int i) =>
+        {
+            Ability!.Text = i.ToString();
         };
-        MinusOne!.Pressed += () => {
+        AddOne!.Pressed += () =>
+        {
+            Value += 1;
+            OnValueChanged!.Invoke(Value);
+        };
+        MinusOne!.Pressed += () =>
+        {
             Value -= 1;
-            Ability!.Text = Value.ToString();
+            OnValueChanged!.Invoke(Value);
         };
     }
-
 }

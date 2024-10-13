@@ -1,22 +1,6 @@
-namespace Mutemaanpa;
-using System;
 using Godot;
 
-public class CharacterAbility
-{
-    /// Influence attack, weight, hit points
-    public required int Strength;
-    /// Influence mana, buff duration
-    public required int Stamina;
-    /// Influence speed, damage reduction
-    public required int Dexterity;
-    /// Influence hit points, weight
-    public required int Constitution;
-    /// Influence spells, environment interaction, crafting
-    public required int Intelligence;
-    /// Influence environment interaction, dialogue, merchant
-    public required int Wisdom;
-}
+namespace Mutemaanpa;
 
 public enum Origin
 {
@@ -29,69 +13,62 @@ public enum Origin
     NAMELESS_ONE
 }
 
-/// <summary>
-/// basic information about the character
-/// </summary>
-public class CharacterStat
+public abstract partial class Character : EntityCharacterBody3D
 {
-    public required string Name;
-    public required Origin Origin;
-}
+    [Export]
+    private int strength = 0;
+    [Export]
+    private int stamina = 0;
+    [Export]
+    private int dexterity = 0;
+    [Export]
+    private int constitution = 0;
+    [Export]
+    private int intelligence = 0;
+    [Export]
+    private int wisdom = 0;
+    [Export]
+    private string name = "";
+    [Export]
+    private Origin origin = Origin.SOLDIER;
+    [Export]
+    private double maxHp = 0;
 
-/// <summary>
-/// Persistent data of the character.
-/// </summary>
-public class CharacterInner
-{
-    public required CharacterAbility Ability;
-    public required CharacterStat Stat;
-    public required Guid Uuid;
-}
-
-public class Hp
-{
-    public required double hp;
-    public required double maxHp;
-}
-
-/// <summary>
-/// Controller class for characters
-/// </summary>
-/// <param name="state"></param> <summary>
-/// The state of a character.
-/// </summary>
-public class Character
-{
-    public required CharacterInner inner;
-    public required Hp hp;
-    public static Character NewCharacter(CharacterAbility ability, CharacterStat stat)
-    {
-        var Hp = new Hp()
-        {
-            hp = 1.0f * ability.Constitution,
-            maxHp = 1.0f * ability.Constitution
-        };
-        var uuid = Guid.NewGuid();
-        var inner = new CharacterInner()
-        {
-            Ability = ability,
-            Stat = stat,
-            Uuid = uuid
-        };
-        return new Character()
-        {
-            inner = inner,
-            hp = Hp
-        };
-    }
+    public static readonly EntityDataKey<int> STRENGTH = new("strength", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> STAMINA = new("stamina", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> DEXTERITY = new("dexterity", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> CONSTITUTION = new("constitution", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> INTELLIGENCE = new("intelligence", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<int> WISDOM = new("wisdom", EntityDataSerializers.INT);
+    public static readonly EntityDataKey<string> NAME = new("name", EntityDataSerializers.STRING);
+    public static readonly EntityDataKey<Origin> ORIGIN = new("origin", EntityDataSerializers.ENUM<Origin>());
 
     internal Vector3 GetVelocity(Vector3 input)
     {
-        return inner.Ability.Dexterity * input;
+        return new Vector3()
+        {
+            X = DEXTERITY[this] * input.X,
+            Y = input.Y,
+            Z = dexterity * input.Z
+        };
     }
 
-    internal void Hit(float v)
+    internal void Hit(double v)
     {
-        hp.hp -= v;
+        Hp.HP[this] -= v;
+    }
+
+    public override void DefineData(EntityDataBuilder builder)
+    {
+        base.DefineData(builder);
+        builder.define(STRENGTH, strength);
+        builder.define(STAMINA, stamina);
+        builder.define(DEXTERITY, dexterity);
+        builder.define(CONSTITUTION, constitution);
+        builder.define(INTELLIGENCE, intelligence);
+        builder.define(WISDOM, wisdom);
+        builder.define(ORIGIN, origin);
+        builder.define(NAME, name);
+        Hp.DefineHp(builder, maxHp, maxHp);
     }
 }

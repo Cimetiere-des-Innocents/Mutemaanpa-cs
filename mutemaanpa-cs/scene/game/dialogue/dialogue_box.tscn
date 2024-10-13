@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://rvshysjr3h8u"]
+[gd_scene load_steps=6 format=3 uid="uid://rvshysjr3h8u"]
 
 [ext_resource type="Script" path="res://src/game/dialogue/DialogueBox.cs" id="1_murm0"]
+[ext_resource type="Script" path="res://addons/YarnSpinner-Godot/Runtime/DialogueRunner.cs" id="2_rn1wf"]
+[ext_resource type="Script" path="res://addons/YarnSpinner-Godot/Runtime/InMemoryVariableStorage.cs" id="3_0t3sq"]
+[ext_resource type="Resource" uid="uid://b1mjskxog3lq5" path="res://asset/dialogue/globulin.yarnproject" id="3_4vl7e"]
+[ext_resource type="Script" path="res://src/game/dialogue/DialogueView.cs" id="3_8havv"]
 
 [node name="DialogueBox" type="Control" node_paths=PackedStringArray("view")]
 layout_mode = 3
@@ -9,8 +13,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_murm0")
 view = NodePath("PanelContainer/MarginContainer/RichTextLabel")
+
+[node name="DialogueRunner" type="Node" parent="." node_paths=PackedStringArray("variableStorage", "dialogueViews")]
+script = ExtResource("2_rn1wf")
+yarnProject = ExtResource("3_4vl7e")
+variableStorage = NodePath("../InMemoryVariableStorage")
+dialogueViews = [NodePath("../PanelContainer/MarginContainer")]
+startNode = "HelloWorld"
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -23,13 +35,18 @@ offset_right = -120.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" node_paths=PackedStringArray("richTextLabel")]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 200
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 200
+script = ExtResource("3_8havv")
+richTextLabel = NodePath("RichTextLabel")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 30
+
+[node name="InMemoryVariableStorage" type="Node" parent="."]
+script = ExtResource("3_0t3sq")

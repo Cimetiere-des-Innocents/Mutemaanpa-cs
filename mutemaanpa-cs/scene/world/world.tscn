@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2m2xn2jxjq1v"]
+
+[ext_resource type="Script" path="res://src/game/world/World.cs" id="1_acndb"]
+[ext_resource type="PackedScene" uid="uid://rvshysjr3h8u" path="res://scene/game/dialogue/dialogue_box.tscn" id="2_0iasc"]
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_acndb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.909599, -0.172405, -0.378029, 0.415487, 0.377436, 0.827595, 0, -0.909845, 0.414948, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Press ESC to save and exit"
+
+[node name="DialogueBox" parent="." instance=ExtResource("2_0iasc")]

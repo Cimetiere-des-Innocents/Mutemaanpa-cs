@@ -4,6 +4,7 @@ using Godot;
 
 public partial class SetInfo : MarginContainer
 {
+    internal Character? character;
     [Export]
     private LineEdit? CharacterName;
 
@@ -13,19 +14,19 @@ public partial class SetInfo : MarginContainer
     [Export]
     private Button? BackButton;
 
-    public CharacterStat GetCharacterStat() => new()
-    {
-        Name = CharacterName!.Text,
-        Origin = (Origin)Origin!.Selected
-    };
-
     public override void _Ready()
     {
-        base._Ready();
+        CharacterName!.TextChanged += (newText) =>
+        {
+            Character.NAME[character!] = newText;
+        };
+        Origin!.ItemSelected += (long selected) =>
+        {
+            Character.ORIGIN[character!] = (Origin)selected;
+        };
         BackButton!.Pressed += () =>
         {
             Router.Of(this).Pop();
         };
     }
 }
-

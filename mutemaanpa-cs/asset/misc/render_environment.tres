@@ -1,0 +1,16 @@
+[gd_resource type="Environment" load_steps=3 format=3 uid="uid://bx7xrhlvjkcju"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_48kds"]
+
+[sub_resource type="Sky" id="Sky_ljeko"]
+sky_material = SubResource("PhysicalSkyMaterial_48kds")
+
+[resource]
+background_mode = 2
+sky = SubResource("Sky_ljeko")
+fog_enabled = true
+fog_mode = 1
+fog_density = 1.0
+fog_depth_curve = 5.0
+fog_depth_begin = 128.0
+fog_depth_end = 384.0

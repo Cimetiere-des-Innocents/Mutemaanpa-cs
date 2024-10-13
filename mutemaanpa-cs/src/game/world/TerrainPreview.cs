@@ -17,5 +17,6 @@ public partial class TerrainPreview : MeshInstance3D
         var heightOffset = GetParent<Chunk>().HeightOffset;
         Position += new Vector3(0.0f, yOffset - heightOffset, 0.0f);
         Mesh = mesh;
+        MaterialOverride = TerrainMaterialHolder.Get();
     }
 }

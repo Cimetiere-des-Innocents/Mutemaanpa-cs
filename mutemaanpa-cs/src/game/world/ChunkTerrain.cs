@@ -1,7 +1,19 @@
-using System.Collections.Generic;
 using Godot;
 
 namespace Mutemaanpa;
+
+public class TerrainMaterialHolder
+{
+    static Material? material;
+    public static Material Get()
+    {
+        if (material is null)
+        {
+            material = GD.Load<Material>("res://asset/material/terrain.tres");
+        }
+        return material;
+    }
+}
 
 public partial class ChunkTerrain : StaticBody3D
 {
@@ -11,9 +23,6 @@ public partial class ChunkTerrain : StaticBody3D
 
     [Export]
     private CollisionShape3D shape;
-
-    [Export]
-    private StandardMaterial3D material;
 #pragma warning restore CS8618
 
     public int ChunkX = 0;
@@ -27,7 +36,7 @@ public partial class ChunkTerrain : StaticBody3D
         TerrainGenerator.Generate(ChunkX, ChunkZ, true, out arrMesh, out polyShape, out yOffset);
 
         mesh.Mesh = arrMesh;
-        mesh.MaterialOverride = material;
+        mesh.MaterialOverride = TerrainMaterialHolder.Get();
         shape.Shape = polyShape;
 
         var offset = new Vector3(0, yOffset, 0);

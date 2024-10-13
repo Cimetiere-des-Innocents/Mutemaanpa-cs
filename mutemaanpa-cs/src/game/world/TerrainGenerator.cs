@@ -11,12 +11,11 @@ class GlobalHeightMapHolder
 
     private static Texture2D Get()
     {
-        if (globalHeightMap != null)
+        if (globalHeightMap is null)
         {
-            return globalHeightMap;
+            globalHeightMap = GD.Load<Texture2D>("res://asset/image/global_heightmap.png");
         }
 
-        globalHeightMap = GD.Load<Texture2D>("res://asset/image/global_heightmap.png");
         return globalHeightMap;
     }
 

@@ -13,6 +13,9 @@ public partial class Chunk : Node3D
 	[Export]
 	public required int ChunkZ;
 
+	[Export]
+	public int HeightOffset = 0;
+
 	public World World
 	{
 		get { return GetParent<World>(); }
@@ -175,11 +178,44 @@ public partial class Chunk : Node3D
 		terrain.ChunkX = ChunkX;
 		terrain.ChunkZ = ChunkZ;
 		AddChild(terrain);
-		terrain.Position = new Vector3()
+		terrain.GlobalPosition = new Vector3()
 		{
 			X = (ChunkX - 128) * 128,
 			Y = 0,
 			Z = (ChunkZ - 128) * 128
 		};
+	}
+
+	public override void _Ready()
+	{
+		if (Engine.IsEditorHint())
+		{
+			editorReady();
+		}
+		else
+		{
+			gameReady();
+		}
+	}
+
+	private void gameReady()
+	{
+		foreach (var child in GetChildren())
+		{
+			if (child is Node3D node3D)
+			{
+				node3D.Position += new Vector3(0.0f, HeightOffset, 0.0f);
+			}
+		}
+	}
+
+	private void editorReady()
+	{
+		var node = new TerrainPreview()
+		{
+			ChunkX = ChunkX,
+			ChunkZ = ChunkZ
+		};
+		AddChild(node);
 	}
 }

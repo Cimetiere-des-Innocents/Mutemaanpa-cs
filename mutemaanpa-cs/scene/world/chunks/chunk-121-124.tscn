@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://cs0u2gdee35a"]
+
+[ext_resource type="Script" path="res://src/game/world/Chunk.cs" id="1_0872k"]
+[ext_resource type="Script" path="res://src/game/world/ChunkEntitySpawner.cs" id="2_cj6rf"]
+[ext_resource type="PackedScene" uid="uid://cao2e6k8dd7ka" path="res://scene/game/character/Player.tscn" id="3_n216t"]
+[ext_resource type="PackedScene" uid="uid://dxkieb3070yph" path="res://scene/game/character/Unnis.tscn" id="4_phelc"]
+[ext_resource type="PackedScene" uid="uid://ciqjind208ws" path="res://scene/game/character/Lena.tscn" id="5_oxv62"]
+
+[node name="InitialChunk" type="Node3D"]
+script = ExtResource("1_0872k")
+ChunkX = 121
+ChunkZ = 124
+HeightOffset = 200
+
+[node name="PlayerSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107.524, 55.9496, 120.256)
+script = ExtResource("2_cj6rf")
+packedScene = ExtResource("3_n216t")
+
+[node name="UnnisSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110.594, 57.0356, 120)
+script = ExtResource("2_cj6rf")
+packedScene = ExtResource("4_phelc")
+
+[node name="LenaSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 112.84, 57.4481, 120)
+script = ExtResource("2_cj6rf")
+packedScene = ExtResource("5_oxv62")

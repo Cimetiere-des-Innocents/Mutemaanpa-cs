@@ -210,7 +210,7 @@ public partial class World : Node3D
 		if (musicPlayer.Status != "World")
 		{
 			musicPlayer.Status = "World";
-			musicPlayer.Stop();
+			musicPlayer.StopMusic();
 		}
 	}
 

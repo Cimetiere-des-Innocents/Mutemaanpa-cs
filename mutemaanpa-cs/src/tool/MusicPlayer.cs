@@ -14,7 +14,7 @@ public partial class MusicPlayer : AudioStreamPlayer
     {
         this.waitTime = waitTime;
         this.fromPosition = fromPosition;
-        this.setWaitTime = true;
+        setWaitTime = true;
     }
 
     public override void _Process(double delta)
@@ -33,5 +33,11 @@ public partial class MusicPlayer : AudioStreamPlayer
     public static MusicPlayer Of(Node node)
     {
         return Main.Get(node).MusicPlayer!;
+    }
+
+    public void StopMusic()
+    {
+        Stop();
+        setWaitTime = false;
     }
 };

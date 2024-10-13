@@ -42,7 +42,7 @@ public partial class MainMenu : VBoxContainer
         if (musicPlayer.Status != "MainMenu")
         {
             musicPlayer.Status = "MainMenu";
-            musicPlayer.Stop();
+            musicPlayer.StopMusic();
             musicPlayer.Stream = GD.Load<AudioStream>("res://asset/music/mutemaanpa.ogg");
             musicPlayer.PlayDelayed(1.5);
         }

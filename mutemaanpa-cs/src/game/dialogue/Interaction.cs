@@ -55,18 +55,16 @@ public abstract partial class Interaction : Node3D
             material = shaderMaterial;
         }
         material.NextPass = outline;
-        Logger.Info("added shader for interaction");
     }
 
     public void HideOutline()
     {
-        outline?.SetShaderParameter("cutoff", 1e10f);
+        outline?.SetShaderParameter("outline_thickness", 1e10f);
     }
 
     public void ShowOutline()
     {
-        outline?.SetShaderParameter("cutoff", 1.1f);
-        Logger.Info("show outline");
+        outline?.SetShaderParameter("outline_thickness", 0.02f);
     }
 
     private void SetClickHandler()

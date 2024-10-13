@@ -10,8 +10,9 @@ public record struct SettingData
 );
 
 /// <summary>
-/// MetadataManager persists some key-value configurations in JSON format
+/// Setting persists some key-value configurations in JSON format
 /// 
+/// use Setting.Get(this) to acquire global game setting
 /// </summary>
 public class Setting
 {

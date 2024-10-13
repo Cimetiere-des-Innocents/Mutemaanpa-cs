@@ -22,16 +22,15 @@ class GlobalHeightMapHolder
 
 	public static float Sample(int chunkX, int chunkZ, int x, int z)
 	{
-		// var hMap = Get();
-		// int i = chunkX * 4 + x;
-		// int j = chunkZ * 4 + z;
-		// if (i < 0 || i >= 1024 || j < 0 || j >= 1024)
-		// {
-		//     return 0.0f;
-		// }
+		var hMap = Get();
+		int i = chunkX * 4 + x;
+		int j = chunkZ * 4 + z;
+		if (i < 0 || i >= 1024 || j < 0 || j >= 1024)
+		{
+			return 0.0f;
+		}
 
-		// return hMap.GetImage().GetPixel(i, j).R * MAX_HEIGHT;
-		return 0.0f;
+		return hMap.GetImage().GetPixel(i, j).R * MAX_HEIGHT;
 	}
 }
 
@@ -43,6 +42,9 @@ public partial class ChunkTerrain : StaticBody3D
 
 	[Export]
 	private CollisionShape3D shape;
+
+	[Export]
+	private StandardMaterial3D material;
 #pragma warning restore CS8618
 
 	public int ChunkX = 0;
@@ -104,11 +106,11 @@ public partial class ChunkTerrain : StaticBody3D
 			for (int j = 0; j < 4; j++)
 			{
 				indices.Add(indicesMap[i, j]);
-				indices.Add(indicesMap[i, j + 1]);
+				indices.Add(indicesMap[i + 1, j]);
 				indices.Add(indicesMap[i + 1, j + 1]);
 				indices.Add(indicesMap[i, j]);
 				indices.Add(indicesMap[i + 1, j + 1]);
-				indices.Add(indicesMap[i + 1, j]);
+				indices.Add(indicesMap[i, j + 1]);
 			}
 		}
 
@@ -117,11 +119,15 @@ public partial class ChunkTerrain : StaticBody3D
 		surfaceArray[(int)Mesh.ArrayType.Normal] = normals.ToArray();
 		surfaceArray[(int)Mesh.ArrayType.Index] = indices.ToArray();
 
-		var arrMesh = mesh.Mesh as ArrayMesh;
-		arrMesh!.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
-		var polyShape = shape.Shape as ConcavePolygonShape3D;
+		var arrMesh = new ArrayMesh();
+		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, surfaceArray);
+		mesh.Mesh = arrMesh;
+		mesh.MaterialOverride = material;
+
+		var polyShape = new ConcavePolygonShape3D();
 		var faces = arrMesh.GetFaces();
 		polyShape!.SetFaces(faces);
+		shape.Shape = polyShape;
 
 		var yOffset = new Vector3(0, minVertexHeight, 0);
 		mesh.Position += yOffset;

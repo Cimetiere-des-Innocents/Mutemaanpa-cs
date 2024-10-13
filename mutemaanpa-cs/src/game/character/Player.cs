@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 
 namespace Mutemaanpa;
@@ -33,6 +34,10 @@ public partial class Player : Character
         velocity += gravity * (float)delta;
         Velocity = velocity;
         MoveAndSlide();
+
+        var head = GetChildren().Where((node) => node is Label3D).First() as Label3D;
+        var y = GlobalPosition.Y.ToString("0.0000");
+        head!.Text = $"y: {y}";
     }
 
     public override void OnSpawned()

@@ -7,13 +7,13 @@ class GlobalHeightMapHolder
 {
     private static float MAX_HEIGHT = 2560.0f;
 
-    private static Texture2D? globalHeightMap;
+    private static Image? globalHeightMap;
 
-    private static Texture2D Get()
+    private static Image Get()
     {
         if (globalHeightMap is null)
         {
-            globalHeightMap = GD.Load<Texture2D>("res://asset/image/global_heightmap.png");
+            globalHeightMap = GD.Load<Texture2D>("res://asset/image/global_heightmap.png").GetImage();
         }
 
         return globalHeightMap;
@@ -29,7 +29,7 @@ class GlobalHeightMapHolder
             return 0.0f;
         }
 
-        return hMap.GetImage().GetPixel(i, j).R * MAX_HEIGHT;
+        return hMap.GetPixel(i, j).R * MAX_HEIGHT;
     }
 }
 

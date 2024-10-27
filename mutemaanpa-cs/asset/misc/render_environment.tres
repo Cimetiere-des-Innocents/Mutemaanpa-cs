@@ -9,6 +9,7 @@ sky_material = SubResource("PhysicalSkyMaterial_48kds")
 background_mode = 2
 sky = SubResource("Sky_ljeko")
 fog_enabled = true
+fog_light_color = Color(0.543301, 0.753762, 0.871301, 1)
 fog_density = 0.006
 fog_depth_curve = 5.0
 fog_depth_begin = 64.0

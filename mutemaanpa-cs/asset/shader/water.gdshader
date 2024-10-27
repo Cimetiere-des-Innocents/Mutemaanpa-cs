@@ -50,7 +50,7 @@ void fragment() {
 	float depth_texture = 1.0 - texture(DEPTH_TEXTURE, SCREEN_UV).r * 2.0;
 	float depth = PROJECTION_MATRIX[3][2] / (depth_texture + PROJECTION_MATRIX[2][2]);
 	float depth_blend = exp((depth+VERTEX.z + depth_offset) * -beers_law);
-	depth_blend = clamp(1.0 - depth_blend, 0.0, 1.0);	
+	depth_blend = clamp(1.0 - depth_blend, 0.0, 1.0);
 	float depth_blend_power = clamp(pow(depth_blend, 2.5), 0.0, 1.0);
 
 	// Retrieving depth color and applying the deep and shallow colors

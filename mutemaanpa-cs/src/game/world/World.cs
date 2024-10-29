@@ -22,6 +22,32 @@ class EscapedEntityInfo
     }
 }
 
+class GlobalSeaMaskHolder
+{
+    private static Image? globalSeaMask;
+
+    private static Image Get()
+    {
+        if (globalSeaMask is null)
+        {
+            globalSeaMask = GD.Load<Texture2D>("res://asset/image/global_sea_mask.png").GetImage();
+        }
+
+        return globalSeaMask;
+    }
+
+    public static bool Sample(int chunkX, int chunkZ)
+    {
+        var sMask = Get();
+        if (chunkX < 0 || chunkX >= 256 || chunkZ < 0 || chunkZ >= 256)
+        {
+            return true;
+        }
+
+        return sMask.GetPixel(chunkX, chunkZ).A > 0;
+    }
+}
+
 public partial class World : Node3D
 {
     [Export]
@@ -46,6 +72,8 @@ public partial class World : Node3D
     private float seaLevelHeight = 192.0f;
 
     public bool Paused = false;
+
+    private bool inSeaMask = true;
 
     public void FindPredefinedChunks()
     {
@@ -243,10 +271,17 @@ public partial class World : Node3D
         {
             DestroyChunk(pos);
         }
+
+        inSeaMask = true;
         for (int i = -2; i <= 2; i++)
         {
             for (int j = -2; j <= 2; j++)
             {
+                if (!GlobalSeaMaskHolder.Sample(chunkCoord.X + i, chunkCoord.Y + j))
+                {
+                    inSeaMask = false;
+                }
+
                 var pos = new Vector2I(chunkCoord.X + i, chunkCoord.Y + j);
                 if (!activeChunks.ContainsKey(pos))
                 {
@@ -321,11 +356,12 @@ public partial class World : Node3D
         sea = GD.Load<PackedScene>("res://asset/model/sea.blend").Instantiate<Node3D>();
         sea.GetChild<MeshInstance3D>(0).CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
         AddChild(sea);
-        sea.Position = new Vector3(initialChunkX * 128.0f, seaLevelHeight, initialChunkZ * 128.0f);
+        UpdateSea(initialChunkX * 128.0f, initialChunkZ * 128.0f);
     }
 
     public void UpdateSea(float x, float z)
     {
         sea!.Position = new Vector3(x, seaLevelHeight, z);
+        sea!.Visible = inSeaMask;
     }
 }

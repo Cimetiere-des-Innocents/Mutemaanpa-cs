@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbplfa0s3y2ca"
-path="res://.godot/imported/global_heightmap.png-6155bee8b4f2893fb9debb26c1f8f400.ctex"
+uid="uid://d35a6ug8dobgw"
+path="res://.godot/imported/global_sea_mask.png-33461a7d981e6a7015054a6ac776a58a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/image/global_heightmap.png"
-dest_files=["res://.godot/imported/global_heightmap.png-6155bee8b4f2893fb9debb26c1f8f400.ctex"]
+source_file="res://asset/image/global_sea_mask.png"
+dest_files=["res://.godot/imported/global_sea_mask.png-33461a7d981e6a7015054a6ac776a58a.ctex"]
 
 [params]
 

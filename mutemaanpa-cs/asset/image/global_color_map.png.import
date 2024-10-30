@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cbplfa0s3y2ca"
-path="res://.godot/imported/global_heightmap.png-6155bee8b4f2893fb9debb26c1f8f400.ctex"
+uid="uid://bto6wd8xrgjst"
+path="res://.godot/imported/global_color_map.png-9f55d37f255907d63dda787572bcf5fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/image/global_heightmap.png"
-dest_files=["res://.godot/imported/global_heightmap.png-6155bee8b4f2893fb9debb26c1f8f400.ctex"]
+source_file="res://asset/image/global_color_map.png"
+dest_files=["res://.godot/imported/global_color_map.png-9f55d37f255907d63dda787572bcf5fb.ctex"]
 
 [params]
 

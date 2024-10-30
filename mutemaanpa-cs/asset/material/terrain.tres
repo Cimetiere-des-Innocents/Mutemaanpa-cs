@@ -3,3 +3,4 @@
 [resource]
 diffuse_mode = 1
 specular_mode = 2
+vertex_color_use_as_albedo = true

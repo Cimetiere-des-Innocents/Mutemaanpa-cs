@@ -30,6 +30,9 @@ public partial class World : Node3D
 	[Export]
 	private int initialChunkZ = 124;
 
+    [Export]
+    public DialogueBox? dialogueBox;
+
 	private readonly Dictionary<Vector2I, string> preDefinedChunks = [];
 
 	private readonly Dictionary<Vector2I, Chunk> activeChunks = [];

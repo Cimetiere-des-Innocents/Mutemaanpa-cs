@@ -1,0 +1,14 @@
+[remap]
+
+importer="yarnscript"
+type="Resource"
+uid="uid://de2glfl6ffgh0"
+path="res://.godot/imported/globulin.yarn-15fdb21fd904d9150979daf4b808ab0d.tres"
+
+[deps]
+
+source_file="res://asset/dialogue/globulin.yarn"
+dest_files=["res://.godot/imported/globulin.yarn-15fdb21fd904d9150979daf4b808ab0d.tres"]
+
+[params]
+

@@ -5,7 +5,21 @@ Mutemaanpa is a role-play vampire-survivor like open world 3D game.
 ## Role playing elements
 
 - Perk-based rich dialogue system which influences the world even more than battle
+  - dialogue basic design
+    - ui
+      - those who can interact will be marked with a black border. When the user click on them,
+      interaction begins.
+      - banter only raise a small text label on the head of the character.
+      - dialogue shows in a black box in the right of screen.
+    - banters
+      - player can banter with NPCs, who will simply repeat some fixed sentences
+      - banters does not affect the world.
+    - dialogue
+      - player enters a "talking" state, where it stops to move.
+      - the character will start to show their dialogue text to the box.
+      - player can select various options. in doing so, some function is invoked.
   - Add perk to character in the first chapter.
+    - 0.1: origin perk
   - Add skill checks in dialogue.
   - Add perk specific options in dialogue.
 

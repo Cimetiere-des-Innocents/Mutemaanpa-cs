@@ -8,22 +8,16 @@ using System.Linq;
 /// 
 /// REQUIRES: its parent node is PhysicsBody3D and has Head(Label3D) and Mesh 
 /// </summary>
-public partial class Interaction : Node3D
+public abstract partial class Interaction : Node3D
 {
     ShaderMaterial? outline;
-    Label3D? banterBox;
-    bool inBanter;
-    protected GameMain? gameMain;
-    protected IInteractiveText? interactiveText;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         RegisterShader();
         RegisterOutlineHandler();
-        RegisterBanterBox();
         SetClickHandler();
-        // gameMain = GameMain.Of(this);
     }
 
     private void RegisterOutlineHandler()
@@ -65,19 +59,12 @@ public partial class Interaction : Node3D
 
     public void HideOutline()
     {
-        outline?.SetShaderParameter("cutoff", 1e10f);
+        outline?.SetShaderParameter("outline_thickness", 1e10f);
     }
 
     public void ShowOutline()
     {
-        outline?.SetShaderParameter("cutoff", 0.1f);
-    }
-
-    private void RegisterBanterBox()
-    {
-        banterBox = GetNode<Label3D>("../Head");
-        banterBox.Text = "And you thought rivellon was flat.";
-        banterBox!.Hide();
+        outline?.SetShaderParameter("outline_thickness", 0.02f);
     }
 
     private void SetClickHandler()
@@ -92,43 +79,9 @@ public partial class Interaction : Node3D
         && inputEventMouseButton.IsReleased()
         && inputEventMouseButton.ButtonIndex == MouseButton.Left)
         {
-            if (inBanter)
-            {
-                return;
-            }
-            switch (interactiveText)
-            {
-                case IBanter banter:
-                    ShowBanter(banter);
-                    break;
-                case IDialogue dialogue:
-                    // ShowDialogue(dialogue);
-                    break;
-                default:
-                    break;
-            }
-        };
+            DoInteraction();
+        }
     }
 
-    private void ShowBanter(IBanter banter)
-    {
-        banterBox!.Show();
-        inBanter = true;
-        banterBox!.Text = banter.GetText();
-        var timer = GetTree().CreateTimer(3.0);
-        timer.Timeout += banterBox!.Hide;
-        timer.Timeout += () => inBanter = false;
-    }
-
-    // private void ShowDialogue(IDialogue dialogue)
-    // {
-    //     gameMain!.AddDialogueBox(dialogue);
-    // }
-
-    // protected void EndDialogue()
-    // {
-    //     gameMain!.RemoveDialogueBox();
-    // }
+    protected abstract void DoInteraction();
 }
-
-

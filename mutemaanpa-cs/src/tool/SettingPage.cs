@@ -1,11 +1,61 @@
 namespace Mutemaanpa;
 
+using System.Text.Json;
 using Godot;
+
+
+public record struct SettingData
+(
+    bool Test
+);
+
+/// <summary>
+/// Setting persists some key-value configurations in JSON format
+/// 
+/// use Setting.Get(this) to acquire global game setting
+/// </summary>
+public class Setting
+{
+    private static readonly string MetadataPath = "user://setting";
+
+    public SettingData Metadata;
+
+    public Setting() => LoadMetadata();
+
+    public void WriteToDisk()
+    {
+        using var file = FileAccess.Open(MetadataPath, FileAccess.ModeFlags.Write);
+        string s = JsonSerializer.Serialize(Metadata);
+        file.StoreString(s);
+    }
+
+    private static SettingData ProvideDefaultMetadata()
+    {
+        return new SettingData(
+            Test: false
+        );
+    }
+
+    private void LoadMetadata()
+    {
+        using FileAccess? file = FileAccess.Open(MetadataPath, FileAccess.ModeFlags.Read);
+        Metadata = file?.GetAsText() switch
+        {
+            string s when s != "" => JsonSerializer.Deserialize<SettingData>(s),
+            _ => ProvideDefaultMetadata(),
+        };
+    }
+
+    public static SettingData Get(Node node)
+    {
+        return Main.Get(node).Setting!.Metadata;
+    }
+}
 
 public partial class SettingPage : MarginContainer
 {
 
-    private MetadataManager? metadataManager;
+    private Setting? setting;
 
     [Export]
     private Button? _CancelButton;
@@ -16,11 +66,11 @@ public partial class SettingPage : MarginContainer
     [Export]
     private CheckBox? _TestCheckBox;
 
-    public static SettingPage CreateSettingPage(MetadataManager metadataManager)
+    public static SettingPage CreateSettingPage(Setting setting)
     {
         var settingPage = ResourceLoader.Load<PackedScene>("res://scene/tool/setting_page.tscn")
             .Instantiate<SettingPage>();
-        settingPage.metadataManager = metadataManager;
+        settingPage.setting = setting;
         return settingPage;
     }
 
@@ -33,14 +83,13 @@ public partial class SettingPage : MarginContainer
         };
         _OkayButton!.ButtonUp += () =>
         {
-            metadataManager!.WriteToDisk();
+            setting!.WriteToDisk();
             Router.Of(this).Pop();
         };
         _TestCheckBox!.ButtonUp += () =>
         {
-            metadataManager!.Metadata.Test = _TestCheckBox.ButtonPressed;
+            setting!.Metadata.Test = _TestCheckBox.ButtonPressed;
         };
-        _TestCheckBox?.SetPressedNoSignal(metadataManager!.Metadata.Test);
+        _TestCheckBox?.SetPressedNoSignal(setting!.Metadata.Test);
     }
 }
-

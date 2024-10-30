@@ -5,21 +5,21 @@ using Godot;
 
 public partial class CreationNavigator : PanelContainer
 {
-
     [Export]
     private SetInfo? SetInfo;
 
     [Export]
     private SetAbility? SetAbility;
+    internal Character? character;
 
-    public void SetFinishCallback(Action<CharacterStat, CharacterAbility> action)
+    public void SetFinishCallback(Action callback)
     {
-        SetAbility!.FinishButton!.Pressed += () => action(SetInfo!.GetCharacterStat(),
-                                                          SetAbility!.GetAbility());
+        SetAbility!.FinishButton!.Pressed += callback;
     }
 
-    public override void _Ready()
+    public override void _EnterTree()
     {
-        base._Ready();
+        SetInfo!.character = character;
+        SetAbility!.character = character;
     }
 }

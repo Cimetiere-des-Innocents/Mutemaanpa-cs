@@ -25,14 +25,38 @@ public partial class SetAbility : MarginContainer
     [Export]
     public Button? FinishButton;
 
-    public CharacterAbility GetAbility() => new()
-    {
-        Strength = Strength!.Value,
-        Stamina = Stamina!.Value,
-        Dexterity = Dexterity!.Value,
-        Constitution = Constitution!.Value,
-        Intelligence = Intelligence!.Value,
-        Wisdom = Wisdom!.Value
-    };
+    internal Character? character;
 
+    public override void _Ready()
+    {
+        Strength!.OnValueChanged += (int strength) =>
+        {
+            Character.STRENGTH[character!] = strength;
+        };
+
+        Stamina!.OnValueChanged += (int stamina) =>
+        {
+            Character.STAMINA[character!] = stamina;
+        };
+
+        Dexterity!.OnValueChanged += (int dexterity) =>
+        {
+            Character.DEXTERITY[character!] = dexterity;
+        };
+
+        Intelligence!.OnValueChanged += (int intelligence) =>
+        {
+            Character.INTELLIGENCE[character!] = intelligence;
+        };
+
+        Wisdom!.OnValueChanged += (int wisdom) =>
+        {
+            Character.WISDOM[character!] = wisdom;
+        };
+
+        Constitution!.OnValueChanged += (int constitution) =>
+        {
+            Character.CONSTITUTION[character!] = constitution;
+        };
+    }
 }

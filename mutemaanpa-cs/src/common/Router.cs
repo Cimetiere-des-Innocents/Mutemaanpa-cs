@@ -1,4 +1,3 @@
-namespace Mutemaanpa;
 
 using Godot;
 using System;
@@ -7,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using Welles = System.Func<Godot.Node>;
 
+namespace Mutemaanpa;
 /// <summary>
 /// Router controls the navigation of scenes. The router node is responsible of
 ///

@@ -1,51 +1,45 @@
 namespace Mutemaanpa;
 
-using System;
 using Godot;
+using YarnSpinnerGodot;
 
-/// <summary>
-/// DialogueBox is the widget for long, stateful conversation between interactions. It is used to
-/// pass user input to controller and then show internal states. It is by its nature not stateful.
-/// </summary>
 public partial class DialogueBox : Control
 {
     [Export]
-    RichTextLabel? view;
+    DialogueView? view;
 
-    IDialogue? controller;
+    DialogueRunner dialogueRunner = new();
 
-    public static DialogueBox CreateDialogueBox(IDialogue dialogue)
+    InMemoryVariableStorage variableStorage = new();
+
+    public static void CreateDialogue(
+        Node curNode,
+        string yarnProjectPath,
+        string startNode)
     {
-        var node = ResourceLoader.Load<PackedScene>("res://scene/game/dialogue/dialogue_box.tscn")
-            .Instantiate<DialogueBox>();
-        node.controller = dialogue;
-        node.ShowDialogue();
-        node.view!.MetaClicked += (Variant meta) =>
+        static DialogueBox findDialogueBox(Node node) => node switch
         {
-            GD.Print($"{meta} clicked.");
-            var option = meta.AsString();
-            var optionIdx = option.Substr(0, option.Find(':')).ToInt() - 1; // -1 because UI interface begins with one while offset begins with 0
-            (_, IDialogue? next, Action? action) = node.controller!.GetNext()[optionIdx];
-            if (next != null)
-            {
-                node.controller = next;
-                node.ShowDialogue();
-            }
-            action?.Invoke();
+            World world => world.dialogueBox!,
+            null => throw new System.Exception("interaction not having a dialogue box paired."),
+            _ => findDialogueBox(node.GetParent())
         };
-        return node;
+        var node = findDialogueBox(curNode);
+        node.Visible = true;
+        var yarnProject = GD.Load<YarnProject>(yarnProjectPath);
+        node.dialogueRunner!.SetProject(yarnProject);
+        node.dialogueRunner!.StartDialogue(startNode);
     }
 
-    private void ShowDialogue()
+    public override void _Ready()
     {
-        view!.AppendText($"[p]{controller!.GetText()}[/p]");
-        view!.Newline();
-        var optionList = 1;
-        foreach (var transition in controller!.GetNext())
-        {
-            view!.AppendText($"[url]{optionList++}: {transition!.Text ?? "Continue"}[/url]");
-            view!.Newline();
-        }
-        view!.Newline();
+        view!.OnDialogueLineFinished += Hide;
+        dialogueRunner.startAutomatically = false;
+        dialogueRunner.VariableStorage = variableStorage;
+        dialogueRunner.SetDialogueViews([view]);
+        variableStorage.debugTextView = GetNode<RichTextLabel>("DebugLabelClass");
+        AddChild(variableStorage);
+        AddChild(dialogueRunner);
+        Hide();
+        base._Ready();
     }
 }

@@ -31,22 +31,33 @@ public partial class LoadGame : ScrollContainer
             saveList!.RemoveChild(c);
             c.QueueFree();
         }
-        catalog!.Saves
-            .ForEach((save) =>
+
+
+        void slotHandler(SaveData save)
+        {
+            void loadGameBehavior()
             {
-                var saveFile = $"m8a_save_{save.Id}.db";
-                var child = SaveSlot.CreateSaveSlot(save,
-                loadGameBehavior: () =>
-                {
-                    var gameMain = GameMain.CreateGameMain(save.Id);
-                    Router.Of(this).Overwrite(gameMain);
-                },
-                deleteSaveBehavior: () =>
-                {
-                    catalog.Remove(save.Id);
-                    Sync();
-                });
-                saveList!.AddChild(child);
-            });
+                var testScene = ResourceLoader.Load<PackedScene>("res://scene/world/world.tscn")
+                    .Instantiate<Node3D>();
+                catalog.UseGame(save.Id);
+                Router.Of(this).Overwrite(testScene);
+            }
+
+            void deleteSaveBehavior()
+            {
+                catalog.Remove(save.Id);
+                Sync();
+            }
+
+            var saveFile = $"m8a_save_{save.Id}.db";
+            var child = SaveSlot.CreateSaveSlot(
+                save,
+                loadGameBehavior,
+                deleteSaveBehavior
+            );
+            saveList!.AddChild(child);
+        }
+
+        catalog!.Saves.ForEach(slotHandler);
     }
 }

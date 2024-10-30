@@ -35,5 +35,16 @@ public partial class MainMenu : VBoxContainer
         _NewGameButton!.Pressed += () => Router.Of(this).Push("/newGame");
         _LoadGameButton!.Pressed += () => Router.Of(this).Push("/load");
     }
-}
 
+    public override void _EnterTree()
+    {
+        var musicPlayer = MusicPlayer.Of(this);
+        if (musicPlayer.Status != "MainMenu")
+        {
+            musicPlayer.Status = "MainMenu";
+            musicPlayer.StopMusic();
+            musicPlayer.Stream = GD.Load<AudioStream>("res://asset/music/mutemaanpa.ogg");
+            musicPlayer.PlayDelayed(1.5);
+        }
+    }
+}
